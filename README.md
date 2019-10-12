@@ -30,7 +30,7 @@ sudo cp gffread /usr/local/bin/
 cd ..
 ```
 ### Installing up-to-date ncbi-blast+ version (October 2019 version)
-# If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
+### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
 
 ```
 # To remove older ncbi-blast+ binaries from your system 
