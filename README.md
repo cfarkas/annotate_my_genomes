@@ -1,5 +1,5 @@
 # annotate_my_genomes 
-### :microscope: :hatched_chick: :hatched_chick: 
+### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads.
 
 ## Pipeline Outline
