@@ -29,7 +29,7 @@ make release
 sudo cp gffread /usr/local/bin/
 cd ..
 ```
-### Installing up-to-date ncbi-blast+ version (October 2019 version)
+### Installing up-to-date ncbi-blast+ version (v2.9.0)
 #### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
 
 ```
