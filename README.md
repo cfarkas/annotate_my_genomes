@@ -52,4 +52,13 @@ sudo apt-get install gmap
 
 ## Quickstart
 
+```
+# 1) Clone the repo
+git clone https://github.com/cfarkas/annotate_my_genomes.git
 
+# 2) Specify Number of threads in gawn_config.sh file. Default are NCPUS=10 but you can increase this number to speed-up things.
+cd annotate_my_genomes/test/
+
+# 3) Run the pipeline with a tiny set of transcripts (Chromosome 3 StringTie assembled transcripts in Gallus gallus genome)
+bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
+```
