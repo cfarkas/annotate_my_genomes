@@ -1,10 +1,12 @@
-# annotate_my_genomes
+# annotate_my_genomes 
+### :microscope: :hatched_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads.
 
 ## Pipeline Outline
 
-annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies. A set of transfrags can be obtained by tools such as StringTie or related (for documentation, please see http://ccb.jhu.edu/software/stringtie/). Often, genomes from model and Non-model organisms contain reference genome annotation available in GTF format (Gene Transfer Format) but these annotations often failed to capture all genome features including novel transcripts and genes due missing, tissue and/or stage-specific gene expression. The pipeline aims to conciliate current gene annotation from an organism and expand this annotation by annotating transcripts with GAWN (Genome Annotation Without Nightmares, for documentation of this pipeline, please see https://github.com/enormandeau/gawn). 
+annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies. A set of transfrags can be obtained by tools such as StringTie or related (for documentation, please see http://ccb.jhu.edu/software/stringtie/). Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations often failed to capture all genome features. Novel genes and novel transcripts can be missed from reference due tissue or stage-specific gene expression patterning, not accounted in curated reference annotations using RNA-seq data. The pipeline aims to conciliate current gene annotation from an organism and expand this annotation by annotating transcripts with GAWN (Genome Annotation Without Nightmares, for documentation of this pipeline, please see https://github.com/enormandeau/gawn). The transcripts used in this pipeline are recovered from long sequencing technologies such as PacBio or Oxford Nanopore sequencing technology since these technologies can fully reconstruct transcript complexity.  
 The pipeline is implemented in BASH enviroment.
+
 
 ## Preeliminars:
 ### Obtaining and installing StringTie (v2.0 release needed)
@@ -54,12 +56,12 @@ sudo apt-get install gmap
 ## Quickstart
 
 ```
-1) Clone the repo
+#1 Clone the repo
 git clone https://github.com/cfarkas/annotate_my_genomes.git
 
-2) Specify Number of threads in gawn_config.sh file located in test folder. Default are NCPUS=10 but you can increase this number to speed-up things.
+#2 Specify Number of threads in gawn_config.sh file located in test folder. Default are NCPUS=10 but you can increase this number to speed-up things.
 
-3) Run the pipeline with a tiny set of transcripts (Chromosome 3 StringTie assembled transcripts in Gallus gallus genome)
+#3 Run the pipeline with a tiny set of transcripts (Chromosome 3 StringTie assembled transcripts in Gallus gallus genome)
 cd annotate_my_genomes/test/
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 ```
