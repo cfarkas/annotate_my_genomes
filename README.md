@@ -30,7 +30,7 @@ sudo cp gffread /usr/local/bin/
 cd ..
 ```
 ### Installing up-to-date ncbi-blast+ version (October 2019 version)
-### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
+#### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
 
 ```
 # To remove older ncbi-blast+ binaries from your system 
@@ -44,7 +44,8 @@ rm ncbi-blast-2.9.0+-x64-linux.tar.gz
 cd ncbi-blast-2.9.0+/bin/
 sudo cp * /usr/local/bin/ 
 ```
-### Installing GMAP genomic aligner program (please see http://research-pub.gene.com/gmap/)
+### Installing GMAP genomic aligner program 
+#### (please see http://research-pub.gene.com/gmap/)
 
 ```
 sudo apt-get install gmap
@@ -56,9 +57,9 @@ sudo apt-get install gmap
 # 1) Clone the repo
 git clone https://github.com/cfarkas/annotate_my_genomes.git
 
-# 2) Specify Number of threads in gawn_config.sh file. Default are NCPUS=10 but you can increase this number to speed-up things.
-cd annotate_my_genomes/test/
+# 2) Specify Number of threads in gawn_config.sh file located in test folder. Default are NCPUS=10 but you can increase this number to speed-up things.
 
 # 3) Run the pipeline with a tiny set of transcripts (Chromosome 3 StringTie assembled transcripts in Gallus gallus genome)
+cd annotate_my_genomes/test/
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 ```
