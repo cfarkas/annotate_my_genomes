@@ -172,20 +172,22 @@ echo ""
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
 gunzip swissprot.tar.gz
 tar -xvf swissprot.tar
+dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd ..
 
 # Configuring Gawn Inputs
 
 cd /${dir1}/
-cp galGal6.fa /${dir1}/gawn/03_data/genome.fasta
-cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
+cp galGal6.fa /${dir2}/03_data/genome.fasta
+cp transcripts.fa /${dir2}/03_data/transcriptome.fasta
 
-# Configuring swissprot database
+# Configuring swissprot database directory
+dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 sed -i 's/~//g' gawn_config.sh
-sed -i 's/Software/${dir1}/g' gawn_config.sh
-sed -i 's/blastplus_databases/gawn/g' gawn_config.sh
+sed -i 's/Software/${dir2}/g' gawn_config.sh
+sed -i 's/blastplus_databases//g' gawn_config.sh
 rm /${dir1}/gawn/02_infos/gawn_config.sh
-cp gawn_config.sh /${dir1}/gawn/02_infos/
+cp gawn_config.sh /${dir2}/02_infos/
 
 echo "###################################"
 echo ""
