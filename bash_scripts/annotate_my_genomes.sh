@@ -164,11 +164,12 @@ git clone https://github.com/enormandeau/gawn.git
 cd gawn/02_infos/
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
+
 # Configuring Gawn Inputs and config file
 
 cd /${dir1}/
-cp galGal6.fa /${dir2}/03_data/genome.fasta
-cp transcripts.fa /${dir2}/03_data/transcriptome.fasta
+cp galGal6.fa /${dir1}/gawn/03_data/genome.fasta
+cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
 
