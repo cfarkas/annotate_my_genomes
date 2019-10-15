@@ -74,7 +74,7 @@ gunzip swissprot.tar.gz
 tar -xvf swissprot.tar
 cd ..
 
-#2: Edit the parameters in /test/gawn_config.sh. You can edit
+#2: Edit two parameters in /test/gawn_config.sh. You can edit
 
 NCPUS=10 # Increase this value to speed-up things
 SWISSPROT_DB="/paste_pwd_here/swissprot" # You need to specify full path to swissprot database files you downloaded in #1. You can pwd inside swissprot database you downloaded, copy this path and paste it.  
