@@ -16,4 +16,4 @@ GENOME_NAME="genome.fasta"                  # Name of genome fasta file found in
 TRANSCRIPTOME_NAME="transcriptome.fasta"    # Name of transcriptome fasta file found in 03_data
 
 # Swissprot
-SWISSPROT_DB="~/Software/blastplus_databases/swissprot"
+SWISSPROT_DB="/${dir2}/swissprot"
