@@ -19,3 +19,4 @@ TRANSCRIPTOME_NAME="transcriptome.fasta"    # Name of transcriptome fasta file f
 
 # Swissprot
 SWISSPROT_DB="/${curr_dir}/swissprot"
+#
