@@ -175,7 +175,7 @@ tar -xvf swissprot.tar
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 cd ..
 
-# Configuring Gawn Inputs
+# Configuring Gawn Inputs and config file
 
 cd /${dir1}/
 cp galGal6.fa /${dir2}/03_data/genome.fasta
