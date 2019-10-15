@@ -80,9 +80,8 @@ NCPUS=10 # Increase this value to speed-up things
 
 SWISSPROT_DB="/paste_pwd_path_here/swissprot" # You need to specify full path to swissprot database files you downloaded in #1. You can type "pwd" inside swissprot folder (found in annotate_my_genomes), copy this path and replace paste_pwd_path_here.  
 
-#3 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly
+#3 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal: 
 
-cd annotate_my_genomes/test/
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 ```
 
