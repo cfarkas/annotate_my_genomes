@@ -77,7 +77,7 @@ cd ..
 #2: Edit the parameters in /test/gawn_config.sh. You can edit
 
 NCPUS=10 # Increase this value to speed-up things
-SWISSPROT_DB="/path_to/annotate_my_genomes/swissprot/swissprot" # You need to specify full path to swissprot database files you downloaded in #1.
+SWISSPROT_DB="/paste_pwd_here/swissprot" # You need to specify full path to swissprot database files you downloaded in #1. You can pwd inside swissprot database you downloaded, copy this path and paste it.  
 
 #3 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly
 
