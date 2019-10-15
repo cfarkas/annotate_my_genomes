@@ -29,6 +29,7 @@ git clone https://github.com/gpertea/gffread
 cd gclib
 make release
 sudo cp gclib /usr/local/bin/
+cd ..
 cd gffcompare
 make release
 sudo cp gffcompare trmap /usr/local/bin/
