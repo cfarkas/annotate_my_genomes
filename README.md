@@ -23,8 +23,12 @@ sudo cp stringtie /usr/local/bin/
 ### Obtaining and installing gffcompare and gffread
 
 ```
+git clone https://github.com/gpertea/gclib
 git clone https://github.com/gpertea/gffcompare
 git clone https://github.com/gpertea/gffread
+cd gclib
+make release
+sudo cp gclib /usr/local/bin/
 cd gffcompare
 make release
 sudo cp gffcompare trmap /usr/local/bin/
