@@ -61,6 +61,7 @@ sudo apt-get install gmap
 ```
 #1 Clone the repo
 git clone https://github.com/cfarkas/annotate_my_genomes.git
+cd annotate_my_genomes
 
 #2 Specify Number of threads in gawn_config.sh file located in test folder. Default are NCPUS=10 but you can increase this number to speed-up things.
 
