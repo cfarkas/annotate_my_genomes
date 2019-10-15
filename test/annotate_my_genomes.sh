@@ -161,7 +161,7 @@ echo ""
 echo "########################################################################"
 echo ""
 git clone https://github.com/enormandeau/gawn.git
-cd gawn
+cd /gawn/02_infos/
 echo ""
 echo "##############################"
 echo ""
@@ -172,7 +172,7 @@ echo ""
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
 gunzip swissprot.tar.gz
 tar -xvf swissprot.tar
-dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+cd ..
 cd ..
 
 # Configuring Gawn Inputs and config file
