@@ -4,8 +4,6 @@
 # Do not modify the parameter names or remove parameters
 # Do not add spaces around the equal (=) sign
 
-curr_dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-
 # Global parameters
 NCPUS=10                    # Number of CPUs to use for analyses (int, 1+)
 
