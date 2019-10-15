@@ -60,15 +60,44 @@ sudo cp * /usr/local/bin/
 sudo apt-get install gmap
 ```
 
-## Quickstart
+## Quickstart (Running the test)
 
 ```
-#1 Clone the repo
+#1: Clone the repo and obtain swissprot database for GAWN (you just need to do this once)
+
 git clone https://github.com/cfarkas/annotate_my_genomes.git
+cd annotate_my_genomes
+mkdir swissprot
+cd swissprot
+wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
+gunzip swissprot.tar.gz
+tar -xvf swissprot.tar
+cd ..
 
-#2 Specify Number of threads in gawn_config.sh file located in test folder. Default are NCPUS=10 but you can increase this number to speed-up things.
+#2: Edit the parameters in /test/gawn_config.sh. You can edit
 
-#3 Run the pipeline with a tiny set of transcripts (Chromosome 3 StringTie assembled transcripts in Gallus gallus genome)
+NCPUS=10 # Increase this value to speed-up things
+SWISSPROT_DB="/path_to/annotate_my_genomes/swissprot/swissprot" # You need to specify full path to swissprot database files you downloaded in #1.
+
+#3 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly
+
 cd annotate_my_genomes/test/
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
+```
+
+## Usage
+
+```
+# Assuming you downloaded the swissprot database for running the test ...
+
+#1: Duplicate bash_scripts folder into annotate_my_genomes folder and rename it as you wish. Put your target GTF file to annotate in this folder
+
+#2: Edit gawn_config.sh file as in test
+
+#3 Run the pipeline 
+
+cd annotate_my_genomes/your_folder/
+bash annotate_my_genomes.sh target.gtf genome_assembly_name
+
+# To check genome_assembly_names (UCSC Genome Browser assembly ID), please check: https://genome.ucsc.edu/cgi-bin/hgGateway
 ```
