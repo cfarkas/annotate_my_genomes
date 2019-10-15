@@ -88,11 +88,11 @@ bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 ## Usage
 
 ```
-# Assuming you downloaded the swissprot database for running the test ...
+# Assuming you runned the test ...
 
-#1: Duplicate bash_scripts folder into annotate_my_genomes folder and rename it as you wish. Put your target GTF file to annotate in this folder
+#1: Rename "genome_1" folder as you wish. Put your target GTF assembly to annotate in this folder (you can duplicate this folder every time you need to annotate a new GTF assembly)
 
-#2: Edit gawn_config.sh file as in test
+#2: Copy gawn_config.sh file from test and put it in this folder.
 
 #3 Run the pipeline 
 
