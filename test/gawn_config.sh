@@ -17,6 +17,6 @@ SKIP_GENOME_INDEXING=0      # 1 to skip genome indexing, 0 to index it
 GENOME_NAME="genome.fasta"                  # Name of genome fasta file found in 03_data
 TRANSCRIPTOME_NAME="transcriptome.fasta"    # Name of transcriptome fasta file found in 03_data
 
-# Swissprot
-SWISSPROT_DB="$curr_dir/swissprot"
+# Specify Swissprot folder path
+SWISSPROT_DB="swissprot-folder-path/swissprot"
 #
