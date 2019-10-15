@@ -28,7 +28,6 @@ git clone https://github.com/gpertea/gffcompare
 git clone https://github.com/gpertea/gffread
 cd gclib
 make release
-sudo cp gclib /usr/local/bin/
 cd ..
 cd gffcompare
 make release
