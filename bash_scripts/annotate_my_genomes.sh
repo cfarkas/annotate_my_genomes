@@ -162,17 +162,6 @@ echo "########################################################################"
 echo ""
 git clone https://github.com/enormandeau/gawn.git
 cd gawn/02_infos/
-echo ""
-echo "##############################"
-echo ""
-echo "Downloading swissprot database"
-echo ""
-echo "##############################"
-echo ""
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
-gunzip swissprot.tar.gz
-tar -xvf swissprot.tar
-cd ..
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
 # Configuring Gawn Inputs and config file
@@ -181,7 +170,7 @@ cd ${dir1}/
 cp galGal6.fa /${dir2}/03_data/genome.fasta
 cp transcripts.fa /${dir2}/03_data/transcriptome.fasta
 rm /${dir2}/02_infos/gawn_config.sh
-cp gawn_config.sh /${dir2}/02_infos/gawn_config.sh
+cp gawn_config.sh /${dir2}/gawn_config.sh
 
 echo "###################################"
 echo ""
