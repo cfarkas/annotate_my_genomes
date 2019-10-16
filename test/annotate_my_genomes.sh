@@ -180,11 +180,13 @@ echo "###################################"
 echo ""
 cd /${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
-echo "###################################################################"
+echo "###############################################################"
 echo ""
-echo "All Done. The novel transcripts are annotated in ./gawn/05_results/"
+echo "Done. The novel transcripts are annotated in ./gawn/05_results/"
 echo ""
-echo "###################################################################"
+echo "###############################################################"
+mkdir gffcompare_outputs
+mv merged.annotated.gtf merged.loci merged.stats merged.stringtie_chr3.gtf.refmap merged.stringtie_chr3.gtf.tmap merged.tracking merged.loci ./gffcompare_outputs
 end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
