@@ -60,6 +60,15 @@ sudo cp * /usr/local/bin/
 sudo apt-get install gmap
 ```
 
+### Installing python dependences for CNIT: A tool for identifying protein-coding and long non-coding transcripts based on intrinsic sequence composition 
+#### (please see http://cnit.noncode.org/CNIT/)
+
+```
+pip install numpy
+pip install sklearn
+pip install xgboost
+```
+
 ## Quickstart (Running the test)
 
 ```
