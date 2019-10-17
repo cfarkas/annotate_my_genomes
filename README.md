@@ -69,27 +69,25 @@ pip install sklearn
 pip install xgboost
 ```
 
-## Quickstart (Running the test)
-
+## Installation
+  
 ```
-#1: Clone the repo and obtain swissprot database for GAWN (you just need to do this once)
-
 git clone https://github.com/cfarkas/annotate_my_genomes.git
 cd annotate_my_genomes
-mkdir swissprot
-cd swissprot
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
-gunzip swissprot.tar.gz
-tar -xvf swissprot.tar
-cd ..
+bash makefile.sh
+```
 
-#2: Edit two parameters in /test/gawn_config.sh. You can edit
+## Quickstart (Running the test)
+```
+#1: Edit two parameters in /test/gawn_config.sh. You can edit:
 
 NCPUS=10 # Increase this value to speed-up things
 
-SWISSPROT_DB="/paste_pwd_path_here/swissprot" # You need to specify full path to swissprot database files you downloaded in #1. You can type "pwd" inside swissprot folder (found in annotate_my_genomes), copy this path and replace paste_pwd_path_here.  
+SWISSPROT_DB="/paste_pwd_path_here/swissprot" # You need to specify full path to swissprot database. You can type "pwd" inside swissprot folder (found in annotate_my_genomes after make), copy this path and replace paste_pwd_path_here.
 
-#3 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal: 
+i.e.: SWISSPROT_DB="/home/lrt/brain_chicken/PacBio/annotate_my_genomes/swissprot/swissprot"
+
+#2 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal: 
 
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 ```
