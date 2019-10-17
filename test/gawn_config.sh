@@ -16,5 +16,5 @@ GENOME_NAME="genome.fasta"                  # Name of genome fasta file found in
 TRANSCRIPTOME_NAME="transcriptome.fasta"    # Name of transcriptome fasta file found in 03_data
 
 # Specify full swissprot folder path you downloaded
-SWISSPROT_DB="/paste_pwd_path_here/swissprot"
+SWISSPROT_DB="paste_pwd_path_here/swissprot"
 #
