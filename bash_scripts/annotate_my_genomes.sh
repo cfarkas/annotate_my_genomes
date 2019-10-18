@@ -200,13 +200,23 @@ CNIT.index CNIT
 join --nocheck-order transcriptome_annotation_file CNIT_file > file1
 sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' namelist |
 sed -f - file1 > summary.txt
+sed 's/ /\t/g' summary.txt > summary.tab
 sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' namelist |
 sed -f - merged.annotated_with_reference.gtf > merged_with_reference_final.gtf
 rm transcriptome_annotation_file CNIT_file namelist file1
 mkdir merged_annotation
-mv merged_with_reference_final.gtf summary.txt ./merged_annotation
+mv merged_with_reference_final.gtf summary.tab ./merged_annotation
+rm summary.txt
 echo ""
-echo "All Done. The transcripts were classified in summary.txt file located in ./merged_annotation"
+echo "All Done. The transcripts were classified in summary.tab file located in ./merged_annotation"
+echo ""
+echo "The Classification includes:"
+echo ""
+echo "Field #1: StringTie transcript id (STRG)"
+echo "Field #2: Uniprot closest BLASTp match from GAWN annotation"
+echo "Field #3: Coding or non coding classfication by CNIT"
+echo "Field #4: Coding probability score (CNIT Score)"
+echo "Field #5: Transcript length (bp)"
 echo ""
 echo "A new GTF file named merged_with_reference_final.gtf is located in ./merged_annotation"
 echo ""
