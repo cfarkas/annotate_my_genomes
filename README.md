@@ -79,7 +79,7 @@ bash makefile.sh
 
 ## Quickstart (Running the test)
 ```
-#1: Edit two parameters in /test/gawn_config.sh. You can edit:
+#1: Just edit two parameters in /test/gawn_config.sh. You can edit:
 
 NCPUS=10 # Increase this value to speed-up things
 
