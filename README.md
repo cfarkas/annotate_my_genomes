@@ -78,17 +78,18 @@ bash makefile.sh
 ```
 
 ## Quickstart (Running the test)
-```
+
 #1: Just edit two parameters in /test/gawn_config.sh. You can edit:
 
-^^ NCPUS=10 # Increase this value to speed-up things
+- NCPUS=10 # Increase this value to speed-up things
 
-^^ SWISSPROT_DB="paste_pwd_path_here/swissprot" # You need to specify full path to swissprot database. You can type pwd inside swissprot ^^ folder (found in annotate_my_genomes after make), copy this path and replace paste_pwd_path_here.
+- SWISSPROT_DB="paste_pwd_path_here/swissprot" # You need to specify full path to swissprot database. You can type pwd inside swissprot folder (found in annotate_my_genomes after make), copy this path and replace paste_pwd_path_here.
 
-^^ # i.e.: SWISSPROT_DB="/home/lrt/brain_chicken/PacBio/annotate_my_genomes/swissprot/swissprot"
+- # i.e.: SWISSPROT_DB="/home/lrt/brain_chicken/PacBio/annotate_my_genomes/swissprot/swissprot"
 
 #2 Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal: 
 
+```
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 ```
 
