@@ -79,11 +79,13 @@ bash makefile.sh
 
 ## Quickstart (Running the test)
 
-1) Just edit two parameters in /test/gawn_config.sh. You can edit:
+1) Edit two parameters in /test/gawn_config.sh. You should can edit:
 
-- NCPUS=10 # Increase this value to speed-up things
+- NCPUS=10
+  - Increase this value to speed-up things
 
-- SWISSPROT_DB="paste_pwd_path_here/swissprot" # You need to specify full path to swissprot database. You can type pwd inside swissprot folder (found in annotate_my_genomes after make), copy this path and replace paste_pwd_path_here.
+- SWISSPROT_DB="paste_pwd_path_here/swissprot"
+  - You need to specify full path to swissprot database. You can type pwd inside swissprot folder (found in annotate_my_genomes after make), copy this path and replace paste_pwd_path_here.
 ```
 # i.e.: SWISSPROT_DB="/home/lrt/brain_chicken/PacBio/annotate_my_genomes/swissprot/swissprot"
 ```
