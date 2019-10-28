@@ -6,12 +6,30 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 
   annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies coming from long sequencing reads (i.e. PacBio/Oxford Nanopore technologies). By using this sequencing, a set of high-quality transfrags can be obtained by tools such as StringTie or related (for documentation, please see http://ccb.jhu.edu/software/stringtie/) and further characterized. 
   
-  Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations often failed to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization. The pipeline aims to conciliate current gene annotation from an organism and expand this annotation by annotating transcripts with GAWN (Genome Annotation Without Nightmares, for documentation of this pipeline, please see https://github.com/enormandeau/gawn). 
+  Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization. The pipeline aims to conciliate current gene annotation from an organism and expand this annotation by annotating transcripts with GAWN (Genome Annotation Without Nightmares, for documentation of this pipeline, please see https://github.com/enormandeau/gawn) and classify long-noncoding RNAs with CNIT tool (http://cnit.noncode.org/CNIT/). 
 
 The pipeline is implemented in BASH enviroment.
 
 
 ## Preeliminars:
+
+## Files
+
+### Alignment of long sequencing reads using minimap aligner (against galGal6 genome as an example, using 30 threads)
+```
+./minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
+samtools view -S -b aln_galGal6.sam > aln_4_galGal6.bam --threads 30
+samtools sort aln_4_galGal6.bam > aln_4_galGal6.sorted.bam --threads 30
+samtools index aln_4_galGal6.sorted.bam -@ 30
+```
+
+### Obtaining transfrags from the above alignment using StringTie (using -p: 30 threads, -L: long read settings)
+```
+stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
+```
+
+## Dependences
+
 ### Obtaining and installing StringTie (v2.0 release needed)
 
 ```
@@ -95,9 +113,9 @@ bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 
 #### Assuming you runned the test ...
 
-1) Put your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly, changing the folder name)
+1) Place your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly, changing the folder name)
 
-2) Copy gawn_config.sh file from test and put it in "genome_1" folder.
+2) Copy gawn_config.sh file from test and place it in "genome_1" folder.
 
 3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example):
 ```
