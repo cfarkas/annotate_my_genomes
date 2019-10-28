@@ -79,17 +79,12 @@ bash makefile.sh
 
 ## Quickstart (Running the test)
 
-1) Edit two parameters in /test/gawn_config.sh. You should can edit:
+1) Optionally, edit number of cpus in /test/gawn_config.sh:
 
 - NCPUS=10
   - Increase this value to speed-up things
 
-- SWISSPROT_DB="paste_pwd_path_here/swissprot"
-  - You need to specify full path to swissprot database. You can type pwd inside swissprot folder (found in annotate_my_genomes after make), copy this path and replace paste_pwd_path_here.
-```
-# i.e.: SWISSPROT_DB="/home/lrt/brain_chicken/PacBio/annotate_my_genomes/swissprot/swissprot"
-```
-2) Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome) specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal: 
+2) Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome version "6") specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal:
 
 ```
 bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
@@ -97,17 +92,27 @@ bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 
 ## Usage
 
+
+#### Assuming you runned the test ...
+
+1) Put your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly changing the folder name)
+
+2) Copy gawn_config.sh file from test and put it in "genome_1" folder.
+
+3) Run the pipeline in genome_1 typing:
 ```
-# Assuming you runned the test ...
-
-#1: Rename "genome_1" folder as you wish. Put your target GTF assembly to annotate in this folder (you can duplicate this folder every time you need to annotate a new GTF assembly)
-
-#2: Copy gawn_config.sh file from test and put it in this folder.
-
-#3 Run the pipeline 
-
-cd annotate_my_genomes/your_folder/
 bash annotate_my_genomes.sh target.gtf genome_assembly_name
+```
+#### to check genome_assembly_names (UCSC Genome Browser assembly ID), please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
 
-# To check genome_assembly_names (UCSC Genome Browser assembly ID), please check: https://genome.ucsc.edu/cgi-bin/hgGateway
+
+## Usage examples
+
+- For mouse assembly using "target.gtf" in genome_1 folder:
+```
+bash annotate_my_genomes.sh target.gtf mm10
+```
+- For rabbit assembly using "target.gtf" in genome_1 folder:
+```
+bash annotate_my_genomes.sh target.gtf oryCun2
 ```
