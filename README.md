@@ -72,7 +72,7 @@ pip install xgboost
 
 ### Obtaining StringTie transfrags for annotation
 
-#### 1) Alignment of long sequencing reads using minimap aligner (against galGal6 genome as an example, using 30 threads). You can use gmap as well. 
+#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
 ```
 git clone https://github.com/lh3/minimap2
 cd minimap2 && make
@@ -83,7 +83,7 @@ samtools sort aln_4_galGal6.bam > aln_4_galGal6.sorted.bam --threads 30
 samtools index aln_4_galGal6.sorted.bam -@ 30
 ```
 
-#### 2) Obtaining transfrags from the above alignment using StringTie (using -p: 30 threads, -L: long read settings)
+#### 2) Obtaining transfrags from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
 ```
 stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
 ```
