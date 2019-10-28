@@ -95,15 +95,15 @@ bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
 
 #### Assuming you runned the test ...
 
-1) Put your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly changing the folder name)
+1) Put your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly, changing the folder name)
 
 2) Copy gawn_config.sh file from test and put it in "genome_1" folder.
 
-3) Run the pipeline in genome_1 typing:
+3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example):
 ```
 bash annotate_my_genomes.sh target.gtf genome_assembly_name
 ```
-#### to check genome_assembly_names (UCSC Genome Browser assembly ID), please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
+#### To check genome_assembly_names (UCSC Genome Browser assembly ID), please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
 
 
 ## Usage examples
