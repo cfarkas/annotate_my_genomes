@@ -11,7 +11,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 The pipeline is implemented in BASH enviroment.
 
 
-## Dependences:
+## Preeliminars:
 
 ### Obtaining and installing StringTie (v2.0 release needed)
 
@@ -70,7 +70,7 @@ pip install sklearn
 pip install xgboost
 ```
 
-## Obtaining StringTie transfrags for annotation
+### Obtaining StringTie transfrags for annotation
 
 #### 1) Alignment of long sequencing reads using minimap aligner (against galGal6 genome as an example, using 30 threads). You can use gmap as well. 
 ```
