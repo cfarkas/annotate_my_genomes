@@ -82,7 +82,7 @@ bash makefile.sh
 1) Optionally, edit number of cpus in /test/gawn_config.sh:
 
 - NCPUS=10
-  - Increase this value to speed-up things
+  - Increase this value to speed-up things :rocket:
 
 2) Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome version "6") specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal:
 
