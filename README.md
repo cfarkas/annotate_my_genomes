@@ -11,24 +11,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 The pipeline is implemented in BASH enviroment.
 
 
-## Preeliminars:
-
-## Files
-
-### Alignment of long sequencing reads using minimap aligner (against galGal6 genome as an example, using 30 threads)
-```
-./minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
-samtools view -S -b aln_galGal6.sam > aln_4_galGal6.bam --threads 30
-samtools sort aln_4_galGal6.bam > aln_4_galGal6.sorted.bam --threads 30
-samtools index aln_4_galGal6.sorted.bam -@ 30
-```
-
-### Obtaining transfrags from the above alignment using StringTie (using -p: 30 threads, -L: long read settings)
-```
-stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
-```
-
-## Dependences
+## Dependences:
 
 ### Obtaining and installing StringTie (v2.0 release needed)
 
@@ -85,6 +68,24 @@ sudo apt-get install gmap
 pip install numpy
 pip install sklearn
 pip install xgboost
+```
+
+## Obtaining StringTie transfrags for annotation
+
+#### 1) Alignment of long sequencing reads using minimap aligner (against galGal6 genome as an example, using 30 threads). You can use gmap as well. 
+```
+git clone https://github.com/lh3/minimap2
+cd minimap2 && make
+
+./minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
+samtools view -S -b aln_galGal6.sam > aln_4_galGal6.bam --threads 30
+samtools sort aln_4_galGal6.bam > aln_4_galGal6.sorted.bam --threads 30
+samtools index aln_4_galGal6.sorted.bam -@ 30
+```
+
+#### 2) Obtaining transfrags from the above alignment using StringTie (using -p: 30 threads, -L: long read settings)
+```
+stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
 ```
 
 ## Installation
