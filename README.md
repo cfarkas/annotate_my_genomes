@@ -106,7 +106,7 @@ bash makefile.sh
 2) Run the pipeline with a tiny set of transcripts (Chromosome 3 from Gallus gallus genome version "6") specifying the reference genome assembly. Go to /annotate_my_genomes/test and type in a terminal:
 
 ```
-bash annotate_my_genomes.sh stringtie_chr3.gtf galGal6
+bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6
 ```
 
 ## Usage
