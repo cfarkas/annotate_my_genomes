@@ -78,9 +78,9 @@ git clone https://github.com/lh3/minimap2
 cd minimap2 && make
 
 ./minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
-samtools view -S -b aln_galGal6.sam > aln_4_galGal6.bam --threads 30
-samtools sort aln_4_galGal6.bam > aln_4_galGal6.sorted.bam --threads 30
-samtools index aln_4_galGal6.sorted.bam -@ 30
+samtools view -S -b aln_galGal6.sam > aln_galGal6.bam --threads 30
+samtools sort aln_galGal6.bam > aln_galGal6.sorted.bam --threads 30
+samtools index aln_galGal6.sorted.bam -@ 30
 ```
 
 #### 2) Obtaining transfrags from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
