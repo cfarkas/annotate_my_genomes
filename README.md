@@ -76,8 +76,11 @@ pip install xgboost
 ```
 git clone https://github.com/lh3/minimap2
 cd minimap2 && make
+sudo cp minimap2 /usr/local/bin/
 
-./minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
+# Usage
+
+minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
 samtools view -S -b aln_galGal6.sam > aln_galGal6.bam --threads 30
 samtools sort aln_galGal6.bam > aln_galGal6.sorted.bam --threads 30
 samtools index aln_galGal6.sorted.bam -@ 30
