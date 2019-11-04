@@ -115,7 +115,7 @@ bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6
 
 1) Place your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly, changing the folder name)
 
-2) Copy gawn_config.sh file from test and place it in "genome_1" folder.
+2) (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10. 
 
 3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example):
 ```
