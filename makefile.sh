@@ -1,5 +1,6 @@
 #!/bin/bash
 
+dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 mkdir swissprot
 cd swissprot
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
@@ -13,6 +14,7 @@ tar -xvf CNIT.tar
 cd test
 echo 'SWISSPROT_DB="'$SWISSPROT_PATH'/swissprot"' >> gawn_config.sh
 echo '#' >> gawn_config.sh
+cp gawn_config.sh ${dir}/genome_1
 cd ..
 ###
 echo ""
