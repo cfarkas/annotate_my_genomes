@@ -15,8 +15,9 @@ cd test
 echo 'SWISSPROT_DB="'$SWISSPROT_PATH'/swissprot"' >> gawn_config.sh
 echo '#' >> gawn_config.sh
 cp gawn_config.sh ${dir}/genome_1
+cp gawn_config.sh ${dir}/bash_scripts
 cd ..
 ###
 echo ""
 echo "make done"
-
+#
