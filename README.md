@@ -55,14 +55,14 @@ cd ncbi-blast-2.9.0+/bin/
 sudo cp * /usr/local/bin/ 
 ```
 ### Installing GMAP genomic aligner program 
-#### (please see http://research-pub.gene.com/gmap/)
+#### (for documentation, please see http://research-pub.gene.com/gmap/)
 
 ```
 sudo apt-get install gmap
 ```
 
 ### Installing python dependences for CNIT: A tool for identifying protein-coding and long non-coding transcripts based on intrinsic sequence composition 
-#### (please see http://cnit.noncode.org/CNIT/)
+#### (for documentation, please see http://cnit.noncode.org/CNIT/)
 
 ```
 pip install numpy
