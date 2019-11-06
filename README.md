@@ -69,6 +69,18 @@ pip install numpy
 pip install sklearn
 pip install xgboost
 ```
+### Installing ChopStitch: exon annotation and splice graph construction using transcriptome assembly
+#### (for documentation, please see https://github.com/bcgsc/ChopStitch.git)
+
+```
+git clone https://github.com/bcgsc/ChopStitch.git
+cd ChopStitch/
+pip install -r requirements.txt
+./autogen.sh
+./configure
+make
+sudo make install
+```
 
 ### Obtaining StringTie transfrags for annotation
 
