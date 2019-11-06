@@ -69,7 +69,8 @@ pip install numpy
 pip install sklearn
 pip install xgboost
 ```
-### Installing bioawk #### (for documentation, please see: https://github.com/lh3/bioawk)
+### Installing bioawk 
+#### (for documentation, please see: https://github.com/lh3/bioawk)
 
 ```
 sudo apt-get install byacc
