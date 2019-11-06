@@ -69,14 +69,6 @@ pip install numpy
 pip install sklearn
 pip install xgboost
 ```
-### Installing bioawk 
-#### (for documentation, please see: https://github.com/lh3/bioawk)
-
-```
-sudo apt-get install byacc
-git clone git://github.com/lh3/bioawk.git && cd bioawk && make
-sudo cp bioawk /usr/local/bin
-```
 
 ### Obtaining StringTie transfrags for annotation
 
