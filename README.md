@@ -147,7 +147,7 @@ bash annotate_my_genomes.sh target.gtf mm10
 bash annotate_my_genomes.sh target.gtf oryCun2
 ```
 
-## "genes_withGO.tab" and "transcriptsGO.tab" output files usage:
+## "genesGO.tab" and "transcriptsGO.tab" output files usage:
 - A gene list in tabular format (e.g.: coming from differential expression analysis from genes or transcripts) can be intersected with these output files by using the galaxy framework (https://usegalaxy.org/). A gene list can be the following:
 
 ```
@@ -162,9 +162,9 @@ HMGA1
 ...
 ```
 
-can be intersected with "genes_withGO.tab" output file, containing annotated GO terms. 
+can be intersected with "genesGO.tab" output file, containing annotated GO terms. 
 ```
-less genes_withGO.tab
+less genesGO.tab
 
 ARF5    GO:0005737 GO:0005794 GO:0005886 GO:0005525 GO:0006886 GO:0016192
 GCC1    GO:0005829 GO:0005794 GO:0000139 GO:0005886
