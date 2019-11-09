@@ -146,3 +146,30 @@ bash annotate_my_genomes.sh target.gtf mm10
 ```
 bash annotate_my_genomes.sh target.gtf oryCun2
 ```
+
+## "genes_withGO.tab" and "transcriptsGO.tab" output files usage:
+- A gene list in tabular format (e.g.: coming from differential expression analysis from genes or transcripts) can be intersected with these output files by using the galaxy framework (https://usegalaxy.org/). A gene list can be the following:
+
+```
+less gene_list.tab
+
+STRG.14047
+GMPPB
+STRG.26267
+MSX2
+STRG.12490
+HMGA1
+```
+
+can be intersected with "genes_withGO.tab" output file, containing annotated GO terms. 
+```
+less genes_withGO.tab
+
+ARF5    GO:0005737 GO:0005794 GO:0005886 GO:0005525 GO:0006886 GO:0016192
+GCC1    GO:0005829 GO:0005794 GO:0000139 GO:0005886
+MIR1651 GO:0005829 GO:0043231 GO:0019903 GO:0043666
+LMF2    GO:0005737 GO:0016604 GO:0048471 GO:0001691 GO:0017112 GO:0001558 GO:0043087 GO:0007283
+```
+Following this simple steps in galaxy: https://usegalaxy.org/u/carlosfarkas/h/joining-user-genelist-with-genegotab-file
+
+The file number 4, "Cut on data 3" file can be inputted in WEGO 2.0 server (http://wego.genomics.org.cn/) in native format, to explore and plot GO terms. 
