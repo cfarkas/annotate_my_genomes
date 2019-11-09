@@ -159,6 +159,7 @@ STRG.26267
 MSX2
 STRG.12490
 HMGA1
+...
 ```
 
 can be intersected with "genes_withGO.tab" output file, containing annotated GO terms. 
@@ -169,6 +170,7 @@ ARF5    GO:0005737 GO:0005794 GO:0005886 GO:0005525 GO:0006886 GO:0016192
 GCC1    GO:0005829 GO:0005794 GO:0000139 GO:0005886
 MIR1651 GO:0005829 GO:0043231 GO:0019903 GO:0043666
 LMF2    GO:0005737 GO:0016604 GO:0048471 GO:0001691 GO:0017112 GO:0001558 GO:0043087 GO:0007283
+...
 ```
 Following this simple steps in galaxy: https://usegalaxy.org/u/carlosfarkas/h/joining-user-genelist-with-genegotab-file
 
