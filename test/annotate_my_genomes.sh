@@ -3,54 +3,47 @@
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 stringtie_gtf=${1}
 reference_genome_name=${2}
-threads=${3}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
   echo "{stringtie_gtf}: Name of the StringTie GTF file"
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
-  echo ""
-  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
   echo ""
   exit 0
 fi
 
 if [ "$1" == "-help" ]; then
     echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
   echo "{stringtie_gtf}: Name of the StringTie GTF file"
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
-  echo ""
-  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
   echo ""
   exit 0
 fi
 if [ "$1" == "--h" ]; then
    echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
   echo "{stringtie_gtf}: Name of the StringTie GTF file"
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
-  echo ""
-  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
   echo ""
   exit 0
 fi
 if [ "$1" == "--help" ]; then
     echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
@@ -58,15 +51,13 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
   echo ""
-  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
-  echo ""
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"; exit 1; }
 
-if [ $# -ne 3 ]; then
-  echo 1>&2 "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+if [ $# -ne 2 ]; then
+  echo 1>&2 "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
   exit 3
 fi
 
@@ -292,7 +283,7 @@ echo ""
 echo "Predicting Exons from transcripts_for_glimmer.fa with ChopStitch"
 echo ""
 cd /${dir1}/
-CreateBloom -t ${3} -k 50 --fpr1 0.01 transcripts_for_glimmer.fa
+CreateBloom -t 1 -k 50 --fpr1 0.01 transcripts_for_glimmer.fa
 FindExons -i Bfilter.bf transcripts_for_glimmer.fa
 echo ""
 echo "Done. confident_exons.fa file contains predicted exons from transcripts. Number of Annotated Exons:"
