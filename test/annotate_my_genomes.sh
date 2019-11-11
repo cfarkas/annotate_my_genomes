@@ -170,7 +170,6 @@ echo ""
 echo "::: Obtaining Annotated Transcripts in FASTA format with gffread"
 echo ""
 gffread -w transcripts.fa -g ${2}.fa merged_with_reference.gtf
-gffread -w transcripts_for_glimmer.fa -g ${2}.fa ${1}
 rm merged.annotated_with_reference.gtf
 echo ""
 echo "Moving gffcompare results to gffcompare_outputs folder ..."
@@ -277,41 +276,32 @@ sed 's/ /\t/' genes_with_GO.tab > genesGO.tab
 rm STRG_genes_withGO genes_withGO.tab genes_with_GO.tab
 
 ##########################################
-# Exon Prediction Step with ChopStitch
+# Gene Prediction Step with Augustus
 ##########################################
-echo ""
-echo "Predicting Exons from transcripts_for_glimmer.fa with ChopStitch"
-echo ""
 cd /${dir1}/
-CreateBloom -t 1 -k 50 --fpr1 0.01 transcripts_for_glimmer.fa
-FindExons -i Bfilter.bf transcripts_for_glimmer.fa
 echo ""
-echo "Done. confident_exons.fa file contains predicted exons from transcripts. Number of Annotated Exons:"
-grep ">" confident_exons.fa -c
+echo "::: Predicting gene models from transcripts with AUGUSTUS (gff3 format). progress will be printed for each transcript."
 echo ""
-echo "Getting exong ranges"
+wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
+gunzip augustus.2.5.5.tar.gz
+tar -xvf augustus.2.5.5.tar
+cd augustus.2.5.5/src/
+make
+cd ..
+cd ..
+export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=on --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
+echo "Done. augustus.gff3 file is present in current directory..."
 echo ""
-tr '_' '\t' < confident_exons.fa > confident_exons_splitname.fa
-grep ">" confident_exons_splitname.fa > exon_ranges
-sed 's/>//' exon_ranges > exon_ranges.tab
-column -t exon_ranges.tab > exon_ranges.bed
-awk -v i=1 'NR>1 && $i!=p { print "" }{ p=$i } 1' exon_ranges.bed > exons_for_glimmerhmm.bed
-rm confident_exons_splitname.fa exon_ranges exon_ranges.tab exon_ranges.bed
-echo "Done. exon_ranges.bed file contain predicted exon ranges in each transcript"
+echo "Converting gff3 to GTF format, collecting coding sequences and proteins with gffread..."
+gffread augustus.gff3 -T -o novel_transcripts.gtf
+gffread -x cds.fa -g transcripts.fa novel_transcripts.gtf
+gffread -y prot.fa -g transcripts.fa novel_transcripts.gtf
 
-##########################################
-# Gene Prediction Step with GlimmerHMM 
-##########################################
-echo ""
-echo "Gene Prediction Step with GlimmerHMM"
-echo ""
-echo "Downloading GlimmerHMM software from https://ccb.jhu.edu/software/glimmerhmm/"
-echo ""
-wget https://ccb.jhu.edu/software/glimmerhmm/dl/GlimmerHMM-3.0.4.tar.gz
-tar -xzf GlimmerHMM-3.0.4.tar.gz 
-echo "Training and predicting gene models from transcripts.fa with GlimmerHMM"
-./GlimmerHMM/train/trainGlimmerHMM transcripts_for_glimmer.fa exons_for_glimmerhmm.bed -i 0,40,100 -d gene_training
-
+# Re-formatting
+cat cds.fa |rev|cut -d"." -f1 --complement|rev > CDS.fa
+cat prot.fa |rev|cut -d"." -f1 --complement|rev > proteins.fa
+rm cds.fa prot.fa
 
 ##########################################
 # Clean-up enviroment and building summary
@@ -324,8 +314,8 @@ sed -f - file1 > summary.txt
 sed 's/ /\t/g' summary.txt > summary.tab
 rm transcriptome_annotation_file CNIT_file namelist file1
 mkdir merged_annotation
-mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab ./merged_annotation
-rm summary.txt genes.tab genes1.tab genes2.tab
+mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab CDS.fa proteins.fa novel_transcripts.gtf ./merged_annotation
+rm summary.txt genes.tab genes1.tab genes2.tab 
 
 echo ""
 echo "All Done. The transcripts were classified in summary.tab file located in ./merged_annotation"
@@ -341,9 +331,13 @@ echo ""
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./merged_annotation"
 echo ""
-echo "A new GTF file named merged_with_reference.gtf is located in ./merged_annotation"
+echo "A new GTF file suitable for gene count quantification is named merged_with_reference.gtf and is located in ./merged_annotation"
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./merged_annotation"
+echo ""
+echo "A GTF file named novel_transcripts.gtf contains all discovered transcripts resolved by AUGUSTUS"
+echo ""
+echo "Associated Transcript coding sequences (CDS.fa) and correspondent protein sequences (proteins.fa) with novel_transcripts.gtf are located in ./merged_annotation"
 echo ""
 echo "GO terms associated to each transcript, named transcriptsGO.tab and genesGO.tab are located in ./merged_annotation"
 echo ""
