@@ -4,14 +4,14 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 
 ## Pipeline Outline
 
-  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation. Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization. The pipeline aims to:
-- Conciliate current gene annotation from an organism and expand this annotation by annotating transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). Transcripts in fasta format an concilliated GTF files are generated. 
+  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation. Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization. Thus, this pipeline aims to:
+  
+- The input for this pipeline are GTF files coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
+- Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). Concilliated GTF files are generated with corresponent transcripts in fasta format. 
 - Predict exons with ChopStitch tool (https://github.com/bcgsc/ChopStitch.git), by implementing a Bloom filter that represents the k-mer spectrum of assembled transcripts.
 - Train exons sequences along with the assembled transcripts in order to discover gene models with GlimmerHMM (https://ccb.jhu.edu/software/glimmerhmm/)
 - Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
-
-The input for this pipeline are GTF files coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository). 
 
 The pipeline is implemented in BASH enviroment.
 
