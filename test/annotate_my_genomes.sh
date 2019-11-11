@@ -335,7 +335,7 @@ echo "A new GTF file suitable for gene count quantification is named merged_with
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./merged_annotation"
 echo ""
-echo "A GTF file named novel_transcripts.gtf contains all discovered transcripts resolved by AUGUSTUS"
+echo "A GTF file named novel_transcripts.gtf contains all discovered transcripts resolved by AUGUSTUS and is located in ./merged_annotation"
 echo ""
 echo "Associated Transcript coding sequences (CDS.fa) and correspondent protein sequences (proteins.fa) with novel_transcripts.gtf are located in ./merged_annotation"
 echo ""
