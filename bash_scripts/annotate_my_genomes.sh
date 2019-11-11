@@ -321,7 +321,7 @@ sed -f - file1 > summary.txt
 sed 's/ /\t/g' summary.txt > summary.tab
 rm transcriptome_annotation_file CNIT_file namelist file1
 mkdir merged_annotation
-mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab CDS.fa proteins.fa novel_transcripts.gtf ./merged_annotation
+mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf ./merged_annotation
 rm summary.txt genes.tab genes1.tab 
 
 echo ""
@@ -342,9 +342,9 @@ echo "A new GTF file suitable for gene count quantification is named merged_with
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./merged_annotation"
 echo ""
-echo "A GTF file named novel_transcripts.gtf contains all discovered transcripts resolved by AUGUSTUS and is located in ./merged_annotation"
+echo "A GTF file named coding_transcripts.gtf contains all discovered transcripts resolved by AUGUSTUS and is located in ./merged_annotation"
 echo ""
-echo "Associated Transcript coding sequences (CDS.fa) and correspondent protein sequences (proteins.fa) with novel_transcripts.gtf are located in ./merged_annotation"
+echo "Associated Transcript coding sequences (transcripts_CDS.fa) and correspondent protein sequences (transcripts_proteins.fa) with coding_transcripts.gtf are located in ./merged_annotation"
 echo ""
 echo "GO terms associated to each transcript, named transcriptsGO.tab and genesGO.tab are located in ./merged_annotation"
 echo ""
