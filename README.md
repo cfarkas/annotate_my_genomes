@@ -8,8 +8,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
   
 - The input for this pipeline are GTF files coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
 - Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). Concilliated GTF files are generated with corresponent transcripts in fasta format. 
-- Predict exons with ChopStitch tool (https://github.com/bcgsc/ChopStitch.git), by implementing a Bloom filter that represents the k-mer spectrum of assembled transcripts.
-- Train exons sequences along with the assembled transcripts in order to discover gene models with GlimmerHMM (https://ccb.jhu.edu/software/glimmerhmm/)
+- Perform gene prediction with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
 
@@ -74,18 +73,6 @@ sudo apt-get install gmap
 pip install numpy
 pip install sklearn
 pip install xgboost
-```
-### Installing ChopStitch: exon annotation and splice graph construction using transcriptome assembly
-#### (for documentation, please see https://github.com/bcgsc/ChopStitch.git)
-
-```
-git clone https://github.com/bcgsc/ChopStitch.git
-cd ChopStitch/
-pip install -r requirements.txt
-./autogen.sh
-./configure
-make
-sudo make install
 ```
 
 ### Obtaining StringTie transfrags for annotation
