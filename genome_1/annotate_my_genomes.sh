@@ -324,7 +324,7 @@ sed -f - coding_transcripts.gtf > coding_transcripts.gtf1
 sed 's/.t1"/"/' coding_transcripts.gtf1 > coding_transcripts.gtf
 echo ""
 echo "Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory"
-rm A B namelist*
+rm A B namelist* coding_transcripts.gtf1 
 ##########################################
 # Clean-up enviroment and building summary
 ##########################################
@@ -336,8 +336,9 @@ sed -f - file1 > summary.txt
 sed 's/ /\t/g' summary.txt > summary.tab
 rm transcriptome_annotation_file CNIT_file namelist file1
 mkdir merged_annotation
-mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf ./merged_annotation
-rm summary.txt genes.tab genes1.tab genes2.tab
+mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./merged_annotation
+cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/merged_annotation/
+rm summary.txt genes.tab genes1.tab genes2.tab transcripts.fa.fai
 
 echo ""
 echo "All Done. The transcripts were classified in summary.tab file located in ./merged_annotation"
@@ -351,7 +352,7 @@ echo "Field #4: Coding probability score (CNIT Score)"
 echo "Field #5: Transcript length (bp)"
 echo ""
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./merged_annotation"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./merged_annotation . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
 echo "A new GTF file suitable for gene count quantification is named merged_with_reference.gtf and is located in ./merged_annotation"
 echo ""
@@ -368,3 +369,4 @@ elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
 } | tee logfile
+#
