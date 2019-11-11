@@ -158,7 +158,24 @@ bash annotate_my_genomes.sh target.gtf mm10
 ```
 bash annotate_my_genomes.sh target.gtf oryCun2
 ```
+## gene quantification procedure using GTF files:
+- Install HTSeq-count: (please see https://htseq.readthedocs.io/en/release_0.11.1/index.html)
 
+```
+sudo apt-get install build-essential python2.7-dev python-numpy python-matplotlib python-pysam python-htseq
+```
+
+-Gene-level quantification using "merged_with_reference.gtf" GTF file
+
+```
+htseq-count -t transcript --stranded=no --format bam aln_4_galGal6.sorted.bam aln_7_galGal6.sorted.bam merged_with_reference.gtf > gene_counts
+```
+
+- Transcript-level quantification using "coding_transcripts.gtf" GTF file (coding transcripts from AUGUSTUS)
+
+```
+htseq-count -t transcript --stranded=no --format bam aln_4_galGal6.sorted.bam aln_7_galGal6.sorted.bam coding_transcripts.gtf > transcript_counts
+```
 ## "genesGO.tab" and "transcriptsGO.tab" output files usage:
 - A gene list in tabular format (e.g.: coming from differential expression analysis from genes or transcripts) can be intersected with these output files by using the galaxy framework (https://usegalaxy.org/). A gene list can be the following:
 
