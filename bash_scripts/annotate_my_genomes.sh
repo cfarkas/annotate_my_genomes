@@ -280,7 +280,7 @@ rm STRG_genes_withGO genes_withGO.tab genes_with_GO.tab
 ##########################################
 cd /${dir1}/
 echo ""
-echo "::: Predicting gene models from transcripts with AUGUSTUS (gff3 format). progress will be printed for each transcript."
+echo "::: Predicting gene models from transcripts with AUGUSTUS (gff3 format). Progress will be printed for each transcript."
 echo ""
 wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
 gunzip augustus.2.5.5.tar.gz
@@ -294,14 +294,21 @@ export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
 echo "Done. augustus.gff3 file is present in current directory..."
 echo ""
 echo "Converting gff3 to GTF format, collecting coding sequences and proteins with gffread..."
-gffread augustus.gff3 -T -o novel_transcripts.gtf
-gffread -x cds.fa -g transcripts.fa novel_transcripts.gtf
-gffread -y prot.fa -g transcripts.fa novel_transcripts.gtf
+gffread augustus.gff3 -T -o coding_transcripts.gtf
+gffread -x cds.fa -g transcripts.fa coding_transcripts.gtf
+gffread -y prot.fa -g transcripts.fa coding_transcripts.gtf
 
 # Re-formatting
-cat cds.fa |rev|cut -d"." -f1 --complement|rev > CDS.fa
-cat prot.fa |rev|cut -d"." -f1 --complement|rev > proteins.fa
+cat cds.fa |rev|cut -d"." -f1 --complement|rev > transcripts_CDS.fa
+cat prot.fa |rev|cut -d"." -f1 --complement|rev > transcripts_proteins.fa
 rm cds.fa prot.fa
+
+##########################################
+# Re-formatting coding_transcripts.gtf
+##########################################
+
+sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' genes2.tab |
+sed -f - coding_transcripts.gtf > coding_transcripts1.gtf
 
 ##########################################
 # Clean-up enviroment and building summary
@@ -315,7 +322,7 @@ sed 's/ /\t/g' summary.txt > summary.tab
 rm transcriptome_annotation_file CNIT_file namelist file1
 mkdir merged_annotation
 mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab CDS.fa proteins.fa novel_transcripts.gtf ./merged_annotation
-rm summary.txt genes.tab genes1.tab genes2.tab 
+rm summary.txt genes.tab genes1.tab 
 
 echo ""
 echo "All Done. The transcripts were classified in summary.tab file located in ./merged_annotation"
