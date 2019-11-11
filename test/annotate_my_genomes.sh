@@ -3,59 +3,54 @@
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 stringtie_gtf=${1}
 reference_genome_name=${2}
+threads=${3}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
   echo "{stringtie_gtf}: Name of the StringTie GTF file"
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo ""
+  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
   echo ""
   exit 0
 fi
 
 if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
+    echo ""
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
   echo "{stringtie_gtf}: Name of the StringTie GTF file"
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo ""
+  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
   echo ""
   exit 0
 fi
 if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
-  echo ""
-  echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
-  echo ""
-  echo "{stringtie_gtf}: Name of the StringTie GTF file"
-  echo ""
-  echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
-  echo ""
-  exit 0
-fi
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
+   echo ""
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
   echo "{stringtie_gtf}: Name of the StringTie GTF file"
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo ""
+  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
   echo ""
   exit 0
 fi
 if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
+    echo ""
+  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
   echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts with GAWN"
   echo ""
@@ -63,13 +58,15 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
   echo ""
+  echo "{threads}: Name of threads to ChopStitch exon finding step (Integer)"
+  echo ""
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"; exit 1; }
 
-if [ $# -ne 2 ]; then
-  echo 1>&2 "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name}"
+if [ $# -ne 3 ]; then
+  echo 1>&2 "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   exit 3
 fi
 
@@ -88,6 +85,7 @@ echo ""
 gffcompare -R -r ${2}.gtf -o merged ${1}
 echo ""
 echo "Done"
+
 ########################################
 # Stats
 ########################################
@@ -113,6 +111,7 @@ echo ""
 
 echo "::: Replacing gene_id field in merged.annotated.gtf file with reference gene_id's"
 echo ""
+
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
@@ -132,6 +131,7 @@ paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2 refGene.txt namelist_unique_sorted
 sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' namelist |
 sed -f - merged.annotated.gtf > merged.annotated_with_reference.gtf
+
 ########################################
 # Collecting Transcripts names
 ########################################
@@ -146,6 +146,7 @@ awk '{print $4"."$3}' gene_names.tab > gene_names2.tab
 paste -d'\t' transcript_gene_names.tab gene_names2.tab > filec
 awk '{print $1"\t"$3}' filec > gene_names3.tab
 awk '$2 !~ /STRG./' gene_names3.tab > genes1.tab
+
 ##########################################
 # Adding "" to each name in genes.tab file
 ##########################################
@@ -163,6 +164,10 @@ echo "Done. Reconciliated gene_id's with Reference GTF"
 rm merged.${1}.tmap.1 merged.${1}.tmap.2
 echo ""
 
+#####################################################################
+# Identifying transcripts in merged.annotated_with_reference.gtf file
+#####################################################################
+
 echo "::: Identifying transcripts in merged.annotated_with_reference.gtf file"
 echo ""
 sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' genes2.tab |
@@ -174,6 +179,7 @@ echo ""
 echo "::: Obtaining Annotated Transcripts in FASTA format with gffread"
 echo ""
 gffread -w transcripts.fa -g ${2}.fa merged_with_reference.gtf
+gffread -w transcripts_for_glimmer.fa -g ${2}.fa ${1}
 rm merged.annotated_with_reference.gtf
 echo ""
 echo "Moving gffcompare results to gffcompare_outputs folder ..."
@@ -181,6 +187,10 @@ mkdir gffcompare_outputs
 mv *.annotated.gtf *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
 echo ""
 echo "Done"
+
+################################################################
+# Configuring Gawn Inputs, config file and running GAWN pipeline
+################################################################
 echo ""
 echo "Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git"
 echo ""
@@ -189,9 +199,6 @@ cd gawn/02_infos/
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
-##########################################
-# Configuring Gawn Inputs and config file
-##########################################
 cd /${dir1}/
 cp ${2}.fa /${dir1}/gawn/03_data/genome.fasta
 cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
@@ -210,6 +217,9 @@ echo ""
 echo "Done. The novel transcripts are annotated in ./gawn/05_results/"
 echo ""
 
+##########################################
+# CNIT long noncoding identification
+##########################################
 echo "::: Classifying protein-coding and long non-coding transcripts with CNIT"
 echo ""
 cd /${dir1}/
@@ -220,7 +230,6 @@ cd /${dir1}/
 echo ""
 echo "Done. The transcripts were classified in ./CNIT_output/"
 echo ""
-
 echo "::: Configuring Summary results"
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
 cp /${dir1}/CNIT_output/CNIT.index /${dir1}/
@@ -237,18 +246,95 @@ tr ';' '\t' < transcripts_GO > transcripts_GO_sep
 column -t transcripts_GO_sep > transcripts_GO.tab
 tail -n +2 transcripts_GO.tab > transcriptsGO.tab
 rm transcripts_GO*
+
+##########################################
+# Extracting GO terms for each Gene
+##########################################
+
+grep "STRG." transcriptsGO.tab > STRG_transcriptsGO.tab
+grep -v "STRG." transcriptsGO.tab > Annotated_transcriptsGO.tab
+
+# Working with "STRG" genes
+tr '.' '\t' < STRG_transcriptsGO.tab > STRG_transcripts_GO_splitname
+awk '{$3=""; print $0}' STRG_transcripts_GO_splitname > STRG_transcripts_GO_splitname1
+awk '{print $1"."$2}' < STRG_transcripts_GO_splitname1 > STRG_transcripts_GO_splitname2
+paste -d'\t' STRG_transcripts_GO_splitname2 STRG_transcripts_GO_splitname1 > STRG_transcripts_GO_merged
+awk '{$2=$3=""; print $0}' STRG_transcripts_GO_merged > STRG_genes_GO
+awk '!a[$0]++' STRG_genes_GO > STRG_genesGO
+awk '{print NF}' STRG_genesGO > STRG_numbers
+paste -d'\t' STRG_numbers STRG_genesGO > STRG_genesGO_with_numbers
+awk '{ if ($1>1) { print } }' STRG_genesGO_with_numbers > STRG_GO
+awk '{$1=""; print $0}' STRG_GO > STRG_genes_with_GO
+column -t STRG_genes_with_GO > STRG_genes_withGO
+rm STRG_genes_GO STRG_transcripts_GO_merged STRG_transcripts_GO_splitname* STRG_transcriptsGO.tab STRG_numbers STRG_genesGO STRG_genesGO_with_numbers STRG_genes_with_GO STRG_GO
+
+# Working with Annotated genes
+tr '.' '\t' < Annotated_transcriptsGO.tab > Annotated_transcripts_GO_splitname
+awk '{$2=""; print $0}' Annotated_transcripts_GO_splitname > Annotated_genes_GO
+awk '!a[$0]++' Annotated_genes_GO > Annotated_genesGO
+awk '{print NF}' Annotated_genesGO > Annotated_numbers
+paste -d'\t' Annotated_numbers Annotated_genesGO > Annotated_genesGO_with_numbers
+awk '{ if ($1>1) { print } }' Annotated_genesGO_with_numbers > Annotated_GO
+awk '{$1=""; print $0}' Annotated_GO > Annotated_genes_with_GO
+column -t Annotated_genes_with_GO > genes_withGO.tab
+rm Annotated_transcriptsGO.tab Annotated_transcripts_GO_splitname Annotated_genes_GO Annotated_genesGO Annotated_numbers Annotated_genesGO_with_numbers Annotated_GO Annotated_genes_with_GO
+
+# Joining Files in order to create "genesGO.tab" file 
+cat STRG_genes_withGO >> genes_withGO.tab
+sed "s/^ *//;s/ *$//;s/ \{1,\}/ /g" genes_withGO.tab > genes_with_GO.tab
+sed 's/ /\t/' genes_with_GO.tab > genesGO.tab
+rm STRG_genes_withGO genes_withGO.tab genes_with_GO.tab
+
+##########################################
+# Exon Prediction Step with ChopStitch
+##########################################
+echo ""
+echo "Predicting Exons from transcripts_for_glimmer.fa with ChopStitch"
+echo ""
+cd /${dir1}/
+CreateBloom -t ${3} -k 50 --fpr1 0.01 transcripts_for_glimmer.fa
+FindExons -i Bfilter.bf transcripts_for_glimmer.fa
+echo ""
+echo "Done. confident_exons.fa file contains predicted exons from transcripts. Number of Annotated Exons:"
+grep ">" confident_exons.fa -c
+echo ""
+echo "Getting exong ranges"
+echo ""
+tr '_' '\t' < confident_exons.fa > confident_exons_splitname.fa
+grep ">" confident_exons_splitname.fa > exon_ranges
+sed 's/>//' exon_ranges > exon_ranges.tab
+column -t exon_ranges.tab > exon_ranges.bed
+awk -v i=1 'NR>1 && $i!=p { print "" }{ p=$i } 1' exon_ranges.bed > exons_for_glimmerhmm.bed
+rm confident_exons_splitname.fa exon_ranges exon_ranges.tab exon_ranges.bed
+echo "Done. exon_ranges.bed file contain predicted exon ranges in each transcript"
+
+##########################################
+# Gene Prediction Step with GlimmerHMM 
+##########################################
+echo ""
+echo "Gene Prediction Step with GlimmerHMM"
+echo ""
+echo "Downloading GlimmerHMM software from https://ccb.jhu.edu/software/glimmerhmm/"
+echo ""
+wget https://ccb.jhu.edu/software/glimmerhmm/dl/GlimmerHMM-3.0.4.tar.gz
+tar -xzf GlimmerHMM-3.0.4.tar.gz 
+echo "Training and predicting gene models from transcripts.fa with GlimmerHMM"
+./GlimmerHMM/train/trainGlimmerHMM transcripts_for_glimmer.fa exons_for_glimmerhmm.bed -i 0,40,100 -d gene_training
+
+
 ##########################################
 # Clean-up enviroment and building summary
 ##########################################
 rm transcriptome_annotation_table.tsv transcriptome_annotation CNIT.index CNIT
 join --nocheck-order transcriptome_annotation_file CNIT_file > file1
-sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' genes1.tab |
+awk '!a[$0]++' genes1.tab > genes.tab
+sed -e 's/^/s%/' -e 's/\t/%/' -e 's/$/%g/' genes.tab |
 sed -f - file1 > summary.txt
 sed 's/ /\t/g' summary.txt > summary.tab
 rm transcriptome_annotation_file CNIT_file namelist file1
 mkdir merged_annotation
-mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab ./merged_annotation
-rm summary.txt genes1.tab genes2.tab
+mv merged_with_reference.gtf summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab ./merged_annotation
+rm summary.txt genes.tab genes1.tab genes2.tab
 
 echo ""
 echo "All Done. The transcripts were classified in summary.tab file located in ./merged_annotation"
@@ -268,7 +354,7 @@ echo "A new GTF file named merged_with_reference.gtf is located in ./merged_anno
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./merged_annotation"
 echo ""
-echo "GO terms associated to each transcript, named transcriptsGO.tab is located in ./merged_annotation"
+echo "GO terms associated to each transcript, named transcriptsGO.tab and genesGO.tab are located in ./merged_annotation"
 echo ""
 end=`date +%s`
 elapsed=`expr $end - $begin`
