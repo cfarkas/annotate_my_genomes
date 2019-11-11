@@ -79,7 +79,7 @@ pip install xgboost
 ```
 
 ### Obtaining and installing up-to-date SAMtools with htslib (version 1.9)
-(OLD SAMTOOLS version can also work). Users needs to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplish by downloading the three packages, decompressing it, and doing the following:
+(Old samtools version can also work). Users needs to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplish by downloading the three packages, decompressing it, and doing the following:
 ```
 cd htslib-1.9    # and similarly for samtools
 sudo ./configure --prefix=/usr/local/bin
