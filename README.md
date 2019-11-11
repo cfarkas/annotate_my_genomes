@@ -158,7 +158,7 @@ bash annotate_my_genomes.sh target.gtf mm10
 ```
 bash annotate_my_genomes.sh target.gtf oryCun2
 ```
-## Gene quantification procedure examples using GTF files:
+## Gene quantification procedure examples using output GTF files:
 - Install HTSeq-count: (please see https://htseq.readthedocs.io/en/release_0.11.1/index.html)
 
 ```
