@@ -78,6 +78,22 @@ pip install sklearn
 pip install xgboost
 ```
 
+### Obtaining and installing up-to-date SAMtools, bcftools and htslib (version 1.9)
+Old samtools version will not work. Users needs to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplish by downloading the three packages, decompressing it, and doing the following:
+```
+cd htslib-1.9    # and similarly for bcftools and samtools
+sudo ./configure --prefix=/usr/local/bin
+sudo make
+sudo make install
+# this step is only for samtools and bcftools...
+sudo cp samtools /usr/local/bin/
+```
+Then in a terminal type
+>samtools<br>bcftools
+
+to check 1.9 versions (using htslib v1.9)
+
+
 ### Obtaining StringTie transfrags for annotation
 
 #### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
