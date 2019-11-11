@@ -3,16 +3,19 @@
 Genome annotation pipeline using long sequencing reads from non-model (and model) vertebrate organisms.
 
 ## Pipeline Outline
-
-  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation. Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization. Thus, this pipeline aims to:
+  Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization
   
-- The input for this pipeline are GTF files coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
+  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
+  
+  The pipeline is designed for:
+  
+- INPUT: GTF files coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
 - Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). Concilliated GTF files are generated within corresponent transcripts in fasta format. 
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
 
-The pipeline is implemented in BASH enviroment.
+This pipeline is implemented in BASH enviroment.
 
 
 ## Preeliminars:
