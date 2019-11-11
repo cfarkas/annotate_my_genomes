@@ -89,9 +89,9 @@ sudo make install
 sudo cp samtools /usr/local/bin/
 ```
 Then in a terminal type
->samtools<br>bcftools
+>samtools
 
-to check 1.9 versions (using htslib v1.9)
+to check 1.9 version (using htslib v1.9)
 
 
 ### Obtaining StringTie transfrags for annotation
