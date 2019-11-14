@@ -93,6 +93,17 @@ Then in a terminal type
 
 to check 1.9 version (using htslib v1.9)
 
+## Obtaining and install seqkit (toolkit for FASTA/Q file manipulation)
+Complete instructions can be found at the webpage: https://bioinf.shenwei.me/seqkit/download/. 
+```
+wget https://github.com/shenwei356/seqkit/releases/download/v0.11.0/seqkit_linux_386.tar.gz
+tar -zxvf seqkit_linux_386.tar.gz
+sudo cp seqkit /usr/local/bin/
+```
+Also can be installed via conda:
+```
+conda install -c bioconda seqkit
+```
 
 ### Obtaining StringTie transfrags for annotation
 
