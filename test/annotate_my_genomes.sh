@@ -317,7 +317,7 @@ echo "AUGUSTUS GTF file suitable for transcript count quantification is named co
 echo ""
 echo "Associated Transcript coding sequences (transcripts_CDS.fa) and correspondent protein sequences (transcripts_proteins.fa) with coding_transcripts.gtf are located in ./merged_annotation"
 echo ""
-echo "GO terms associated to each transcript, named transcriptsGO.tab and genesGO.tab are located in ./merged_annotation"
+echo "GO terms associated to each transcript (and gene), named transcriptsGO.tab and genesGO.tab are located in ./merged_annotation"
 echo ""
 end=`date +%s`
 elapsed=`expr $end - $begin`
