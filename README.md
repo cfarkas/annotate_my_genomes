@@ -10,7 +10,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
   The pipeline is designed for:
   
 - INPUT: GTF files coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
-- Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). Concilliated GTF files are generated within corresponent transcripts in fasta format. 
+- Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). A concilliated GTF file is generated with annotated gene names. 
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
@@ -171,11 +171,6 @@ sudo apt-get install build-essential python2.7-dev python-numpy python-matplotli
 htseq-count -t transcript --stranded=no --format bam condition1.bam condition2.bam merged_with_reference.gtf > gene_counts
 ```
 
-- Transcript-level quantification using "coding_transcripts.gtf" GTF file (coding transcripts from AUGUSTUS)
-
-```
-htseq-count -t transcript --stranded=no --format bam condition1.bam condition2.bam coding_transcripts.gtf > transcript_counts
-```
 ## "genesGO.tab" and "transcriptsGO.tab" output files usage:
 - A gene list in tabular format (e.g.: coming from differential expression analysis from genes or transcripts) can be intersected with these output files by using the galaxy framework (https://usegalaxy.org/). A gene list can be the following:
 
