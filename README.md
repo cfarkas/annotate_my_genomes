@@ -214,7 +214,7 @@ The file number 4, "Cut on data 3" file can be inputted in WEGO 2.0 server (http
 
 - IMPORTANT: if you copied the gene list from excel and you paste it in a txt file, you must convert this file to tabular and remove non ASCII characters. Galaxy (https://usegalaxy.org/) can easily do this by uploading the .txt file and executing Text Manipulation --> Convert delimiters to TAB in a single step.   
 
-## I need to validate my genes by qPCR, what can I do?:
+## I need to validate my genes by qPCR hopefully in conserved regions, what can I do?:
 
 The above gene list in tabular format can also be used to extract: 
 - Transcripts sequences associated to each gene. 
@@ -233,4 +233,4 @@ awk '{print "bash get_transcripts.sh merged_with_reference.gtf galGal6.fa " $0}'
 # Execute "commands" file
 bash commands
 ```
-GENE.cons files contain common sequences within transcripts and are suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers. 
+{gene_name}.cons files contain common sequences within transcripts and are suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. 
