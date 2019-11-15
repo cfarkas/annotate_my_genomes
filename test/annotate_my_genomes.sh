@@ -142,7 +142,7 @@ exec 4< fileB
 while read -r astring <&3
 do
         read -r bstring <&4
-        echo "s/$astring/$bstring/" >> "$tmpfile"
+        echo "s/\<$astring\>/$bstring/" >> "$tmpfile"
 done
 exec 3<&- 4<&-
         cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f "$tmpfile" > merged_with_reference.gtf
