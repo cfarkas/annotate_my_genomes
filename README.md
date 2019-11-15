@@ -16,8 +16,8 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
 
 This pipeline requieres:
-> StringTie assembled transcripts (in GTF format)
-> genome assembly name (USCS format)
+- StringTie assembled transcripts (in GTF format)
+- genome assembly name (USCS format)
 
 
 ## Preeliminars:
