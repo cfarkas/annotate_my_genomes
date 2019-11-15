@@ -15,9 +15,9 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 - Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
 
-This pipeline requieres:
+This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
-- genome assembly name (USCS format)
+- genome assembly name (check UCSC format)
 
 
 ## Preeliminars:
