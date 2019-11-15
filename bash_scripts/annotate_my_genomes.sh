@@ -189,9 +189,6 @@ echo ""
 
 echo "::: Identifying transcripts in merged.annotated_with_reference.gtf file"
 echo ""
-#############################################
-# Getting transcript names replaced in a loop
-#############################################
 awk '{print $1}' genes2.tab > fileA
 awk '{print $2}' genes2.tab > fileB
 tmpfile=/tmp/Asasuser.$$
@@ -217,7 +214,7 @@ echo "Moving gffcompare results to gffcompare_outputs folder ..."
 mkdir gffcompare_outputs
 mv *.annotated.gtf *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
 echo ""
-echo "Done"
+echo "Done. Continue with GAWN annotation..."
 
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
