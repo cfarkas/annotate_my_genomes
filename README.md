@@ -211,3 +211,12 @@ LMF2    GO:0005737 GO:0016604 GO:0048471 GO:0001691 GO:0017112 GO:0001558 GO:004
 Following these simple steps in galaxy: https://usegalaxy.org/u/carlosfarkas/h/joining-user-genelist-with-genegotab-file
 
 The file number 4, "Cut on data 3" file can be inputted in WEGO 2.0 server (http://wego.genomics.org.cn/) in native format, to explore and plot GO terms. 
+
+## I need to validate my genes by qPCR, what can I do?:
+
+The above gene list in tabular format can also be used to extract: 
+- Transcripts sequences associated to each gene. 
+- Align transcript sequences in order to obtain consensus sequences
+- pick qPCR primers using PrimerBlast from NCBI: https://www.ncbi.nlm.nih.gov/tools/primer-blast/.
+
+This can be accomplished by creating a folder e.g.: "features" and moving get_transcripts
