@@ -93,16 +93,15 @@ Then in a terminal type
 
 to check 1.9 version (using htslib v1.9)
 
-## Obtaining and install seqkit (toolkit for FASTA/Q file manipulation)
-Complete instructions can be found at the webpage: https://bioinf.shenwei.me/seqkit/download/. A way to install it can be the following:
+## Obtaining and installing EMBOSS toolkit (Open Source software for molecular biology)
+Complete instructions can be found at the webpage: https://ssbio.readthedocs.io/en/latest/instructions/emboss.html. A way to install it can be the following:
 ```
-wget https://github.com/shenwei356/seqkit/releases/download/v0.11.0/seqkit_linux_386.tar.gz
-tar -zxvf seqkit_linux_386.tar.gz
-sudo cp seqkit /usr/local/bin/
+sudo apt-get install emboss
 ```
-Also can be installed via conda:
+## Obtaining and installing Clustal Omega (DNA/Protein alignment program)
+Description can be found at the webpage: http://www.clustal.org/omega/. A way to install it can be the following:
 ```
-conda install -c bioconda seqkit
+sudo apt-get install clustalo
 ```
 
 ### Obtaining StringTie transfrags for annotation
