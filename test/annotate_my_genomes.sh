@@ -283,7 +283,7 @@ awk '{$1=$3=$4=$5=$6=""; print $0}' summary_with_GO.tab > genesGO.tab
 sed -i 's/^ //g' genesGO.tab
 awk '!a[$0]++' genesGO.tab > genesGO.tab1
 mv genesGO.tab1 genesGO.tab
-rm summary_with_GO.tab summary.tab merged.annotated.gtf
+rm summary_with_GO.tab summary.tab
 
 ############################################
 # Moving results to merged_annotation folder
