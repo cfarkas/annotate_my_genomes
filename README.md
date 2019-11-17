@@ -223,7 +223,7 @@ The above gene list in tabular format can also be used to extract:
 - Transcripts sequences associated to each gene. 
 - Align transcript sequences in order to obtain consensus sequences
 
-This can be accomplished by moving merged_with_reference.gtf file and a user provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder and inside this folder, execute the following (e.g.: for chicken genome):
+This can be accomplished by copying merged_with_reference.gtf file and a user provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ and execute the following (e.g.: for chicken genome):
 
 ```
 # Downloading galGal6 genome
