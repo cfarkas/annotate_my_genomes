@@ -219,7 +219,6 @@ The file number 4, "Cut on data 3" file can be inputted in WEGO 2.0 server (http
 The above gene list in tabular format can also be used to extract: 
 - Transcripts sequences associated to each gene. 
 - Align transcript sequences in order to obtain consensus sequences
-- pick qPCR primers using PrimerBlast from NCBI: https://www.ncbi.nlm.nih.gov/tools/primer-blast/.
 
 This can be accomplished by moving merged_with_reference.gtf file and a user provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder and inside this folder, execute the following (e.g.: for chicken genome):
 
