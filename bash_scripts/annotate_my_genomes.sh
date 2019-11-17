@@ -145,66 +145,11 @@ do
         echo "s/"$astring"/"$bstring"/" >> "$tmpfile"
 done
 exec 3<&- 4<&-
-        cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f "$tmpfile" > merged.annotated_with_reference.gtf
+        cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f "$tmpfile" > merged_with_reference.gtf
 rm -f "$tmpfile" fileA fileB
 echo "Done"
 echo ""
-echo "A GTF is called merged.annotated_with_reference.gtf with fixed gene names is located in the current directory. Continue with transcript names..."
-echo ""
-########################################
-# Collecting Transcripts names
-########################################
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' merged.annotated_with_reference.gtf > transcript_gene_names.txt
-sed -i 's/transcript_id //g' transcript_gene_names.txt
-sed -i 's/;/\t/g' transcript_gene_names.txt
-sed -i 's/gene_id//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
-cat transcript_gene_names.tab | tr [.] '\t' > gene_names.tab
-awk '{print $4"."$3}' gene_names.tab > gene_names2.tab
-paste -d'\t' transcript_gene_names.tab gene_names2.tab > filec
-awk '{print $1"\t"$3}' filec > gene_names3.tab
-awk '$2 !~ /STRG./' gene_names3.tab > genes1.tab
-
-##########################################
-# Adding "" to each name in genes.tab file
-##########################################
-awk '{print $1}' genes1.tab > STRG.tab
-awk '{print $2}' genes1.tab > GENES.tab
-sed 's/^/"/' STRG.tab > STRG-left.tab
-sed 's/^/"/' GENES.tab > GENES-left.tab
-sed 's/$/"/' STRG-left.tab > STRG-left-right.tab
-sed 's/$/"/' GENES-left.tab > GENES-left-right.tab
-paste -d'\t' STRG-left-right.tab GENES-left-right.tab > filed
-uniq filed > genes2.tab
-rm filed GENES* STRG*
-rm gene_names.tab gene_names2.tab gene_names3.tab filec transcript_gene_names.tab transcript_gene_names.txt
-echo "Done. Reconciliated gene_id's with Reference GTF"
-rm merged.${1}.tmap.1 merged.${1}.tmap.2
-echo ""
-
-#####################################################################
-# Identifying transcripts in merged.annotated_with_reference.gtf file
-#####################################################################
-
-echo "::: Identifying transcripts in merged.annotated_with_reference.gtf file"
-echo ""
-awk '{print $1}' genes2.tab > fileA
-awk '{print $2}' genes2.tab > fileB
-tmpfile=/tmp/Asasuser.$$
-exec 3< fileA
-exec 4< fileB
-while read -r astring <&3
-do
-        read -r bstring <&4
-        echo "s/"$astring"/"$bstring"/" >> "$tmpfile"
-done
-exec 3<&- 4<&-
-	cat merged.annotated_with_reference.gtf | parallel --pipe -j ${3} sed -f "$tmpfile" > merged_with_reference.gtf
-rm -f "$tmpfile" fileA fileB
-echo "Done"
-echo ""
-echo "A new annotated GTF is called merged_with_reference.gtf and is located in the current directory ..."
+echo "A GTF is called merged_with_reference.gtf with fixed gene names is located in the current directory."
 echo ""
 echo "::: Obtaining Transcripts in FASTA format with gffread"
 echo ""
@@ -338,7 +283,7 @@ awk '{$1=$3=$4=$5=$6=""; print $0}' summary_with_GO.tab > genesGO.tab
 sed -i 's/^ //g' genesGO.tab
 awk '!a[$0]++' genesGO.tab > genesGO.tab1
 mv genesGO.tab1 genesGO.tab
-rm summary_with_GO.tab summary.tab merged.annotated_with_reference.gtf
+rm summary_with_GO.tab summary.tab merged.annotated.gtf
 
 ############################################
 # Moving results to merged_annotation folder
