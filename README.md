@@ -171,9 +171,9 @@ bash annotate_my_genomes.sh target.gtf mm10 30
 bash annotate_my_genomes.sh target.gtf oryCun2 30
 ```
 
-## Downstream Analysis using outputs:
+## Downstream analysis using outputs:
 
-### 1) Gene quantification procedure examples using output GTF file (merged_with_reference.gtf):
+### (1) Gene quantification procedure examples using output GTF file (merged_with_reference.gtf):
 - Install HTSeq-count: (please see https://htseq.readthedocs.io/en/release_0.11.1/index.html)
 
 ```
@@ -186,7 +186,7 @@ sudo apt-get install build-essential python2.7-dev python-numpy python-matplotli
 htseq-count -t transcript --stranded=no --format bam condition1.bam condition2.bam merged_with_reference.gtf > gene_counts
 ```
 
-### 2) "genesGO.tab" and "transcriptsGO.tab" output files usage:
+### (2) "genesGO.tab" and "transcriptsGO.tab" output files usage:
 - A gene list in tabular format (e.g.: coming from differential expression analysis from genes or transcripts) can be intersected with these output files by using the galaxy framework (https://usegalaxy.org/). A gene list can be the following:
 
 ```
@@ -217,7 +217,7 @@ The file number 4, "Cut on data 3" file can be inputted in WEGO 2.0 server (http
 
 - IMPORTANT: if you copied the gene list from excel and you paste it in a txt file, you must convert this file to tabular and remove non ASCII characters. Galaxy (https://usegalaxy.org/) can easily do this by uploading the .txt file and executing Text Manipulation --> Convert delimiters to TAB in a single step.   
 
-### 3) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
+### (3) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
 
 The above gene list in tabular format can also be used to extract: 
 - Transcripts sequences associated to each gene. 
