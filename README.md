@@ -154,7 +154,7 @@ bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6 5
 
 2) (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10. 
 
-3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads for text processing:
+3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads:
 ```
 bash annotate_my_genomes.sh target.gtf genome_assembly_name 30
 ```
