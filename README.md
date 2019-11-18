@@ -19,6 +19,8 @@ This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
 - genome assembly name (check UCSC format)
 
+## Installation: 
+
 Clone this repository every time you need to work with a different assembly and/or genome. In the folder you want to annotate the GTF file, do the following: 
   
 ```
@@ -26,7 +28,7 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git
 cd annotate_my_genomes
 bash makefile.sh
 ```
-
+#
 
 ## Dependences:
 
