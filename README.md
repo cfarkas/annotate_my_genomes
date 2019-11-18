@@ -237,6 +237,6 @@ awk '{print "bash get_transcripts.sh merged_with_reference.gtf galGal6.fa " $0}'
 bash commands
 ```
 
-(Users can duplicate get_transcripts folder every time you need to work with a different gene list). 
+- Users can duplicate get_transcripts folder every time you need to work with a different gene list). 
 
-{gene_name}.cons files contain common sequences within transcripts and could suitable for PCR primer picking in conserved regions. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
+- {gene_name}.cons files contain common sequences within transcripts and could suitable for PCR primer picking in conserved regions. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
