@@ -23,7 +23,7 @@ This repository can be cloned every time you need to work with a different genom
 
 ## Preeliminars:
 
-#### Obtaining and installing StringTie (v2.0 release needed)
+### Obtaining and installing StringTie (v2.0 release needed)
 
 ```
 git clone https://github.com/gpertea/stringtie
@@ -31,7 +31,7 @@ cd stringtie
 make release
 sudo cp stringtie /usr/local/bin/
 ```
-#### Obtaining and installing gffcompare and gffread
+### Obtaining and installing gffcompare and gffread
 
 ```
 git clone https://github.com/gpertea/gclib
@@ -50,8 +50,8 @@ sudo cp gffread /usr/local/bin/
 cd ..
 ```
 
-#### Installing up-to-date ncbi-blast+ version (v2.9.0)
-##### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
+### Installing up-to-date ncbi-blast+ version (v2.9.0)
+#### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
 
 ```
 # To remove older ncbi-blast+ binaries from your system 
@@ -65,14 +65,14 @@ rm ncbi-blast-2.9.0+-x64-linux.tar.gz
 cd ncbi-blast-2.9.0+/bin/
 sudo cp * /usr/local/bin/ 
 ```
-#### Installing GMAP genomic aligner program 
-##### (for documentation, please see http://research-pub.gene.com/gmap/)
+### Installing GMAP genomic aligner program 
+#### (for documentation, please see http://research-pub.gene.com/gmap/)
 
 ```
 sudo apt-get install gmap
 ```
 
-#### Installing python dependences for CNIT: A tool for identifying protein-coding and long non-coding transcripts based on intrinsic sequence composition 
+### Installing python dependences for CNIT: A tool for identifying protein-coding and long non-coding transcripts based on intrinsic sequence composition 
 ##### (for documentation, please see http://cnit.noncode.org/CNIT/)
 
 ```
@@ -81,7 +81,7 @@ pip install sklearn
 pip install xgboost
 ```
 
-#### Obtaining and installing up-to-date SAMtools with htslib (version 1.9)
+### Obtaining and installing up-to-date SAMtools with htslib (version 1.9)
 (Old samtools version can also work). Users needs to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplish by downloading the three packages, decompressing it, and doing the following:
 ```
 cd htslib-1.9    # and similarly for samtools
@@ -96,20 +96,20 @@ Then in a terminal type
 
 to check 1.9 version (using htslib v1.9)
 
-#### Obtaining and installing EMBOSS toolkit (Open Source software for molecular biology)
+### Obtaining and installing EMBOSS toolkit (Open Source software for molecular biology)
 Complete instructions can be found at the webpage: https://ssbio.readthedocs.io/en/latest/instructions/emboss.html. A way to install it can be the following:
 ```
 sudo apt-get install emboss
 ```
-#### Obtaining and installing Clustal Omega (DNA/Protein alignment program)
+### Obtaining and installing Clustal Omega (DNA/Protein alignment program)
 Description can be found at the webpage: http://www.clustal.org/omega/. A way to install it can be the following:
 ```
 sudo apt-get install clustalo
 ```
 
-#### Obtaining StringTie GTF file for annotation
+### Obtaining StringTie GTF file for annotation
 
-##### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
+#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
 ```
 git clone https://github.com/lh3/minimap2
 cd minimap2 && make
@@ -119,7 +119,7 @@ samtools sort aln_galGal6.bam > aln_galGal6.sorted.bam --threads 30
 samtools index aln_galGal6.sorted.bam -@ 30
 ```
 
-##### 2) Obtaining GTF (transcripts.gtf) from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
+#### 2) Obtaining GTF (transcripts.gtf) from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
 ```
 stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
 ```
