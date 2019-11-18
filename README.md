@@ -19,7 +19,7 @@ This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
 - genome assembly name (check UCSC format)
 
-This repository can be cloned every time you need to work with a different genome/assembly.
+Clone this repository every time you need to work with a different assembly and/or genome
 
 ## Preeliminars:
 
@@ -150,7 +150,7 @@ bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6 5
 
 #### Assuming you runned the test ...
 
-1) Place your StringTie GTF assembly to annotate in "genome_1" folder (you can duplicate this folder every time you need to annotate a new GTF assembly, changing the folder name)
+1) Place your StringTie GTF assembly to annotate in "genome_1" folder
 
 2) (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10. 
 
@@ -235,8 +235,6 @@ awk '{print "bash get_transcripts.sh merged_with_reference.gtf galGal6.fa " $0}'
 
 # Execute "commands" file
 bash commands
-```
-
-- Users can duplicate get_transcripts folder every time you need to work with a different gene list. 
+``` 
 
 - {gene_name}.cons files contain common sequences within transcripts and could suitable for PCR primer picking in conserved regions. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
