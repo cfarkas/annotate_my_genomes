@@ -133,13 +133,7 @@ samtools index aln_galGal6.sorted.bam -@ 30
 stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
 ```
 
-## Installation
-  
-```
-git clone https://github.com/cfarkas/annotate_my_genomes.git
-cd annotate_my_genomes
-bash makefile.sh
-```
+#
 
 ## Quickstart (Running the test)
 
@@ -181,6 +175,7 @@ bash annotate_my_genomes.sh target.gtf mm10 30
 bash annotate_my_genomes.sh target.gtf oryCun2 30
 ```
 
+#
 ## Downstream analysis using outputs:
 
 ### (1) Gene quantification procedure examples using output GTF file (merged_with_reference.gtf):
