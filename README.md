@@ -107,7 +107,7 @@ Description can be found at the webpage: http://www.clustal.org/omega/. A way to
 sudo apt-get install clustalo
 ```
 
-### Obtaining StringTie transfrags for annotation
+### Obtaining StringTie GTF file for annotation
 
 #### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
 ```
@@ -119,7 +119,7 @@ samtools sort aln_galGal6.bam > aln_galGal6.sorted.bam --threads 30
 samtools index aln_galGal6.sorted.bam -@ 30
 ```
 
-#### 2) Obtaining transfrags from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
+#### 2) Obtaining GTF (transcripts.gtf) from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
 ```
 stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
 ```
