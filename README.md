@@ -147,7 +147,7 @@ stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
 ```
 bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6 5
 ```
-
+#
 ## Usage
 
 
@@ -163,7 +163,7 @@ bash annotate_my_genomes.sh target.gtf genome_assembly_name 30
 ```
 #### To check genome_assembly_names (UCSC Genome Browser assembly ID), please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
 
-
+#
 ## Usage examples
 
 - For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
