@@ -11,7 +11,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
   
 - Use as input GTF file coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
 - Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). A concilliated GTF file is generated with annotated gene names and corresponding StringTie assembled transfrags (transcripts).
-- Annotation Structure: {Gene}.{Transfrag}.{Isoform}. Genes starting with "STRG" are novel.
+- Annotation Structure: {Gene}.{Transfrag}.{Isoform}. Genes denoted with "STRG" are novel and the rest were concilliated with reference.
 >E.g.: HCLS1.43.3   : 
 >Gene = HCLS1 ; 
 >Transfrag N° 43 ; 
