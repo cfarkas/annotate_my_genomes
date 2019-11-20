@@ -129,13 +129,14 @@ sudo apt-get install clustalo
 git clone https://github.com/lh3/minimap2
 cd minimap2 && make
 
-# Converting PacBio subreads to fastq
-samtools bam2fq m54027_191028_202826.subreads.bam > reads.fastq
+# Installing bam2fastq and convert PacBio subreads to fastq
+conda install -c bioconda bam2fastx
+bam2fastq -o reads m54027_191028_202826.subreads.bam
 
 # Aligning with minimap2
 ./minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
-samtools view -S -b aln_galGal6.sam > aln_galGal6.bam --threads 30
-samtools sort aln_galGal6.bam > aln_galGal6.sorted.bam --threads 30
+samtools view -S -b aln_galGal6.sam -@ 30 > aln_galGal6.bam
+samtools sort aln_galGal6.bam -@ 30 > aln_galGal6.sorted.bam
 samtools index aln_galGal6.sorted.bam -@ 30
 ```
 
