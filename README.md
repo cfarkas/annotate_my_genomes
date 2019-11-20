@@ -125,9 +125,15 @@ sudo apt-get install clustalo
 
 #### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
 ```
+# Installing minimap2
 git clone https://github.com/lh3/minimap2
 cd minimap2 && make
-./minimap2 -ax splice galGal6.fa long_reads.fastq > aln_galGal6.sam -t 30
+
+# Converting PacBio subreads to fastq
+samtools bam2fq m54027_191028_202826.subreads.bam > reads.fastq
+
+# Aligning with minimap2
+./minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
 samtools view -S -b aln_galGal6.sam > aln_galGal6.bam --threads 30
 samtools sort aln_galGal6.bam > aln_galGal6.sorted.bam --threads 30
 samtools index aln_galGal6.sorted.bam -@ 30
