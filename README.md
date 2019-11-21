@@ -254,3 +254,7 @@ bash commands
 ``` 
 
 - {gene_name}.cons files contain common sequences within transcripts and could suitable for PCR primer picking in conserved regions. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
+
+### More Scenarios?
+
+To see more examples, please visit and clone https://github.com/cfarkas/annotate_my_genomes_examples.git
