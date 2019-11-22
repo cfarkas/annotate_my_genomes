@@ -130,10 +130,9 @@ git clone https://github.com/lh3/minimap2
 cd minimap2 && make
 sudo cp minimap2 /usr/local/bin/
 
-# Installing bam2fastq and convert PacBio subreads to fastq
-conda install -c bioconda bam2fastx
-bam2fastq -o reads m54027_191028_202826.subreads.bam
-gunzip reads.fastq.gz 
+# Convert PacBio subreads (bam files) to fastq
+samtools bam2fq m54027_190807_082031.subreads.bam > reads.fastq
+
 
 # Aligning with minimap2
 ./minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
