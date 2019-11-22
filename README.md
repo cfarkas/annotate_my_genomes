@@ -128,6 +128,7 @@ sudo apt-get install clustalo
 # Installing minimap2
 git clone https://github.com/lh3/minimap2
 cd minimap2 && make
+sudo cp minimap2 /usr/local/bin/
 
 # Installing bam2fastq and convert PacBio subreads to fastq
 conda install -c bioconda bam2fastx
