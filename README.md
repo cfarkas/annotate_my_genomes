@@ -133,6 +133,7 @@ sudo cp minimap2 /usr/local/bin/
 # Installing bam2fastq and convert PacBio subreads to fastq
 conda install -c bioconda bam2fastx
 bam2fastq -o reads m54027_191028_202826.subreads.bam
+gunzip reads.fastq.gz 
 
 # Aligning with minimap2
 ./minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
