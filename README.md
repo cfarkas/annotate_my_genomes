@@ -142,7 +142,7 @@ samtools index aln_galGal6.sorted.bam -@ 30
 
 #### 2) Obtaining GTF (transcripts.gtf) from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
 ```
-stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_4_galGal6.sorted.bam
+stringtie -p 30 -L -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
 ```
 
 #
