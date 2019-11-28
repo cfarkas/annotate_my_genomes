@@ -135,7 +135,7 @@ samtools bam2fq m54027_190807_082031.subreads.bam > reads.fastq
 
 
 # Aligning with minimap2
-./minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
+minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
 samtools view -S -b aln_galGal6.sam -@ 30 > aln_galGal6.bam
 samtools sort aln_galGal6.bam -@ 30 > aln_galGal6.sorted.bam
 samtools index aln_galGal6.sorted.bam -@ 30
