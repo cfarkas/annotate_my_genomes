@@ -343,7 +343,7 @@ make
 cd ..
 cd ..
 export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
-./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=on --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
 echo "Done. augustus.gff3 file is present in current directory..."
 echo ""
 echo "Converting gff3 to GTF format, collecting coding sequences and proteins with gffread..."
