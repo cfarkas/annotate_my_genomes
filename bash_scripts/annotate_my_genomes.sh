@@ -131,22 +131,14 @@ sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
 
-#######################################
-# Getting gene names replaced in a loop
-#######################################
+###############################
+# Getting gene names replaced #
+###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
-tmpfile=/tmp/Asasuser.$$
-exec 3< fileA
-exec 4< fileB
-while read -r astring <&3
-do
-        read -r bstring <&4
-        echo "s%"$astring"%"$bstring"%" >> "$tmpfile"
-done
-exec 3<&- 4<&-
-        cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f "$tmpfile" > merged.annotated_with_reference.gtf
-rm -f "$tmpfile" fileA fileB
+paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+sed -f sed.script merged.annotated.gtf > merged.annotated_with_reference.gtf
+rm -f sed.script fileA fileB
 echo "Done"
 echo ""
 echo "A GTF is called merged.annotated_with_reference.gtf with fixed gene names is located in the current directory."
@@ -195,22 +187,14 @@ echo ""
 
 echo "::: Identifying transcripts in merged.annotated_with_reference.gtf file"
 echo ""
-#############################################
-# Getting transcript names replaced in a loop
-#############################################
+###################################
+# Getting transcript names replaced
+###################################
 awk '{print $1}' genes2.tab > fileA
 awk '{print $2}' genes2.tab > fileB
-tmpfile=/tmp/Asasuser.$$
-exec 3< fileA
-exec 4< fileB
-while read -r astring <&3
-do
-        read -r bstring <&4
-        echo "s%$astring%$bstring%" >> "$tmpfile"
-done
-exec 3<&- 4<&-
-	cat merged.annotated_with_reference.gtf | parallel --pipe -j ${3} sed -f "$tmpfile" > merged_with_reference.gtf
-rm -f "$tmpfile" fileA fileB
+paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+sed -f sed.script merged.annotated_with_reference.gtf > merged_with_reference.gtf
+rm -f sed.script fileA fileB
 echo "Done"
 echo ""
 echo "A new annotated GTF is called merged_with_reference.gtf and is located in the current directory ..."
