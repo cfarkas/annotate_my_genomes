@@ -137,7 +137,7 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-sed -f sed.script merged.annotated.gtf > merged_with_reference.gtf
+cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f sed.script > merged_with_reference.gtf
 rm -f sed.script fileA fileB
 echo "Done"
 echo ""
