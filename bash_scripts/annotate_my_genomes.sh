@@ -137,63 +137,7 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-sed -f sed.script merged.annotated.gtf > merged.annotated_with_reference.gtf
-rm -f sed.script fileA fileB
-echo "Done"
-echo ""
-echo "A GTF is called merged.annotated_with_reference.gtf with fixed gene names is located in the current directory."
-
-########################################
-# Collecting Transcripts names
-########################################
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' merged.annotated_with_reference.gtf > transcript_gene_names.txt
-sed -i 's/transcript_id //g' transcript_gene_names.txt
-sed -i 's/;/\t/g' transcript_gene_names.txt
-sed -i 's/gene_id//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
-cat transcript_gene_names.tab | tr [.] '\t' > gene_names.tab
-awk '{print $4"."$3}' gene_names.tab > gene_names2.tab
-paste -d'\t' transcript_gene_names.tab gene_names2.tab > filec
-awk '{print $1"\t"$3}' filec > gene_names3.tab
-awk '$2 !~ /STRG./' gene_names3.tab > genes1.tab
-tr '.' '\t' < genes1.tab > genes1_1.tab
-awk '{print $4"."$2"."$3}' genes1_1.tab > genes1_2.tab
-paste -d'\t' genes1.tab genes1_2.tab > filec
-awk '!a[$0]++' filec > filec_unique
-awk '{print $1"\t"$3}' filec_unique > transcripts_conc.tab
-rm genes1_1.tab genes1_2.tab filec filec_unique 
-
-#####################################################################################
-# Adding "" to each name in transcripts_conc.tab to obtain genes2.tab for replacement
-#####################################################################################
-awk '{print $1}' transcripts_conc.tab > STRG.tab
-awk '{print $2}' transcripts_conc.tab > GENES.tab
-sed 's/^/"/' STRG.tab > STRG-left.tab
-sed 's/^/"/' GENES.tab > GENES-left.tab
-sed 's/$/"/' STRG-left.tab > STRG-left-right.tab
-sed 's/$/"/' GENES-left.tab > GENES-left-right.tab
-paste -d'\t' STRG-left-right.tab GENES-left-right.tab > filed
-uniq filed > genes2.tab
-rm filed GENES* STRG*
-rm gene_names.tab gene_names2.tab gene_names3.tab transcript_gene_names.tab transcript_gene_names.txt
-echo "Done. Reconciliated gene_id's with Reference GTF"
-rm merged.${1}.tmap.1 merged.${1}.tmap.2
-echo ""
-
-#####################################################################
-# Identifying transcripts in merged.annotated_with_reference.gtf file
-#####################################################################
-
-echo "::: Identifying transcripts in merged.annotated_with_reference.gtf file"
-echo ""
-###################################
-# Getting transcript names replaced
-###################################
-awk '{print $1}' genes2.tab > fileA
-awk '{print $2}' genes2.tab > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-sed -f sed.script merged.annotated_with_reference.gtf > merged_with_reference.gtf
+sed -f sed.script merged.annotated.gtf > merged_with_reference.gtf
 rm -f sed.script fileA fileB
 echo "Done"
 echo ""
