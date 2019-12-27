@@ -141,11 +141,39 @@ cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f sed.script > merged_wi
 rm -f sed.script fileA fileB
 echo "Done"
 echo ""
-echo "A new annotated GTF is called merged_with_reference.gtf and is located in the current directory ..."
+################################
+# Formatting Transcripts names #
+################################
+grep -v "gene_id \"STRG." merged_with_reference.gtf > annotated_genes.gtf
+sed 's/\ /\t/g' annotated_genes.gtf > annotated_genes.tab
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' annotated_genes.gtf > transcript_gene_names.txt
+sed -i 's/transcript_id //g' transcript_gene_names.txt
+sed -i 's/;/\t/g' transcript_gene_names.txt
+sed -i 's/gene_id//g' transcript_gene_names.txt
+sed 's/"//g' transcript_gene_names.txt > outfile
+sed -i 's/"//g' transcript_gene_names.txt
+awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
+tr '.' '\t' < transcript_gene_names.tab > transcripts_sep
+awk '{print $4"."$3}' < transcripts_sep > filea
+sed 's/^/"/' filea > filea-left
+sed 's/$/";/' filea-left > filea-left-right
+awk 'FNR==NR{a[NR]=$1;next}{$10=a[FNR]}1' filea-left-right annotated_genes.tab > merged
+sed 's/\ /\t/g' merged > annotated_genes.tab
+grep "gene_id \"STRG." merged_with_reference.gtf > STRG_genes.gtf
+cat annotated_genes.tab STRG_genes.gtf > merged.gtf
+
+##################
+# Validating GTF #
+##################
+
+perl validate_gtf.pl -f merged.gtf
+rm outfile merged transcript_gene_names.txt transcripts_sep transcript_gene_names.tab filea filea-left filea-left-right annotated_genes.tab annotated_genes.gtf STRG_genes.gtf merged.gtf
+echo ""
+echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
 echo ""
 echo "::: Obtaining Transcripts in FASTA format with gffread"
 echo ""
-gffread -w transcripts.fa -g ${2}.fa merged_with_reference.gtf
+gffread -w transcripts.fa -g ${2}.fa merged.fixed.gtf
 echo ""
 echo "Moving gffcompare results to gffcompare_outputs folder ..."
 mkdir gffcompare_outputs
@@ -314,7 +342,7 @@ rm file1
 echo ""
 echo "Moving results to merged_annotation folder"
 mkdir output_files
-mv merged_with_reference.gtf final_summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
+mv merged.fixed.gtf final_summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm genes1.tab genes2.tab transcripts.fa.fai namelist namelist_unique_sorted transcripts_conc.tab transcriptome_annotation_file CNIT_file
 echo ""
@@ -331,7 +359,7 @@ echo ""
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "A new GTF file suitable for gene count quantification is named merged_with_reference.gtf and is located in ./output_files"
+echo "A new GTF file suitable for gene count quantification is named merged.fixed.gtf and is located in ./output_files"
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files"
 echo ""
