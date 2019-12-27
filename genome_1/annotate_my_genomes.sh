@@ -165,8 +165,12 @@ cat annotated_genes.tab STRG_genes.gtf > merged.gtf
 ##################
 # Validating GTF #
 ##################
-
-perl validate_gtf.pl -f merged.gtf
+cd /${dir1}/
+cd ..
+perl validate_gtf.pl -f /${dir1}/merged.gtf
+cd /${dir1}/
+echo ""
+echo "The merged.gtf file was succesfully validated"
 rm outfile merged transcript_gene_names.txt transcripts_sep transcript_gene_names.tab filea filea-left filea-left-right annotated_genes.tab annotated_genes.gtf STRG_genes.gtf merged.gtf
 echo ""
 echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
