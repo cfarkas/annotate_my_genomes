@@ -198,17 +198,17 @@ bash annotate_my_genomes.sh target.gtf oryCun2 30
 #
 ## Downstream analysis using outputs:
 
-### (1) Gene quantification procedure examples using output GTF file (merged_with_reference.gtf):
+### (1) Gene quantification procedure examples using output GTF file (merged.fixed.gtf):
 - Install HTSeq-count: (please see https://htseq.readthedocs.io/en/release_0.11.1/index.html)
 
 ```
 sudo apt-get install build-essential python2.7-dev python-numpy python-matplotlib python-pysam python-htseq
 ```
 
-- Gene-level quantification using "merged_with_reference.gtf" GTF file
+- Gene-level quantification using "merged.fixed.gtf" GTF file
 
 ```
-htseq-count -t transcript --stranded=no --format bam condition1.bam condition2.bam merged_with_reference.gtf > gene_counts
+htseq-count -t transcript --stranded=no --format bam condition1.bam condition2.bam merged.fixed.gtf > gene_counts
 ```
 
 ### (2) "genesGO.tab" and "transcriptsGO.tab" output files usage:
