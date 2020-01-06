@@ -15,8 +15,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 gene_id "YF5"; transcript_id "YF5.4"
 (Genes denoted with "STRG" prefix are novel).
 ```
-- The resulting GTF file is validated by using Validate GTF tool from Brent Lab: http://mblab.wustl.edu/software.html#validategtf
-Keibler, E. and M.R. Brent. 2003. "Eval: A software package for analysis of genome annotations." BMC Bioinformatics 4:50.
+- The resulting GTF file is validated by using "Validate GTF" tool from Brent Lab: http://mblab.wustl.edu/software.html#validategtf
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
