@@ -208,7 +208,7 @@ sudo apt-get install build-essential python2.7-dev python-numpy python-matplotli
 - Gene-level quantification using "merged.fixed.gtf" GTF file
 
 ```
-htseq-count -t transcript --stranded=no --format bam condition1.bam condition2.bam merged.fixed.gtf > gene_counts
+htseq-count --stranded=no --format bam condition1.bam condition2.bam merged.fixed.gtf > gene_counts
 ```
 
 ### (2) "genesGO.tab" and "transcriptsGO.tab" output files usage:
