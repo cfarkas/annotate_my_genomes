@@ -248,7 +248,7 @@ The above gene list in tabular format can also be used to extract:
 - Transcripts sequences associated to each gene. 
 - Align transcript sequences in order to obtain consensus sequences
 
-This can be accomplished by copying merged_with_reference.gtf file and a user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ and execute the following (e.g.: for chicken genome):
+This can be accomplished by copying merged.fixed.gtf file and a user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ and execute the following (e.g.: for chicken genome):
 
 ```
 # Downloading galGal6 genome
@@ -262,6 +262,42 @@ bash commands
 ``` 
 
 - {gene_name}.cons files contain common sequences within transcripts and could suitable for PCR primer picking in conserved regions. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
+
+### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
+
+For a detailed characterization of lncRNAs, users can install FEELnc: https://github.com/tderrien/FEELnc
+The installation of this program can be as follows:
+```
+git clone https://github.com/tderrien/FEELnc.git
+cd FEELnc
+export FEELNCPATH=${PWD}
+export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
+export PATH=$PATH:${FEELNCPATH}/scripts/
+export PATH=$PATH:${FEELNCPATH}/utils/
+```
+In the FEELnc folder, place: 
+- merged.fixed.gtf for annotation, 
+- reference GTF file (i.e.: galGal6.gtf) 
+- reference genome in fasta format: (i.e.: galGal6.fa)
+and execute: 
+```
+FEELnc_filter.pl -i merged.fixed.gtf -a galGal6.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a galGal6.gtf -b transcript_biotype=protein_coding -g galGal6.fa --mode=shuffle
+FEELnc_classifier.pl -i ./feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a galGal6.gtf > candidate_lncRNA_classes.txt
+```
+candidate_lncRNA_classes.txt can be used to annotate the merged.fixed.gtf file as follows:
+
+```
+awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
+tail -n +2 lncRNA_genes > lncRNA_transcripts
+rm lncRNA_genes
+grep -w -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.lncRNAs.gtf
+grep --invert-match -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.coding.gtf
+sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
+sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
+cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
+```
+final_annotated.gtf file contains the coding/non-coding classification. This annotation can be also compared with the CNIT output. 
 
 ### More Scenarios?
 
