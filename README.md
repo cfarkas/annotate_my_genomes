@@ -248,7 +248,7 @@ The above gene list in tabular format can also be used to extract:
 - Transcripts sequences associated to each gene. 
 - Align transcript sequences in order to obtain consensus sequences
 
-This can be accomplished by copying merged.fixed.gtf file and a user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ and execute the following (e.g.: for chicken genome):
+This can be accomplished by copying merged.fixed.gtf file and an user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ . Execute the following (e.g.: for chicken genome):
 
 ```
 # Downloading galGal6 genome
@@ -261,7 +261,7 @@ awk '{print "bash get_transcripts.sh merged_with_reference.gtf galGal6.fa " $0}'
 bash commands
 ``` 
 
-- {gene_name}.cons files contain common sequences within transcripts and could suitable for PCR primer picking in conserved regions. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
+- {gene_name}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
 
 ### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
 
