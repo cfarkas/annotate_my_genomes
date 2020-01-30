@@ -266,7 +266,7 @@ bash commands
 ### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
 
 For a detailed characterization of lncRNAs, users can install FEELnc: https://github.com/tderrien/FEELnc
-The installation of this program can be as follows:
+
 ```
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -280,6 +280,7 @@ In the FEELnc folder, place:
 - reference GTF file (i.e.: galGal6.gtf) 
 - reference genome in fasta format: (i.e.: galGal6.fa)
 and execute: 
+
 ```
 FEELnc_filter.pl -i merged.fixed.gtf -a galGal6.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a galGal6.gtf -b transcript_biotype=protein_coding -g galGal6.fa --mode=shuffle
