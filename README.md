@@ -298,7 +298,19 @@ sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
 ```
-final_annotated.gtf file contains the coding/non-coding classification. This annotation can be also compared with the CNIT output. 
+final_annotated.gtf contains the annotated lncRNA/coding GTF in the second field. 
+To obtain coding and non-coding transcripts, use gffread on merged.fixed.lncRNAs.gtf and merged.fixed.coding.gtf outputs of FEELnc, as follows:
+
+```
+gffread -w noncoding.fa -g galGal6.fa merged.fixed.lncRNAs.gtf
+gffread -w coding.fa -g galGal6.fa merged.fixed.coding.gtf
+
+# Number of coding transcripts
+grep ">" -c coding.fa
+
+# Number of noncoding transcripts
+grep ">" -c noncoding.fa
+```
 
 ### More Scenarios?
 
