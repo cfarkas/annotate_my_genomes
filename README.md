@@ -265,7 +265,7 @@ bash commands
 
 ### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
 
-For a detailed characterization of lncRNAs, users can install FEELnc: https://github.com/tderrien/FEELnc
+For a detailed characterization of lncRNAs, users can use FEELnc: https://github.com/tderrien/FEELnc
 
 ```
 git clone https://github.com/tderrien/FEELnc.git
@@ -299,7 +299,8 @@ sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
 ```
 final_annotated.gtf contains the annotated lncRNA/coding GTF in the second field. 
-To obtain coding and non-coding transcripts, use gffread on merged.fixed.lncRNAs.gtf and merged.fixed.coding.gtf outputs of FEELnc, as follows:
+
+To obtain coding and non-coding transcripts, use gffread on merged.fixed.lncRNAs.gtf and merged.fixed.coding.gtf (outputs of FEELnc) as follows:
 
 ```
 gffread -w noncoding.fa -g galGal6.fa merged.fixed.lncRNAs.gtf
