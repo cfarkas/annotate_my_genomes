@@ -17,6 +17,8 @@ echo '#' >> gawn_config.sh
 cp gawn_config.sh ${dir}/genome_1
 cp gawn_config.sh ${dir}/bash_scripts
 cd ..
+gunzip FEELnc.tar.gz
+tar -xvf FEELnc.tar
 ###
 echo ""
 echo "make done"
