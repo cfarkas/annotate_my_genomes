@@ -293,46 +293,17 @@ bash commands
 
 ### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
 
-For a detailed characterization of lncRNAs, users can use FEELnc. See here for install requirements: https://github.com/tderrien/FEELnc
+- For a detailed characterization of lncRNAs, users can use FEELnc. See here for install requirements: https://github.com/tderrien/FEELnc
+- final_annotated.gtf already contains the annotated lncRNA/coding GTF in the second field. 
+
+To obtain coding and non-coding transcripts use final_annotated.gtf file as follows:
 
 ```
-git clone https://github.com/tderrien/FEELnc.git
-cd FEELnc
-export FEELNCPATH=${PWD}
-export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
-export PATH=$PATH:${FEELNCPATH}/scripts/
-export PATH=$PATH:${FEELNCPATH}/utils/
-```
-In the FEELnc folder, place: 
-- merged.fixed.gtf for annotation, 
-- reference GTF file (i.e.: galGal6.gtf) 
-- reference genome in fasta format: (i.e.: galGal6.fa)
-and execute: 
+grep "coding" final_annotated.gtf > final_annotated.coding.gtf
+grep "lncRNA" final_annotated.gtf > final_annotated.lncRNAs.gtf
 
-```
-FEELnc_filter.pl -i merged.fixed.gtf -a galGal6.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a galGal6.gtf -b transcript_biotype=protein_coding -g galGal6.fa --mode=shuffle
-FEELnc_classifier.pl -i ./feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a galGal6.gtf > candidate_lncRNA_classes.txt
-```
-candidate_lncRNA_classes.txt can be used to annotate the merged.fixed.gtf file as follows:
-
-```
-awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
-tail -n +2 lncRNA_genes > lncRNA_transcripts
-rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.coding.gtf
-sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
-```
-final_annotated.gtf contains the annotated lncRNA/coding GTF in the second field. 
-
-To obtain coding and non-coding transcripts, use gffread on merged.fixed.lncRNAs.gtf and merged.fixed.coding.gtf (outputs of FEELnc) as follows:
-
-```
-gffread -w noncoding.fa -g galGal6.fa merged.fixed.lncRNAs.gtf
-gffread -w coding.fa -g galGal6.fa merged.fixed.coding.gtf
+gffread -w noncoding.fa -g galGal6.fa final_annotated.coding.gtf
+gffread -w coding.fa -g galGal6.fa final_annotated.lncRNAs.gtf
 
 # Number of coding transcripts
 grep ">" -c coding.fa
