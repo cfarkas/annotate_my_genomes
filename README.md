@@ -24,17 +24,6 @@ This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
 - genome assembly name (check UCSC format)
 
-## Installation: 
-
-Clone this repository every time you need to work with a different assembly and/or genome. In the folder you want to annotate the GTF file, do the following: 
-  
-```
-git clone https://github.com/cfarkas/annotate_my_genomes.git
-cd annotate_my_genomes
-bash makefile.sh
-```
-#
-
 ## Dependences:
 
 ### Obtaining and installing StringTie (v2.0 release needed)
@@ -148,6 +137,16 @@ sudo apt-get install emboss
 Description can be found at the webpage: http://www.clustal.org/omega/. A way to install it can be the following:
 ```
 sudo apt-get install clustalo
+```
+
+## Installation: 
+
+Clone this repository every time you need to work with a different assembly and/or genome. In the folder you want to annotate the GTF file, do the following: 
+  
+```
+git clone https://github.com/cfarkas/annotate_my_genomes.git
+cd annotate_my_genomes
+bash makefile.sh
 ```
 
 ### Obtaining StringTie GTF file for annotation
