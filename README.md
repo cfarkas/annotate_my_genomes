@@ -75,7 +75,7 @@ sudo cp * /usr/local/bin/
 sudo apt-get install gmap
 ```
 
-### Installing dependences for FEELnc: FEELnc : FlExible Extraction of LncRNA 
+### Installing dependences for FEELnc : FlExible Extraction of LncRNA 
 #### (for documentation, please see https://github.com/tderrien/FEELnc)
 
 ```
