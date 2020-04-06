@@ -217,11 +217,11 @@ echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
-echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
-echo ""
 cd /${dir1}/
-cd ..
-
+echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
+git clone https://github.com/tderrien/FEELnc.git
+echo ""
+cp {reference_genome_name}.fa {reference_genome_name}.gtf merged.fixed.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -245,11 +245,11 @@ echo ""
 ### Running FEELnc
 echo "Running FEELnc on merged.fixed.gtf file ..."
 # Filter
-FEELnc_filter.pl -i /${dir1}/merged.fixed.gtf -a /${dir1}/{reference_genome_name}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i merged.fixed.gtf -a {reference_genome_name}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a /${dir1}/{reference_genome_name}.gtf -b transcript_biotype=protein_coding -g /${dir1}/{reference_genome_name}.fa --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a {reference_genome_name}.gtf -b transcript_biotype=protein_coding -g {reference_genome_name}.fa --mode=shuffle
 # Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a /${dir1}/{reference_genome_name}.gtf > candidate_lncRNA_classes.txt
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a {reference_genome_name}.gtf > candidate_lncRNA_classes.txt
 echo "FEELnc calculations were done"
 echo ""
 echo "::: Parsing FEELnc output"
