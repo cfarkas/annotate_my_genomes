@@ -214,26 +214,58 @@ echo ""
 echo "Done. The novel transcripts are annotated in ./gawn/05_results/"
 echo ""
 
-##########################################
-# CNIT long noncoding identification
-##########################################
-echo "::: Classifying protein-coding and long non-coding transcripts with CNIT"
+############################################
+# FEELnc long noncoding RNA identification #
+############################################
+echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
 echo ""
 cd /${dir1}/
 cd ..
-cd CNIT/
-python CNIT.py -f /${dir1}/transcripts.fa -o /${dir1}/CNIT_output -m 've'
+
+### Cloning FEELnc in current directory
+git clone https://github.com/tderrien/FEELnc.git
+cd FEELnc
+export FEELNCPATH=${PWD}
+export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
+export PATH=$PATH:${FEELNCPATH}/scripts/
+export PATH=$PATH:${FEELNCPATH}/utils/
+echo ""
+### Testing FEELnc first
+echo "Testing FEELnc is works ..."
+cd test/
+# Filter
+FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+# Coding_Potential
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
+# Classifier
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
+echo "FEELnc Test done"
+cd ..
+echo ""
+### Running FEELnc
+echo "Running FEELnc on merged.fixed.gtf file ..."
+# Filter
+FEELnc_filter.pl -i /${dir1}/merged.fixed.gtf -a /${dir1}/{reference_genome_name}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+# Coding_Potential
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a /${dir1}/{reference_genome_name}.gtf -b transcript_biotype=protein_coding -g /${dir1}/{reference_genome_name}.fa --mode=shuffle
+# Classifier
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a /${dir1}/{reference_genome_name}.gtf > candidate_lncRNA_classes.txt
+echo "FEELnc calculations were done"
+echo ""
+echo "::: Parsing FEELnc output"
+cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
+awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
+tail -n +2 lncRNA_genes > lncRNA_transcripts
+rm lncRNA_genes
+grep -w -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.lncRNAs.gtf
+grep --invert-match -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.coding.gtf
+sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
+sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
+cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
 echo ""
-echo "Done. The transcripts were classified in ./CNIT_output/"
+echo "Done. The transcripts were classified and added to final_annotated.gtf file..."
 echo ""
-echo "::: Configuring Summary results"
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-cp /${dir1}/CNIT_output/CNIT.index /${dir1}/
-awk '{print $1"\t"$2}' transcriptome_annotation_table.tsv > transcriptome_annotation
-awk '{print $2"\t"$3"\t"$4"\t"$7}' CNIT.index > CNIT
-tail -n +2 transcriptome_annotation > transcriptome_annotation_file
-tail -n +2 CNIT > CNIT_file
 
 ##########################################
 # Extracting GO terms for each transcript
@@ -328,42 +360,21 @@ rm coding_transcript.gtf
 # Configuring Summary Results
 #############################
 
-echo "::: Configuring Summary results"
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-cp /${dir1}/CNIT_output/CNIT.index /${dir1}/
-awk '{print $1"\t"$2}' transcriptome_annotation_table.tsv > transcriptome_annotation
-awk '{print $2"\t"$3"\t"$4"\t"$7}' CNIT.index > CNIT
-tail -n +2 transcriptome_annotation > transcriptome_annotation_file
-tail -n +2 CNIT > CNIT_file
-rm transcriptome_annotation_table.tsv transcriptome_annotation CNIT.index CNIT
-join --nocheck-order transcriptome_annotation_file CNIT_file > file1
-sed 's/ /\t/' file1 > final_summary.tab
-rm file1
-
 ############################################
 # Moving results to merged_annotation folder
 ############################################
 echo ""
 echo "Moving results to merged_annotation folder"
 mkdir output_files
-mv merged.fixed.gtf final_summary.tab Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
+mv final_annotated.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
-rm genes1.tab genes2.tab transcripts.fa.fai namelist namelist_unique_sorted transcripts_conc.tab transcriptome_annotation_file CNIT_file
+rm genes1.tab genes2.tab transcripts.fa.fai namelist namelist_unique_sorted transcripts_conc.tab
 echo ""
-echo "All Done. The transcripts were classified in final_summary.tab file located in ./output_files"
-echo ""
-echo "The above Classification includes:"
-echo ""
-echo "Field #1: StringTie transcript id (STRG)"
-echo "Field #3: Uniprot closest BLASTp match from GAWN annotation"
-echo "Field #4: Coding or non coding classfication by CNIT"
-echo "Field #5: Coding probability score (CNIT Score)"
-echo "Field #6: Transcript length (bp)"
-echo ""
+echo "All Done. The transcripts were classified in ./output_files"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "A new GTF file suitable for gene count quantification is named merged.fixed.gtf and is located in ./output_files"
+echo "A new GTF file suitable for gene count quantification is named final_annotated.gtf and is located in ./output_files. This GTF contains the annotated lncRNA/coding GTF in the second field".
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files"
 echo ""
