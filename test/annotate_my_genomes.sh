@@ -366,7 +366,7 @@ rm coding_transcript.gtf
 echo ""
 echo "Moving results to merged_annotation folder"
 mkdir output_files
-mv final_annotated.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm genes1.tab genes2.tab transcripts.fa.fai namelist namelist_unique_sorted transcripts_conc.tab
 echo ""
@@ -375,6 +375,8 @@ echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
 echo "A new GTF file suitable for gene count quantification is named final_annotated.gtf and is located in ./output_files. This GTF contains the annotated lncRNA/coding GTF in the second field".
+echo ""
+echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
 echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files"
 echo ""
