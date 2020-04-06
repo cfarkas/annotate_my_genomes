@@ -2,7 +2,7 @@
 ### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads from non-model (and model) vertebrate organisms.
 
-## Pipeline Outline
+# Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
   annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
@@ -24,7 +24,7 @@ This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
 - genome assembly name (check UCSC format)
 
-## Dependences:
+# Dependences:
 
 ### Obtaining and installing StringTie (v2.0 release needed)
 
@@ -139,7 +139,7 @@ Description can be found at the webpage: http://www.clustal.org/omega/. A way to
 sudo apt-get install clustalo
 ```
 
-## Installation: 
+# Installation: 
 
 Clone this repository every time you need to work with a different assembly and/or genome. In the folder you want to annotate the GTF file, do the following: 
   
@@ -183,7 +183,7 @@ stringtie -j 2 -c 2 -p 30 -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
 
 #
 
-## Quickstart (Running the test)
+# Quickstart (Running the test)
 
 1) Optionally, edit number of cpus in /test/gawn_config.sh:
 
@@ -196,7 +196,7 @@ stringtie -j 2 -c 2 -p 30 -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
 bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6 5
 ```
 #
-## Usage
+# Usage
 
 
 #### Assuming you runned the test ...
