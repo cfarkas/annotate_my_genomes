@@ -265,7 +265,7 @@ bash commands
 
 ### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
 
-For a detailed characterization of lncRNAs, users can use FEELnc: https://github.com/tderrien/FEELnc
+For a detailed characterization of lncRNAs, users can use FEELnc. See here for install requirements: https://github.com/tderrien/FEELnc
 
 ```
 git clone https://github.com/tderrien/FEELnc.git
