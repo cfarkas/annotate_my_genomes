@@ -98,18 +98,30 @@ install BioPerl
 quit
 
 # Installing KmerInShort 
+
 git clone --recursive https://github.com/rizkg/KmerInShort
 cd KmerInShort
 mkdir build;  cd build;  cmake ..;  make -j 8
 sudo cp KmerInShort /usr/local/bin/
 
 # Installing fasta_ushuffle
+
 git clone git://github.com/agordon/fasta_ushuffle.git
 cd fasta_ushuffle
 make
 sudo cp ushuffle /usr/local/bin/
 sudo cp fasta_ushuffle /usr/local/bin/
 
+# Testing if FEELnc works 
+
+git clone https://github.com/tderrien/FEELnc
+cd FEELnc/test/
+# Filter
+FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+# Coding_Potential
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
+# Classifier
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
 ```
 
 ### Obtaining and installing up-to-date SAMtools with htslib (version 1.9)
