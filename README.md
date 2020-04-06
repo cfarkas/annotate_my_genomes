@@ -86,13 +86,30 @@ sudo cp * /usr/local/bin/
 sudo apt-get install gmap
 ```
 
-### Installing python dependences for CNIT: A tool for identifying protein-coding and long non-coding transcripts based on intrinsic sequence composition 
-#### (for documentation, please see http://cnit.noncode.org/CNIT/)
+### Installing dependences for FEELnc: FEELnc : FlExible Extraction of LncRNA 
+#### (for documentation, please see https://github.com/tderrien/FEELnc)
 
 ```
-pip install numpy
-pip install sklearn
-pip install xgboost
+## Perl Requirements: Parallel and BioPerl
+
+perl -MCPAN -e shell
+install Parallel::ForkManager
+install BioPerl
+quit
+
+# Installing KmerInShort 
+git clone --recursive https://github.com/rizkg/KmerInShort
+cd KmerInShort
+mkdir build;  cd build;  cmake ..;  make -j 8
+sudo cp KmerInShort /usr/local/bin/
+
+# Installing fasta_ushuffle
+git clone git://github.com/agordon/fasta_ushuffle.git
+cd fasta_ushuffle
+make
+sudo cp ushuffle /usr/local/bin/
+sudo cp fasta_ushuffle /usr/local/bin/
+
 ```
 
 ### Obtaining and installing up-to-date SAMtools with htslib (version 1.9)
