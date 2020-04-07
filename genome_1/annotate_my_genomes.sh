@@ -270,6 +270,8 @@ echo ""
 ##########################################
 # Extracting GO terms for each transcript
 ##########################################
+cd /${dir1}/
+cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
 cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
 tr ';' '\t' < transcripts_GO > transcripts_GO_sep
 column -t transcripts_GO_sep > transcripts_GO.tab
