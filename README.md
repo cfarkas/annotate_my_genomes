@@ -128,6 +128,7 @@ sudo make install
 sudo cp samtools /usr/local/bin/
 
 # Similarly as htslib, samtools and bcftools can be downloaded as follows:
+
 wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
 wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2
 ```
