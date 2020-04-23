@@ -135,9 +135,8 @@ wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10
 
 Then in a terminal type
 >samtools
->bcftools
 
-to check 1.10 versions (using htslib v1.10)
+to check 1.10 version (using htslib v1.10)
 
 ### Obtaining and installing EMBOSS toolkit (Open Source software for molecular biology)
 Complete instructions can be found at the webpage: https://ssbio.readthedocs.io/en/latest/instructions/emboss.html. A way to install it can be the following:
