@@ -127,15 +127,16 @@ sudo make install
 # this step is only for samtools
 sudo cp samtools /usr/local/bin/
 
-Similarly as htslib, samtools and bcftools can be downloaded as follows:
+# Similarly as htslib, samtools and bcftools can be downloaded as follows:
 wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
 wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2
 ```
 
 Then in a terminal type
 >samtools
+>bcftools
 
-to check 1.9 version (using htslib v1.9)
+to check 1.10 versions (using htslib v1.10)
 
 ### Obtaining and installing EMBOSS toolkit (Open Source software for molecular biology)
 Complete instructions can be found at the webpage: https://ssbio.readthedocs.io/en/latest/instructions/emboss.html. A way to install it can be the following:
