@@ -113,16 +113,25 @@ FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_b
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
 ```
 
-### Obtaining and installing up-to-date SAMtools with htslib (version 1.9)
+### Obtaining and installing up-to-date SAMtools with htslib (version >= 1.9)
 (Old samtools version can also work). Users needs to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplish by downloading the three packages, decompressing it, and doing the following:
 ```
-cd htslib-1.9    # and similarly for samtools
+wget https://github.com/samtools/htslib/releases/download/1.10.2/htslib-1.10.2.tar.bz2
+bzip2 -d htslib-1.10.2.tar.bz2
+tar -xvf htslib-1.10.2.tar
+rm htslib-1.10.2.tar
+cd htslib-1.10.2    # and similarly for samtools
 sudo ./configure --prefix=/usr/local/bin
 sudo make
 sudo make install
 # this step is only for samtools
 sudo cp samtools /usr/local/bin/
+
+Similarly as htslib, samtools and bcftools can be downloaded as follows:
+wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
+wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2
 ```
+
 Then in a terminal type
 >samtools
 
