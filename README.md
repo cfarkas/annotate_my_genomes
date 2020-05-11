@@ -79,9 +79,9 @@ sudo apt-get install gmap
 #### (for documentation, please see https://github.com/tderrien/FEELnc)
 
 ```
-## Perl Requirements: Parallel and BioPerl
+## Perl Requirements: Parallel and BioPerl (with sudo privileges)
 
-perl -MCPAN -e shell
+sudo perl -MCPAN -e shell
 install Parallel::ForkManager
 install BioPerl
 quit
