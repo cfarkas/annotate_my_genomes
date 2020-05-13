@@ -20,10 +20,6 @@ cd shc/
 ./autogen.sh
 ./configure
 make
-cd /${dir1}/
-./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o /${dir1}/annotate_my_genomes
-./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o /${dir1}/get_transcripts
-echo "binaries were made"
 echo ""
 echo "make done"
 #
