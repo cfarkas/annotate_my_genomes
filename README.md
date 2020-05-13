@@ -227,7 +227,7 @@ bash annotate_my_genomes.sh Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dn
 
 2) (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10. 
 
-3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads:
+3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads (Important: each thread will use 1 GB of memory, check your machine):
 ```
 bash annotate_my_genomes.sh target.gtf genome_assembly.gtf genome_assembly.fa 30
 ```
