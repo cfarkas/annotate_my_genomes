@@ -160,6 +160,13 @@ Clone this repository every time you need to work with a different assembly and/
 git clone https://github.com/cfarkas/annotate_my_genomes.git
 cd annotate_my_genomes
 bash makefile.sh
+mkdir bin
+mkdir genome_1
+mkdir get_transcripts
+mv annotate_my_genomes get_transcripts ./bin/
+cp ./bin/annotate_my_genomes ./test/
+cp ./bin/annotate_my_genomes ./genome_1/
+cp ./bin/get_transcripts ./get_transcripts/
 ```
 
 ### Obtaining StringTie GTF file for annotation
