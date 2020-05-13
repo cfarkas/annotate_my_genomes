@@ -5,7 +5,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
-  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
+  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from Ensembl. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
   
   The pipeline is designed for:
   
@@ -17,12 +17,15 @@ gene_id "YF5"; transcript_id "YF5.4"
 ```
 - The resulting GTF file is validated by using "Validate GTF" tool from Brent Lab: http://mblab.wustl.edu/software.html#validategtf
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
-- Assess coding potential of each assembled transcript with CNIT tool (http://cnit.noncode.org/CNIT/).
+- Assess coding potential of each assembled transcript with FEELnc tool (https://github.com/tderrien/FEELnc).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
 
 This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
-- genome assembly name (check UCSC format)
+- Reference genome annotation (in GTF format)
+- genome assembly name (masked, fasta format)
+
+The two last requirements can be downloaded from Ensembl ftp webpage: https://uswest.ensembl.org/info/data/ftp/index.html
 
 # Dependences:
 
@@ -200,10 +203,19 @@ stringtie -j 2 -c 2 -p 30 -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
 - NCPUS=10
   - Increase this value to speed-up things :rocket:
 
-2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6" specifying the reference genome assembly (galGal6) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and type in a terminal:
+2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), reference genome assembly annotation (GTF format: ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz), sequence (fasta format: ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and do the following:
 
 ```
-bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6 5
+# Donwload Gallus gallus v6 GTF file and decompress
+wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz
+gunzip Gallus_gallus.GRCg6a.100.gtf.gz
+
+# Download Gallus gallus v6 fasta file (Masked fasta file, with "rm" prefix) and decompress  
+ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
+gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
+
+# Execute
+bash annotate_my_genomes.sh Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna_rm.toplevel.fa 5
 ```
 #
 # Usage
@@ -211,26 +223,26 @@ bash annotate_my_genomes.sh stringtie_chr33.gtf galGal6 5
 
 #### Assuming you runned the test ...
 
-1) Place your StringTie GTF assembly to annotate in "genome_1" folder
+1) Place your StringTie GTF assembly to annotate in "genome_1" folder along with Ensembl reference genome (fasta and GTF files)
 
 2) (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10. 
 
 3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads:
 ```
-bash annotate_my_genomes.sh target.gtf genome_assembly_name 30
+bash annotate_my_genomes.sh target.gtf genome_assembly.gtf genome_assembly.fa 30
 ```
-#### To check genome_assembly_names (UCSC Genome Browser assembly ID), please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
+#### To download reference genome files (Ensembl), please visit: https://uswest.ensembl.org/info/data/ftp/index.html
 
 #
 ## Usage examples
 
 - For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
-bash annotate_my_genomes.sh target.gtf mm10 30
+bash annotate_my_genomes.sh target.gtf Mus_musculus.GRCm38.100.gtf.gz Mus_musculus.GRCm38.dna_rm.alt.fa 30
 ```
 - For rabbit assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
-bash annotate_my_genomes.sh target.gtf oryCun2 30
+bash annotate_my_genomes.sh target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf Oryctolagus_cuniculus.OryCun2.0.dna_rm.toplevel.fa 30
 ```
 
 #
@@ -289,8 +301,9 @@ The above gene list in tabular format can also be used to extract:
 This can be accomplished by copying merged.fixed.gtf file and an user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ . Execute the following (e.g.: for chicken genome):
 
 ```
-# Downloading galGal6 genome
-bash genome_download_for_transcripts.sh galGal6
+# Downloading masked Gallus gallus v6 genome
+wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
+gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
 
 # generate "commands" file using provided list of genes 
 awk '{print "bash get_transcripts.sh merged_with_reference.gtf galGal6.fa " $0}' gene_list.tab > commands
