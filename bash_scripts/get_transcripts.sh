@@ -7,9 +7,9 @@ gene_name=${3}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
   echo ""
-  echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
+  echo "This program will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
   echo "[merged_with_reference]: Name of the StringTie annotated GTF from the pipeline"
   echo ""
@@ -22,7 +22,7 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
   echo ""
   echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
@@ -37,7 +37,7 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
   echo ""
   echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
@@ -52,7 +52,7 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
   echo ""
   echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
@@ -65,10 +65,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"; exit 1; }
 
 if [ $# -ne 3 ]; then
-  echo 1>&2 "Usage: bash ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo 1>&2 "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
   exit 3
 fi
 echo "Working in $dir"
