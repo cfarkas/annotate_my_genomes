@@ -20,7 +20,7 @@ cd shc/
 ./autogen.sh
 ./configure
 make
-cd ..
+cd /${dir1}/
 ./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o annotate_my_genomes
 ./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o get_transcripts
 mkdir bin
