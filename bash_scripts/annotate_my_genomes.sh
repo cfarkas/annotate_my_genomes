@@ -9,7 +9,7 @@ threads=${4}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
@@ -26,7 +26,7 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
@@ -43,7 +43,7 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
@@ -60,7 +60,7 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
@@ -75,10 +75,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
 
 if [ $# -ne 4 ]; then
-  echo 1>&2 "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo 1>&2 "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   exit 3
 fi
 
