@@ -162,17 +162,6 @@ cd annotate_my_genomes
 
 # make
 bash makefile.sh
-
-# Install
-./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o ./annotate_my_genomes
-./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o ./get_transcripts
-mkdir bin
-mkdir genome_1
-mkdir get_transcripts
-mv annotate_my_genomes get_transcripts ./bin/
-cp ./bin/annotate_my_genomes ./test/
-cp ./bin/annotate_my_genomes ./genome_1/
-cp ./bin/get_transcripts ./get_transcripts/
 ```
 
 ### Obtaining StringTie GTF file for annotation
