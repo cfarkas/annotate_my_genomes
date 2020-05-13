@@ -3,122 +3,123 @@
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 stringtie_gtf=${1}
-reference_genome_name=${2}
-threads=${3}
+reference_genome_gtf=${2}
+reference_genome_fasta=${3}
+threads=${4}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
-  echo "{stringtie_gtf}: Name of the StringTie GTF file"
+  echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
   echo ""
-  echo "{threads}: Number of threads for parallel text processing (Integer)"
+  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
   exit 0
 fi
 
 if [ "$1" == "-help" ]; then
-    echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
-  echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts"
+  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "{stringtie_gtf}: Name of the StringTie GTF file"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
-  echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "{threads}: Number of threads for parallel text processing (Integer)"
+  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
   exit 0
 fi
+
 if [ "$1" == "--h" ]; then
-   echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
-  echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts"
+  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "{stringtie_gtf}: Name of the StringTie GTF file"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
-  echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "{threads}: Number of threads for parallel text processing (Integer)"
+  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
   exit 0
 fi
+
 if [ "$1" == "--help" ]; then
-    echo ""
-  echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
   echo ""
-  echo "This script will Overlap StringTie transcripts (GTF format) with UCSC reference genome GTF and annotate novel transcripts"
+  echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "{stringtie_gtf}: Name of the StringTie GTF file"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
   echo ""
-  echo "{reference_genome_name}: Name of the current assembly genome (use UCSC genome names)"
+  echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "{threads}: Number of threads for parallel text processing (Integer)"
+  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo ""
+  echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
 
-if [ $# -ne 3 ]; then
-  echo 1>&2 "Usage: bash ./`basename $0` {stringtie_gtf} {reference_genome_name} {threads}"
+if [ $# -ne 4 ]; then
+  echo 1>&2 "Usage: bash ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   exit 3
 fi
 
 begin=`date +%s`
 echo ""
-
 echo "::: Downloading Reference genome and current GTF annotation"
-echo ""
-bash genome_download.sh ${2}
-echo ""
-echo "Done"
 echo ""
 
 echo "::: Overlapping StringTie transcripts with Reference"
 echo ""
-gffcompare -R -r ${2}.gtf -o merged ${1}
+gffcompare -R -r ${2} -s ${3} -o Ensembl_compare ${1}
 echo ""
 echo "Done"
 
-########################################
-# Stats
-########################################
-exec 3<> Stats.txt
-echo "Number of assembled genes:" >> Stats.txt
-cat merged.${1}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
-echo "" >> Stats.txt
-echo "Number of novel genes:" >> Stats.txt
-cat merged.${1}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
-echo "" >> Stats.txt
-echo "Number of novel transcripts:" >> Stats.txt
-cat merged.${1}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
-echo "" >> Stats.txt
-echo "Number of transcripts matching annotation:" >> Stats.txt
-cat merged.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
-exec 3>&-
-echo ""
-
 echo "::: Writting novel discoveries to Stats.txt"
 echo ""
+# Stats
+exec 3<> Stats.txt
+echo "Number of assembled genes:" >> Stats.txt
+cat Ensembl_compare.${1}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+echo "" >> Stats.txt
+echo "Number of novel genes:" >> Stats.txt
+cat Ensembl_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+echo "" >> Stats.txt
+echo "Number of novel transcripts:" >> Stats.txt
+cat Ensembl_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+echo "" >> Stats.txt
+echo "Number of transcripts matching annotation:" >> Stats.txt
+cat Ensembl_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+exec 3>&-
 echo "Done"
 echo ""
 
 echo "::: Replacing gene_id field in merged.annotated.gtf file with reference gene_id's"
 echo ""
-
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
-awk '{print $4"\t"$1}' merged.${1}.tmap > merged.${1}.tmap.1
-tail -n +2 merged.${1}.tmap.1 > merged.${1}.tmap.2
-awk '!/-/' merged.${1}.tmap.2 > namelist
+awk '{print $4"\t"$1}' Ensembl_compare.${1}.tmap > Ensembl_compare.${1}.tmap.1
+tail -n +2 Ensembl_compare.${1}.tmap.1 > Ensembl_compare.${1}.tmap.2
+awk '!/-/' Ensembl_compare.${1}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
@@ -130,20 +131,21 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
-
 ###############################
 # Getting gene names replaced #
 ###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged.annotated.gtf | parallel --pipe -j ${3} sed -f sed.script > merged_with_reference.gtf
+cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged_with_reference.gtf
 rm -f sed.script fileA fileB
-echo "Done"
+echo "Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes"
 echo ""
+echo "Formatting Isoforms"
 ################################
 # Formatting Transcripts names #
 ################################
+# Extracting replaced genes names from merged_with_reference.gtf file
 grep -v "gene_id \"STRG." merged_with_reference.gtf > annotated_genes.gtf
 sed 's/\ /\t/g' annotated_genes.gtf > annotated_genes.tab
 perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' annotated_genes.gtf > transcript_gene_names.txt
@@ -152,16 +154,39 @@ sed -i 's/;/\t/g' transcript_gene_names.txt
 sed -i 's/gene_id//g' transcript_gene_names.txt
 sed 's/"//g' transcript_gene_names.txt > outfile
 sed -i 's/"//g' transcript_gene_names.txt
+# generating replaced gene names with matched original stringtie isoforms
 awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
-tr '.' '\t' < transcript_gene_names.tab > transcripts_sep
-awk '{print $4"."$3}' < transcripts_sep > filea
-sed 's/^/"/' filea > filea-left
-sed 's/$/";/' filea-left > filea-left-right
-awk 'FNR==NR{a[NR]=$1;next}{$10=a[FNR]}1' filea-left-right annotated_genes.tab > merged
-sed 's/\ /\t/g' merged > annotated_genes.tab
-grep "gene_id \"STRG." merged_with_reference.gtf > STRG_genes.gtf
-cat annotated_genes.tab STRG_genes.gtf > merged.gtf
-
+# removing duplicates
+awk '!a[$0]++' transcript_gene_names.tab > transcript_gene_names.unique.tab
+# selecting column of replaced genes names and iterate numbers to obtain fixed isoforms numbers
+awk '{print $1}' < transcript_gene_names.unique.tab > replaced_gene_names.tab
+# iterate numbers in each unique gene_id
+awk '{ printf "%06d.%d\t%s\n",(!a[$1]++? ++c:c),a[$1],$0 }' replaced_gene_names.tab > replaced_gene_names_iterate.tab
+# generating isoforms IDs
+tr '.' '\t' < replaced_gene_names_iterate.tab > replaced_gene_names_iterate_sep.tab
+awk '{print $3"."$2}' replaced_gene_names_iterate_sep.tab > isoforms_per_gene
+# align transcript_gene_names.unique.tab with new isoforms
+paste -d'\t' transcript_gene_names.unique.tab isoforms_per_gene > isoforms_per_gene_concatenated
+awk '{print $2"\t"$3}' isoforms_per_gene_concatenated > isoforms_per_gene_concatenated.tab
+# generate file for sed script, as "namelist"
+awk '{print $1}' isoforms_per_gene_concatenated.tab  > A
+awk '{print $2}' isoforms_per_gene_concatenated.tab  > B
+sed 's/^/"/' A > A.1
+sed 's/$/"/' A.1 > A.2
+sed 's/^/"/' B > B.1
+sed 's/$/"/' B.1 > B.2
+paste -d'\t' A.2 B.2 > namelist_isoforms
+rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_* outfile transcripts_sep
+##################################
+# Getting isoform names replaced #
+##################################
+awk '{print $1}' namelist_isoforms > fileA
+awk '{print $2}' namelist_isoforms > fileB
+paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+cat merged_with_reference.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
+rm -f sed.script fileA fileB annotated_genes*
+echo "Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes"
+echo ""
 ##################
 # Validating GTF #
 ##################
@@ -171,13 +196,13 @@ perl validate_gtf.pl -f /${dir1}/merged.gtf
 cd /${dir1}/
 echo ""
 echo "The merged.gtf file was succesfully validated"
-rm outfile merged transcript_gene_names.txt transcripts_sep transcript_gene_names.tab filea filea-left filea-left-right annotated_genes.tab annotated_genes.gtf STRG_genes.gtf merged.gtf
+rm merged.gtf
 echo ""
 echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
 echo ""
 echo "::: Obtaining Transcripts in FASTA format with gffread"
 echo ""
-gffread -w transcripts.fa -g ${2}.fa merged.fixed.gtf
+gffread -w transcripts.fa -g ${3} merged.fixed.gtf
 echo ""
 echo "Moving gffcompare results to gffcompare_outputs folder ..."
 mkdir gffcompare_outputs
@@ -197,7 +222,7 @@ dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
 cd /${dir1}/
-cp ${2}.fa /${dir1}/gawn/03_data/genome.fasta
+cp ${3} /${dir1}/gawn/03_data/genome.fasta
 cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
@@ -221,7 +246,7 @@ cd /${dir1}/
 echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ${2}.fa ${2}.gtf merged.fixed.gtf /${dir1}/FEELnc/
+cp ${3} ${2} merged.fixed.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -245,11 +270,11 @@ echo ""
 ### Running FEELnc
 echo "Running FEELnc on merged.fixed.gtf file ..."
 # Filter
-FEELnc_filter.pl -i merged.fixed.gtf -a ${2}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i merged.fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2}.gtf -b transcript_biotype=protein_coding -g ${2}.fa --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
 # Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2}.gtf > candidate_lncRNA_classes.txt
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2} > candidate_lncRNA_classes.txt
 echo "FEELnc calculations were done"
 echo ""
 echo "::: Parsing FEELnc output"
