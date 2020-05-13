@@ -24,6 +24,7 @@ cd ..
 ./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o annotate_my_genomes
 ./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o get_transcripts
 mkdir bin
+mkdir genome_1
 mv annotate_my_genomes get_transcripts ./bin/
 cp ./bin/annotate_my_genomes ./test/
 cp ./bin/annotate_my_genomes ./genome_1/
