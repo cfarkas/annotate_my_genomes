@@ -338,3 +338,6 @@ grep ">" -c noncoding.fa
 ### More Scenarios?
 
 To see more examples, please visit and clone https://github.com/cfarkas/annotate_my_genomes_examples.git
+
+### Notes
+Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc. 
