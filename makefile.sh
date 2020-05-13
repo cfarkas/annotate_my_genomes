@@ -15,7 +15,20 @@ echo '#' >> gawn_config.sh
 cp gawn_config.sh ${dir}/genome_1
 cp gawn_config.sh ${dir}/bash_scripts
 cd ..
-###
+git clone https://github.com/neurobin/shc.git
+cd shc/
+./autogen.sh
+./configure
+make
+cd ..
+./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o annotate_my_genomes
+./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o get_transcripts
+./shc/src/shc -f ./get_transcripts/get_transcripts.sh -o get_transcripts
+./shc/src/shc -f ./genome_1/annotate_my_genomes.sh -o annotate_my_genomes
+./shc/src/shc -f ./test/annotate_my_genomes.sh -o annotate_my_genomes
+mkdir bin
+mv annotate_my_genomes get_transcripts ./bin/
+echo "bin folder containing executable binaries are made"
 echo ""
 echo "make done"
 #
