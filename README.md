@@ -22,8 +22,8 @@ gene_id "YF5"; transcript_id "YF5.4"
 
 This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
-- Reference genome annotation (in GTF format)
-- genome assembly name (masked, fasta format)
+- Ensembl reference genome annotation (in GTF format)
+- Ensembl genome assembly (masked, fasta format)
 
 The two last requirements can be downloaded from Ensembl ftp webpage: https://uswest.ensembl.org/info/data/ftp/index.html
 
