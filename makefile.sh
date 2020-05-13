@@ -12,8 +12,11 @@ cd ..
 cd test
 echo 'SWISSPROT_DB="'$SWISSPROT_PATH'/swissprot"' >> gawn_config.sh
 echo '#' >> gawn_config.sh
-cp gawn_config.sh ${dir}/genome_1
-cp gawn_config.sh ${dir}/bash_scripts
+mkdir bin
+mkdir genome_1
+mkdir get_transcripts
+cp gawn_config.sh /${dir}/genome_1
+cp gawn_config.sh /${dir}/bash_scripts
 cd ..
 git clone https://github.com/neurobin/shc.git
 cd shc/
@@ -23,10 +26,6 @@ make
 cd ..
 ./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o ./annotate_my_genomes
 ./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o ./get_transcripts
-rm -r -f genome_1 get_transcripts
-mkdir bin
-mkdir genome_1
-mkdir get_transcripts
 mv annotate_my_genomes get_transcripts ./bin/
 cp ./bin/annotate_my_genomes ./test/
 cp ./bin/annotate_my_genomes ./genome_1/
