@@ -87,18 +87,19 @@ begin=`date +%s`
 #    vvvv vvvv-- the code from above
 YELLOW='\033[1;33m'
 PURPLE='\033[0;35m'
-WHITE='\033[1;37m'
+GREY='\033[1;30m'
+NC='\033[0m' # No Color
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with Reference :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 gffcompare -R -r ${2} -s ${3} -o Ensembl_compare ${1}
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 2. Writting novel discoveries to Stats.txt :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 # Stats
 exec 3<> Stats.txt
@@ -118,7 +119,7 @@ printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 3. Replacing gene_id field in merged.annotated.gtf file with reference gene_id's :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 ########################################
 # Merging novel transcripts with ref. 
@@ -149,7 +150,7 @@ printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file 
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 4. Formatting Isoforms :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::${GREY}\n"
 ################################
 # Formatting Transcripts names #
 ################################
@@ -201,7 +202,7 @@ echo ""
 ##################
 printf "${YELLOW}::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Validating GTF file :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::${GREY}\n"
 cd /${dir1}/
 cd ..
 perl validate_gtf.pl -f /${dir1}/merged.gtf
@@ -218,7 +219,7 @@ echo ""
 #######################################
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 6. Re-formatting final_annotated.gtf using standard gff/gtf specifications :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 agat_sp_ensembl_output_style.pl -g merged.fixed.gtf -o merged.fixed.gff
 gffread merged.fixed.gff -T -o merged_fixed.gtf
 echo ""
@@ -234,7 +235,7 @@ echo ""
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
 cp ${3} ${2} merged_fixed.gtf /${dir1}/FEELnc/
@@ -265,7 +266,7 @@ echo ""
 ### Running FEELnc
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 8.  Running FEELnc on merged_fixed.gtf file ...\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 # Filter
 FEELnc_filter.pl -i merged_fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
@@ -278,7 +279,7 @@ echo ""
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Parsing FEELnc output :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::${GREY}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
@@ -295,7 +296,7 @@ echo ""
 rm merged_fixed.gtf
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 10. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation...\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 ##########################################
 # Re-formatting final_annotated.gtf file
@@ -311,7 +312,7 @@ rm final.annotated.gtf
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 11. Obtaining Transcripts in FASTA format with gffread :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
 echo ""
@@ -327,7 +328,7 @@ echo "Done"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 12. Performing gene annotation by using GAWN pipeline :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
@@ -358,7 +359,7 @@ echo ""
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 13. Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 cd /${dir1}/
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
@@ -416,7 +417,7 @@ cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 14. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo ""
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -436,7 +437,7 @@ printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 15. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 gffread augustus.gff3 -T -o coding_transcript.gtf
 gffread -x cds.fa -g transcripts.fa coding_transcript.gtf
 gffread -y prot.fa -g transcripts.fa coding_transcript.gtf
@@ -457,7 +458,7 @@ rm coding_transcript.gtf
 #############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 16. Configuring Summary Results :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${GREY}\n"
 ############################################
 # Moving results to merged_annotation folder
 ############################################
@@ -470,7 +471,7 @@ rm transcripts.fa.fai namelist*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${WHITE}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${GREY}\n"
 echo "All Done. The transcripts were classified in ./output_files"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
@@ -489,7 +490,7 @@ echo "GO terms associated to each transcript (and gene), named transcriptsGO.tab
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${NC}\n"
 end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
