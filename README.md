@@ -172,7 +172,7 @@ cp ./bin/get_transcripts ./get_transcripts/
 
 ### Obtaining StringTie GTF file for annotation
 
-#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome, using 30 threads). You can use gmap as well. 
+#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against Gallus gallus v6 genome, using 30 threads). You can use gmap as well. 
 ```
 # Installing minimap2
 git clone https://github.com/lh3/minimap2
