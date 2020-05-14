@@ -26,4 +26,13 @@ make
 cd ..
 echo ""
 echo "make done. Continue with install"
+# Install
+./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o ./annotate-my-genomes
+./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o ./get-transcripts
+mv annotate-my-genomes get-transcripts ./bin/
+cp ./bin/annotate-my-genomes ./test/
+cp ./bin/annotate-my-genomes ./genome_1/
+cp ./bin/get-transcripts ./get_transcripts/
+echo ""
+echo "All done. Binaries are located in ./bin/ ./genome_1/ and ./test/ folders"
 #
