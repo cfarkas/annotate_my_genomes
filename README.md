@@ -169,7 +169,7 @@ cp ./bin/annotate_my_genomes ./test/
 cp ./bin/annotate_my_genomes ./genome_1/
 cp ./bin/get_transcripts ./get_transcripts/
 ```
-Binaries are located in bin, genome_1 and test folders
+Binaries are located in bin, genome_1 and test folders, respectively
 
 ### Obtaining StringTie GTF file for annotation
 
