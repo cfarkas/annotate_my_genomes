@@ -217,7 +217,7 @@ wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus
 gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
 
 # Execute
-./annotate-my-genomes Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna_rm.toplevel.fa 5
+./annotate-my-genomes stringtie_chr33.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna_rm.toplevel.fa 5
 ```
 #
 # Usage
