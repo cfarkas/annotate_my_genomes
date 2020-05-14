@@ -217,7 +217,7 @@ ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg
 gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
 
 # Execute
-bash annotate_my_genomes.sh Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna_rm.toplevel.fa 5
+./annotate-my-genomes Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna_rm.toplevel.fa 5
 ```
 #
 # Usage
@@ -231,7 +231,7 @@ bash annotate_my_genomes.sh Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dn
 
 3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads (Important: each thread will use 1 GB of memory, check your machine):
 ```
-bash annotate_my_genomes.sh target.gtf genome_assembly.gtf genome_assembly.fa 30
+./annotate-my-genomes target.gtf genome_assembly.gtf genome_assembly.fa 30
 ```
 #### To download reference genome files (Ensembl), please visit: https://uswest.ensembl.org/info/data/ftp/index.html
 
@@ -240,11 +240,11 @@ bash annotate_my_genomes.sh target.gtf genome_assembly.gtf genome_assembly.fa 30
 
 - For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
-bash annotate_my_genomes.sh target.gtf Mus_musculus.GRCm38.100.gtf.gz Mus_musculus.GRCm38.dna_rm.alt.fa 30
+./annotate-my-genomes target.gtf Mus_musculus.GRCm38.100.gtf.gz Mus_musculus.GRCm38.dna_rm.alt.fa 30
 ```
 - For rabbit assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
-bash annotate_my_genomes.sh target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf Oryctolagus_cuniculus.OryCun2.0.dna_rm.toplevel.fa 30
+./annotate-my-genomes target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf Oryctolagus_cuniculus.OryCun2.0.dna_rm.toplevel.fa 30
 ```
 
 #
@@ -308,7 +308,7 @@ wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus
 gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
 
 # generate "commands" file using provided list of genes 
-awk '{print "bash get_transcripts.sh merged_with_reference.gtf galGal6.fa " $0}' gene_list.tab > commands
+awk '{print "./get-transcripts merged_with_reference.gtf galGal6.fa " $0}' gene_list.tab > commands
 
 # Execute "commands" file
 bash commands
