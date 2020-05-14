@@ -197,16 +197,87 @@ rm merged.gtf merged_with_reference.gtf isoforms_per_gene_concatenated.tab
 echo ""
 echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
 echo ""
+#######################################
+# Re-formatting merged.fixed.gtf file #
+#######################################
+echo "re-formatting final_annotated.gtf using standard gff/gtf specifications"
+agat_sp_ensembl_output_style.pl -g merged.fixed.gtf -o merged.fixed.gff
+gffread merged.fixed.gff -T -o merged_fixed.gtf
+echo ""
+echo "re-formatting was done. The new GTF file is called merged_fixed.gtf. Continue with FEELnc long non-coding classification..."
+rm merged.fixed.gff merged.fixed.gtf 
+############################################
+# FEELnc long noncoding RNA identification #
+############################################
+cd /${dir1}/
+echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
+git clone https://github.com/tderrien/FEELnc.git
+echo ""
+cp ${3} ${2} merged_fixed.gtf /${dir1}/FEELnc/
+### Cloning FEELnc in current directory
+git clone https://github.com/tderrien/FEELnc.git
+cd FEELnc
+export FEELNCPATH=${PWD}
+export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
+export PATH=$PATH:${FEELNCPATH}/scripts/
+export PATH=$PATH:${FEELNCPATH}/utils/
+echo ""
+### Testing FEELnc first
+echo "Testing FEELnc is works ..."
+cd test/
+# Filter
+FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+# Coding_Potential
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
+# Classifier
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
+echo "FEELnc Test done"
+cd ..
+echo ""
+### Running FEELnc
+echo "Running FEELnc on merged_fixed.gtf file ..."
+# Filter
+FEELnc_filter.pl -i merged_fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+# Coding_Potential
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
+# Classifier
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2} > candidate_lncRNA_classes.txt
+echo "FEELnc calculations were done"
+echo ""
+echo "::: Parsing FEELnc output"
+cp candidate_lncRNA_classes.txt /${dir1}/
+cd /${dir1}/
+awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
+tail -n +2 lncRNA_genes > lncRNA_transcripts
+rm lncRNA_genes
+grep -w -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.lncRNAs.gtf
+grep --invert-match -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.coding.gtf
+sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
+sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
+cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
+echo ""
+echo "Done. The transcripts were classified and added to final.annotated.gtf file..."
+echo ""
+rm merged_fixed.gtf
+echo "Done. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation..."
+##########################################
+# Re-formatting final_annotated.gtf file
+##########################################
+echo "re-formatting final.annotated.gtf using standard gff/gtf specifications"
+agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated.gff
+gffread final_annotated.gff -T -o final_annotated.gtf
+echo ""
+echo "re-formatting was done. The new GTF file is called final_annotated.gtf"
+rm final.annotated.gtf
 echo "::: Obtaining Transcripts in FASTA format with gffread"
 echo ""
-gffread -w transcripts.fa -g ${3} merged.fixed.gtf
+gffread -w transcripts.fa -g ${3} final_annotated.gtf
 echo ""
 echo "Moving gffcompare results to gffcompare_outputs folder ..."
 mkdir gffcompare_outputs
-mv *.annotated.gtf *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
+mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
 echo ""
-echo "Done. Continue with GAWN annotation..."
-
+echo "Continue with protein annotation by using GAWN pipeline"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
@@ -234,59 +305,6 @@ cd /${dir1}/gawn/
 
 echo ""
 echo "Done. The novel transcripts are annotated in ./gawn/05_results/"
-echo ""
-
-############################################
-# FEELnc long noncoding RNA identification #
-############################################
-cd /${dir1}/
-echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
-git clone https://github.com/tderrien/FEELnc.git
-echo ""
-cp ${3} ${2} merged.fixed.gtf /${dir1}/FEELnc/
-### Cloning FEELnc in current directory
-git clone https://github.com/tderrien/FEELnc.git
-cd FEELnc
-export FEELNCPATH=${PWD}
-export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
-export PATH=$PATH:${FEELNCPATH}/scripts/
-export PATH=$PATH:${FEELNCPATH}/utils/
-echo ""
-### Testing FEELnc first
-echo "Testing FEELnc is works ..."
-cd test/
-# Filter
-FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-# Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
-# Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
-echo "FEELnc Test done"
-cd ..
-echo ""
-### Running FEELnc
-echo "Running FEELnc on merged.fixed.gtf file ..."
-# Filter
-FEELnc_filter.pl -i merged.fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-# Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
-# Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2} > candidate_lncRNA_classes.txt
-echo "FEELnc calculations were done"
-echo ""
-echo "::: Parsing FEELnc output"
-cp candidate_lncRNA_classes.txt /${dir1}/
-cd /${dir1}/
-awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
-tail -n +2 lncRNA_genes > lncRNA_transcripts
-rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts merged.fixed.gtf > merged.fixed.coding.gtf
-sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
-echo ""
-echo "Done. The transcripts were classified and added to final_annotated.gtf file..."
 echo ""
 
 ##########################################
@@ -380,14 +398,6 @@ echo ""
 echo "Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory"
 rm coding_transcript.gtf 
 
-##########################################
-# Re-formatting final_annotated.gtf file
-##########################################
-echo "re-formatting final_annotated.gtf using standard gff/gtf specifications"
-agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
-gffread final_annotated.gff -T -o final_annotated_fixed.gtf
-echo ""
-echo "re-formatting was done. The new GTF file is called final_annotated_fixed.gtf"
 #############################
 # Configuring Summary Results
 #############################
@@ -398,7 +408,7 @@ echo "re-formatting was done. The new GTF file is called final_annotated_fixed.g
 echo ""
 echo "Moving results to merged_annotation folder"
 mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff final_annotated_fixed.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm transcripts.fa.fai namelist*
 echo ""
@@ -406,9 +416,7 @@ echo "All Done. The transcripts were classified in ./output_files"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF files final_annotated.gtf (non-standard GTF) and final_annotated_fixed.gtf (standard GTF) are located in ./output_files. These GTFs contains the annotated lncRNA/coding GTF in the second field".
-echo ""
-echo "final_annotated.gff file (Ensembl standards) is also located in ./output_files."
+echo "GTF file final_annotated.gtf (standard GTF) and correspondent gff file (final_annotated.gff) are located in ./output_files. These files contains the annotated lncRNA/coding GTF in the second field".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
