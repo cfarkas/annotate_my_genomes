@@ -16,8 +16,8 @@ cd ..
 mkdir bin
 mkdir genome_1
 mkdir get_transcripts
-cp gawn_config.sh /${dir}/genome_1/
-cp gawn_config.sh /${dir}/bash_scripts/
+cp gawn_config.sh ./genome_1/
+cp gawn_config.sh ./bash_scripts/
 cd ..
 git clone https://github.com/neurobin/shc.git
 cd shc/
