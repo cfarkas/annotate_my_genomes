@@ -170,6 +170,13 @@ Description can be found at the webpage: http://www.clustal.org/omega/. A way to
 sudo apt-get install clustalo
 ```
 
+### Installing AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format.
+For more information, please visit: https://github.com/NBISweden/AGAT
+```
+# Install through bioconda recipe:
+conda install agat
+```
+
 # Installation: 
 
 Clone this repository every time you need to work with a different assembly and/or genome. In the folder you want to annotate the GTF file, do the following: 
