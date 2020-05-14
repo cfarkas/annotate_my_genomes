@@ -111,6 +111,7 @@ echo ""
 
 echo "::: Replacing gene_id field in merged.annotated.gtf file with reference gene_id's"
 echo ""
+
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
@@ -128,6 +129,7 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
+
 ###############################
 # Getting gene names replaced #
 ###############################
@@ -139,6 +141,7 @@ rm -f sed.script fileA fileB
 echo "Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes"
 echo ""
 echo "Formatting Isoforms"
+
 ################################
 # Formatting Transcripts names #
 ################################
@@ -174,6 +177,7 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist_isoforms
 rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_* outfile
+
 ##################################
 # Getting isoform names replaced #
 ##################################
@@ -182,8 +186,9 @@ awk '{print $2}' namelist_isoforms > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat merged_with_reference.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB annotated_genes*
-echo "Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes"
+echo "Done. Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes. Continue with validation"
 echo ""
+
 ##################
 # Validating GTF #
 ##################
@@ -197,6 +202,7 @@ rm merged.gtf merged_with_reference.gtf isoforms_per_gene_concatenated.tab
 echo ""
 echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
 echo ""
+
 #######################################
 # Re-formatting merged.fixed.gtf file #
 #######################################
@@ -206,6 +212,7 @@ gffread merged.fixed.gff -T -o merged_fixed.gtf
 echo ""
 echo "re-formatting was done. The new GTF file is called merged_fixed.gtf. Continue with FEELnc long non-coding classification..."
 rm merged.fixed.gff merged.fixed.gtf 
+
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
@@ -260,6 +267,7 @@ echo "Done. The transcripts were classified and added to final.annotated.gtf fil
 echo ""
 rm merged_fixed.gtf
 echo "Done. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation..."
+
 ##########################################
 # Re-formatting final_annotated.gtf file
 ##########################################
@@ -278,6 +286,7 @@ mkdir gffcompare_outputs
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
 echo ""
 echo "Continue with protein annotation by using GAWN pipeline"
+
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
