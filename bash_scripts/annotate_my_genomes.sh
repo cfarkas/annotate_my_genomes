@@ -176,7 +176,7 @@ sed 's/$/"/' A.1 > A.2
 sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist_isoforms
-rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_* outfile transcripts_sep
+rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_* outfile
 ##################################
 # Getting isoform names replaced #
 ##################################
@@ -196,7 +196,7 @@ perl validate_gtf.pl -f /${dir1}/merged.gtf
 cd /${dir1}/
 echo ""
 echo "The merged.gtf file was succesfully validated"
-rm merged.gtf
+rm merged.gtf merged_with_reference.gtf isoforms_per_gene_concatenated.tab
 echo ""
 echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
 echo ""
