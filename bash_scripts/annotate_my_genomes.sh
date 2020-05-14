@@ -84,9 +84,6 @@ fi
 
 begin=`date +%s`
 echo ""
-echo "::: Downloading Reference genome and current GTF annotation"
-echo ""
-
 echo "::: Overlapping StringTie transcripts with Reference"
 echo ""
 gffcompare -R -r ${2} -s ${3} -o Ensembl_compare ${1}
