@@ -386,8 +386,8 @@ rm coding_transcript.gtf
 echo "re-formatting final_annotated.gtf using standard gff/gtf specifications"
 agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
 gffread final_annotated.gff -T -o final_annotated_fixed.gtf
-echo "re-formatting was done. The new GTF file is called final_annotated_fixed.gtf"
 echo ""
+echo "re-formatting was done. The new GTF file is called final_annotated_fixed.gtf"
 #############################
 # Configuring Summary Results
 #############################
