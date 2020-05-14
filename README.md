@@ -175,6 +175,14 @@ For more information, please visit: https://github.com/NBISweden/AGAT
 ```
 # Install through bioconda recipe:
 conda install agat
+
+# Standard install
+git clone https://github.com/NBISweden/AGAT.git # Clone AGAT
+cd AGAT                                         # move into AGAT folder
+perl Makefile.PL                                # Check all the dependencies*
+make                                            # Compile
+make test                                       # Test
+make install                                    # Install
 ```
 
 # Installation: 
