@@ -213,7 +213,7 @@ wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6
 gunzip Gallus_gallus.GRCg6a.100.gtf.gz
 
 # Download Gallus gallus v6 fasta file (Masked fasta file, with "rm" prefix) and decompress  
-ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
+wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
 gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
 
 # Execute
