@@ -392,7 +392,7 @@ echo "Moving results to merged_annotation folder"
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
-rm genes1.tab genes2.tab transcripts.fa.fai namelist namelist* transcripts_conc.tab
+rm transcripts.fa.fai namelist* transcripts_conc.tab
 echo ""
 echo "All Done. The transcripts were classified in ./output_files"
 echo ""
