@@ -159,7 +159,6 @@ Clone this repository every time you need to work with a different assembly and/
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git
 cd annotate_my_genomes
-
 # make
 bash makefile.sh
 ```
