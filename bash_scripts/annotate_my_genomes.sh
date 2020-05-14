@@ -84,13 +84,16 @@ fi
 
 begin=`date +%s`
 echo ""
-echo "::: Overlapping StringTie transcripts with Reference"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 1. Overlapping StringTie transcripts with Reference :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
 gffcompare -R -r ${2} -s ${3} -o Ensembl_compare ${1}
 echo ""
 echo "Done"
-
-echo "::: Writting novel discoveries to Stats.txt"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 2. Writting novel discoveries to Stats.txt :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
 # Stats
 exec 3<> Stats.txt
@@ -108,10 +111,10 @@ cat Ensembl_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq 
 exec 3>&-
 echo "Done"
 echo ""
-
-echo "::: Replacing gene_id field in merged.annotated.gtf file with reference gene_id's"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 3. Replacing gene_id field in merged.annotated.gtf file with reference gene_id's :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
-
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
@@ -129,7 +132,6 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
-
 ###############################
 # Getting gene names replaced #
 ###############################
@@ -138,10 +140,11 @@ awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged_with_reference.gtf
 rm -f sed.script fileA fileB
-echo "Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes"
+echo "::: Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes"
 echo ""
-echo "Formatting Isoforms"
-
+echo "::::::::::::::::::::::::::::::"
+echo "::: 4. Formatting Isoforms :::"
+echo "::::::::::::::::::::::::::::::"
 ################################
 # Formatting Transcripts names #
 ################################
@@ -177,7 +180,6 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist_isoforms
 rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_* outfile
-
 ##################################
 # Getting isoform names replaced #
 ##################################
@@ -186,38 +188,49 @@ awk '{print $2}' namelist_isoforms > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat merged_with_reference.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB annotated_genes*
-echo "Done. Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes. Continue with validation"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Done. Gene_id field was replaced in the stringtie GTF file and intermediate merged.gtf was generated with these changes. Continue with GTF validation"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
-
 ##################
 # Validating GTF #
 ##################
+echo "::::::::::::::::::::::::::::::"
+echo "::: 5. Validating GTF file :::"
+echo "::::::::::::::::::::::::::::::"
 cd /${dir1}/
 cd ..
 perl validate_gtf.pl -f /${dir1}/merged.gtf
 cd /${dir1}/
 echo ""
-echo "The merged.gtf file was succesfully validated"
+echo "::: The merged.gtf file was succesfully validated"
 rm merged.gtf merged_with_reference.gtf isoforms_per_gene_concatenated.tab
 echo ""
-echo "A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: A new annotated GTF is called merged.fixed.gtf and is located in the current directory ..."
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
-
 #######################################
 # Re-formatting merged.fixed.gtf file #
 #######################################
-echo "re-formatting final_annotated.gtf using standard gff/gtf specifications"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 6. Re-formatting final_annotated.gtf using standard gff/gtf specifications :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 agat_sp_ensembl_output_style.pl -g merged.fixed.gtf -o merged.fixed.gff
 gffread merged.fixed.gff -T -o merged_fixed.gtf
 echo ""
-echo "re-formatting was done. The new GTF file is called merged_fixed.gtf. Continue with FEELnc long non-coding classification..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Re-formatting was done. The new GTF file is called merged_fixed.gtf. Continue with FEELnc long non-coding classification..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 rm merged.fixed.gff merged.fixed.gtf 
-
+echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
-echo "::: Classifying protein-coding and long non-coding transcripts with FEELnc"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
 cp ${3} ${2} merged_fixed.gtf /${dir1}/FEELnc/
@@ -230,7 +243,9 @@ export PATH=$PATH:${FEELNCPATH}/scripts/
 export PATH=$PATH:${FEELNCPATH}/utils/
 echo ""
 ### Testing FEELnc first
-echo "Testing FEELnc is works ..."
+echo ":::::::::::::::::::::::::::::::"
+echo "::: Testing FEELnc is works ..."
+echo ":::::::::::::::::::::::::::::::"
 cd test/
 # Filter
 FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
@@ -238,20 +253,28 @@ FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_b
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
-echo "FEELnc Test done"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: FEELnc Test done. Continue with merged_fixed.gtf file :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 cd ..
 echo ""
 ### Running FEELnc
-echo "Running FEELnc on merged_fixed.gtf file ..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 8.  Running FEELnc on merged_fixed.gtf file ..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::"
 # Filter
 FEELnc_filter.pl -i merged_fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2} > candidate_lncRNA_classes.txt
-echo "FEELnc calculations were done"
+echo ":::::::::::::::::::::::::::::::::::::"
+echo "::: FEELnc calculations were done :::"
+echo ":::::::::::::::::::::::::::::::::::::"
 echo ""
-echo "::: Parsing FEELnc output"
+echo "::::::::::::::::::::::::::::::::"
+echo "::: 9. Parsing FEELnc output :::"
+echo "::::::::::::::::::::::::::::::::"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
@@ -263,35 +286,49 @@ sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
 echo ""
-echo "Done. The transcripts were classified and added to final.annotated.gtf file..."
+echo "::: Parsing is done. The transcripts were classified and added to final.annotated.gtf file..."
 echo ""
 rm merged_fixed.gtf
-echo "Done. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation..."
-
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 10. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo ""
 ##########################################
 # Re-formatting final_annotated.gtf file
 ##########################################
-echo "re-formatting final.annotated.gtf using standard gff/gtf specifications"
+echo "::: Re-formatting final.annotated.gtf using standard gff/gtf specifications"
 agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated.gff
 gffread final_annotated.gff -T -o final_annotated.gtf
 echo ""
-echo "re-formatting was done. The new GTF file is called final_annotated.gtf"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Re-formatting was done. The new GTF file is called final_annotated.gtf :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 rm final.annotated.gtf
-echo "::: Obtaining Transcripts in FASTA format with gffread"
+echo ""
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 11. Obtaining Transcripts in FASTA format with gffread :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
 echo ""
-echo "Moving gffcompare results to gffcompare_outputs folder ..."
+echo "::: Done. transcripts.fa are located in current directory"
+echo ""
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Moving gffcompare results to gffcompare_outputs folder ..."
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 mkdir gffcompare_outputs
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
 echo ""
-echo "Continue with protein annotation by using GAWN pipeline"
-
+echo "Done"
+echo ""
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 12. Continue with protein annotation by using GAWN pipeline :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
 echo ""
-echo "Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git"
+echo "::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git"
 echo ""
 git clone https://github.com/enormandeau/gawn.git
 cd gawn/02_infos/
@@ -303,22 +340,23 @@ cp ${3} /${dir1}/gawn/03_data/genome.fasta
 cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
-
 echo ""
-
 echo "::: Starting GAWN transcript annotation"
 echo ""
-
 cd /${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
-
 echo ""
-echo "Done. The novel transcripts are annotated in ./gawn/05_results/"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
-
-##########################################
-# Extracting GO terms for each transcript
-##########################################
+###########################################
+# Extracting GO terms for each transcript #
+###########################################
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 13. Extracting GO terms for each transcript :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo ""
 cd /${dir1}/
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
 cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
@@ -326,14 +364,11 @@ tr ';' '\t' < transcripts_GO > transcripts_GO_sep
 column -t transcripts_GO_sep > transcripts_GO.tab
 tail -n +2 transcripts_GO.tab > transcriptsGO.tab
 rm transcripts_GO*
-
 ##########################################
 # Extracting GO terms for each Gene
 ##########################################
-
 grep "STRG." transcriptsGO.tab > STRG_transcriptsGO.tab
 grep -v "STRG." transcriptsGO.tab > Annotated_transcriptsGO.tab
-
 # Working with "STRG" genes
 tr '.' '\t' < STRG_transcriptsGO.tab > STRG_transcripts_GO_splitname
 awk '{$3=""; print $0}' STRG_transcripts_GO_splitname > STRG_transcripts_GO_splitname1
@@ -347,7 +382,6 @@ awk '{ if ($1>1) { print } }' STRG_genesGO_with_numbers > STRG_GO
 awk '{$1=""; print $0}' STRG_GO > STRG_genes_with_GO
 column -t STRG_genes_with_GO > STRG_genes_withGO
 rm STRG_genes_GO STRG_transcripts_GO_merged STRG_transcripts_GO_splitname* STRG_transcriptsGO.tab STRG_numbers STRG_genesGO STRG_genesGO_with_numbers STRG_genes_with_GO STRG_GO
-
 # Working with Annotated genes
 tr '.' '\t' < Annotated_transcriptsGO.tab > Annotated_transcripts_GO_splitname
 awk '{$2=""; print $0}' Annotated_transcripts_GO_splitname > Annotated_genes_GO
@@ -358,7 +392,6 @@ awk '{ if ($1>1) { print } }' Annotated_genesGO_with_numbers > Annotated_GO
 awk '{$1=""; print $0}' Annotated_GO > Annotated_genes_with_GO
 column -t Annotated_genes_with_GO > genes_withGO.tab
 rm Annotated_transcriptsGO.tab Annotated_transcripts_GO_splitname Annotated_genes_GO Annotated_genesGO Annotated_numbers Annotated_genesGO_with_numbers Annotated_GO Annotated_genes_with_GO
-
 # Joining Files in order to create "genesGO.tab" file 
 cat STRG_genes_withGO >> genes_withGO.tab
 sed "s/^ *//;s/ *$//;s/ \{1,\}/ /g" genes_withGO.tab > genes_with_GO.tab
@@ -370,13 +403,21 @@ rm genesGO1.tab
 rm STRG_genes_withGO genes_withGO.tab genes_with_GO.tab
 sed 's/ /\t/' genesGO.tab > genesGO1.tab
 mv genesGO1.tab genesGO.tab
-
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Done. GO terms were extracted succesfully :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::"
 ##########################################
 # Gene Prediction Step with Augustus
 ##########################################
 cd /${dir1}/
 echo ""
-echo "::: Predicting gene models from transcripts with AUGUSTUS (gff3 format). Progress will be printed for each transcript."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 14. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo ""
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Progress will be printed for each transcript. :::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
 wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
 gunzip augustus.2.5.5.tar.gz
@@ -387,40 +428,48 @@ cd ..
 cd ..
 export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
 ./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
-echo "Done. augustus.gff3 file is present in current directory..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Done. augustus.gff3 file is present in current directory..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo ""
-echo "Converting gff3 to GTF format, collecting coding sequences and proteins with gffread..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: 15. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread..."
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 gffread augustus.gff3 -T -o coding_transcript.gtf
 gffread -x cds.fa -g transcripts.fa coding_transcript.gtf
 gffread -y prot.fa -g transcripts.fa coding_transcript.gtf
-
 # Re-formatting
 cat cds.fa |rev|cut -d"." -f1 --complement|rev > transcripts_CDS.fa
 cat prot.fa |rev|cut -d"." -f1 --complement|rev > transcripts_proteins.fa
 rm cds.fa prot.fa
-
 ##########################################
 # Re-formatting coding_transcripts.gtf
 ##########################################
 sed 's/.t1"/"/' coding_transcript.gtf > coding_transcripts.gtf
 echo ""
-echo "Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::: Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory :::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 rm coding_transcript.gtf 
-
 #############################
 # Configuring Summary Results
 #############################
-
+echo ":::::::::::::::::::::::::::::::::::::::"
+echo "::: 16. Configuring Summary Results :::"
+echo ":::::::::::::::::::::::::::::::::::::::"
 ############################################
 # Moving results to merged_annotation folder
 ############################################
 echo ""
-echo "Moving results to merged_annotation folder"
+echo "::: Moving results to merged_annotation folder"
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm transcripts.fa.fai namelist*
 echo ""
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo "::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 echo "All Done. The transcripts were classified in ./output_files"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
@@ -437,6 +486,9 @@ echo "Associated Transcript coding sequences (transcripts_CDS.fa) and correspond
 echo ""
 echo "GO terms associated to each transcript (and gene), named transcriptsGO.tab and genesGO.tab are located in ./output_files"
 echo ""
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
+echo ":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"
 end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
