@@ -15,21 +15,24 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 gene_id "YF5"; transcript_id "YF5.4"
 (Genes denoted with "STRG" prefix are novel).
 ```
-- The resulting GTF file is validated by using "Validate GTF" tool from Brent Lab: http://mblab.wustl.edu/software.html#validategtf
+- The resulting GTF file will be validated by using several tools such as "Validate GTF" tool from Brent Lab: http://mblab.wustl.edu/software.html#validategtf, AGAT: Another Gff Analysis Toolkit (https://github.com/NBISweden/AGAT), and gff utilities (http://ccb.jhu.edu/software/stringtie/gff.shtml). 
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with FEELnc tool (https://github.com/tderrien/FEELnc).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
+- Complement UCSC annotation with Ensembl annotation, using genome coordinates from UCSC genomes. 
 
 This pipeline requieres to run:
-- StringTie assembled transcripts (in GTF format)
-- USCS reference genome annotation (in GTF format)
-- UCSC genome assembly (masked, fasta format)
 
-The two last requirements can be downloaded by using genome-download script provided in this repository:
+1) StringTie assembled transcripts (in GTF format)
+
+2) USCS reference genome annotation (in GTF format) and genome assembly (non-masked, fasta format). These requirements can be downloaded by using the genome-download program provided in this repository. 
 ```
 ./genome-download [genome]
 ```
 To check UCSC genome names, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway.
+
+OPTIONAL: 3) Ensembl reference genome annotation (in GTF format) including non-masked genome. These requirements can be downloaded here:
+https://uswest.ensembl.org/info/data/ftp/index.html
 
 # Dependences:
 
@@ -98,6 +101,12 @@ sudo cp * /usr/local/bin/
 
 ```
 sudo apt-get install gmap
+```
+
+### Obtaining and Installing BEDTools
+Complete instructions can be found in https://bedtools.readthedocs.io/en/latest/content/installation.html. Users with privileges can accomplish with sudo: 
+```
+sudo apt-get install bedtools
 ```
 
 ### Installing dependences for FEELnc : FlExible Extraction of LncRNA 
