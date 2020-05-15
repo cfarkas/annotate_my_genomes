@@ -197,37 +197,18 @@ rm -f sed.script fileA fileB annotated_genes*
 echo ""
 printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and intermediate merged.gtf was generated with these changes. Continue with GTF validation\n"
 echo ""
-##################
-# Validating GTF #
-##################
-printf "${YELLOW}::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Validating GTF file :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::${CYAN}\n"
-cd /${dir1}/
-cd ..
-perl validate_gtf.pl -f /${dir1}/merged.gtf
-cd /${dir1}/
-echo ""
-printf "${PURPLE}::: The merged.gtf file was succesfully validated\n"
-rm merged.gtf merged_with_reference.gtf isoforms_per_gene_concatenated.tab
-echo ""
-echo ""
-printf "${PURPLE}::: A new annotated GTF is called merged.fixed.gtf and is located in the current directory\n"
-echo ""
 #######################################
-# Re-formatting merged.fixed.gtf file #
+# Re-formatting merged.gtf file #
 #######################################
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Re-formatting final_annotated.gtf using standard gff/gtf specifications :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-agat_sp_ensembl_output_style.pl -g merged.fixed.gtf -o merged.fixed.gff
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 6. Re-formatting merged.gtf using standard gff/gtf specifications :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+agat_sp_ensembl_output_style.pl -g merged.gtf -o merged.fixed.gff
 gffread merged.fixed.gff -T -o merged_fixed.gtf
 echo ""
 echo ""
 printf "${PURPLE}::: Re-formatting was done. The new GTF file is called merged_fixed.gtf\n"
 printf "${PURPLE}::: Continue with FEELnc long non-coding classification...\n"
-echo ""
-rm merged.fixed.gff merged.fixed.gtf 
 echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
@@ -293,18 +274,17 @@ cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final.annotated.gtf file...\n"
 echo ""
-rm merged_fixed.gtf
+rm merged.fixed.gff merged.fixed.gtf 
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 10. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 ##########################################
-# Re-formatting final_annotated.gtf file
+# Re-formatting final.annotated.gtf file
 ##########################################
 echo "::: Re-formatting final.annotated.gtf using standard gff/gtf specifications"
 agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated.gff
 gffread final_annotated.gff -T -o final_annotated.gtf
-echo ""
 echo ""
 printf "${PURPLE}::: Re-formatting was done. The new GTF file is called final_annotated.gtf :::\n"
 echo ""
