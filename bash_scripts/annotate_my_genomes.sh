@@ -11,13 +11,13 @@ if [ "$1" == "-h" ]; then
   echo ""
   echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
-  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
   echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
@@ -28,13 +28,13 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
-  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
   echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
@@ -45,13 +45,13 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
-  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
   echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
@@ -62,13 +62,13 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with Ensembl reference genome GTF and will annotate novel transcripts"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
-  echo "[reference_genome_gtf]: Ensembl reference GTF file. For info, see Gene sets in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
-  echo "[reference_genome_fasta]: Current Ensembl assembly genome in fasta format. For info, see DNA (fasta) in https://uswest.ensembl.org/info/data/ftp/index.html"
+  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
   echo "[threads]: Number of threads for parallel text processing (Integer)"
   echo ""
@@ -94,7 +94,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with Reference :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffcompare -R -r ${2} -s ${3} -o Ensembl_compare ${1}
+gffcompare -R -r ${2} -s ${3} -o UCSC_compare ${1}
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -104,16 +104,16 @@ echo ""
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat Ensembl_compare.${1}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${1}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat Ensembl_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat Ensembl_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat Ensembl_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
@@ -124,9 +124,9 @@ echo ""
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
-awk '{print $4"\t"$1}' Ensembl_compare.${1}.tmap > Ensembl_compare.${1}.tmap.1
-tail -n +2 Ensembl_compare.${1}.tmap.1 > Ensembl_compare.${1}.tmap.2
-awk '!/-/' Ensembl_compare.${1}.tmap.2 > namelist
+awk '{print $4"\t"$1}' UCSC_compare.${1}.tmap > UCSC_compare.${1}.tmap.1
+tail -n +2 UCSC_compare.${1}.tmap.1 > UCSC_compare.${1}.tmap.2
+awk '!/-/' UCSC_compare.${1}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
