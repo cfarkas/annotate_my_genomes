@@ -233,9 +233,9 @@ echo ""
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
 cp ${3} ${2} merged_fixed.gtf /${dir1}/FEELnc/
@@ -333,7 +333,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
 echo ""
-printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n""
+printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n"
 echo ""
 git clone https://github.com/enormandeau/gawn.git
 cd gawn/02_infos/
@@ -346,13 +346,13 @@ cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
 echo ""
-printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"\n"
+printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
 echo ""
 cd /${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
 echo ""
 echo ""
-printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"\n"
+printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
 echo ""
 ###########################################
 # Extracting GO terms for each transcript #
@@ -418,7 +418,6 @@ echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 14. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
 echo ""
