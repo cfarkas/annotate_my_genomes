@@ -8,7 +8,7 @@ if [ "$1" == "-h" ]; then
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
-  echo "[genome]: Name of the genome assembly"
+  echo "[genome]: UCSC Prefix of the genome assembly. Check names here: https://genome.ucsc.edu/cgi-bin/hgGateway"
   echo ""
   exit 0
 fi
@@ -19,7 +19,7 @@ if [ "$1" == "-help" ]; then
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
-  echo "[genome]: Name of the genome assembly"
+  echo "[genome]: UCSC Prefix of the genome assembly. Check names here: https://genome.ucsc.edu/cgi-bin/hgGateway"
   echo ""
   exit 0
 fi
@@ -29,7 +29,7 @@ if [ "$1" == "--h" ]; then
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
-  echo "[genome]: Name of the genome assembly"
+  echo "[genome]: UCSC Prefix of the genome assembly. Check names here: https://genome.ucsc.edu/cgi-bin/hgGateway"
   echo ""
   exit 0
 fi
@@ -40,7 +40,7 @@ if [ "$1" == "--help" ]; then
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
-  echo "[genome]: Name of the genome assembly"
+  echo "[genome]: UCSC Prefix of the genome assembly. Check names here: https://genome.ucsc.edu/cgi-bin/hgGateway"
   echo ""
   exit 0
 fi
