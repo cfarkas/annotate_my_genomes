@@ -22,10 +22,10 @@ gene_id "YF5"; transcript_id "YF5.4"
 
 This pipeline requieres to run:
 - StringTie assembled transcripts (in GTF format)
-- Ensembl reference genome annotation (in GTF format)
-- Ensembl genome assembly (masked, fasta format)
+- USCS reference genome annotation (in GTF format)
+- UCSC genome assembly (masked, fasta format)
 
-The two last requirements can be downloaded from Ensembl ftp webpage: https://uswest.ensembl.org/info/data/ftp/index.html
+The two last requirements can be downloaded by using genome-download script provided in this repository
 
 # Dependences:
 
@@ -251,22 +251,14 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 - NCPUS=10
   - Increase this value to speed-up things :rocket:
 
-2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), reference genome assembly annotation (GTF format: ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz), sequence (UCSC fasta format: http://hgdownload.cse.ucsc.edu/goldenpath/${genome}/bigZips/${genome}.2bit) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and do the following:
+2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and do the following:
 
 ```
-# Donwload Gallus gallus v6 GTF file and decompress
-wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz
-gunzip Gallus_gallus.GRCg6a.100.gtf.gz
-
-# Download Gallus gallus v6 fasta file (Masked fasta file, from UCSC repository)
+# Download Gallus gallus v6 fasta assembly with matched GTF file (Masked fasta file, from UCSC repository)
 ./genome-download galGal6
 
-# Remove "chr" and "chrUn_" prefix from stringtie file from UCSC alignment to match Ensembl GTF annotation
-sed -i 's/chrUn_//'g stringtie_chr33.gtf
-sed -i 's/chr//'g stringtie_chr33.gtf
-
 # Execute in folder
-./annotate-my-genomes stringtie_chr33.gtf Gallus_gallus.GRCg6a.100.gtf galGal6.fa 5
+./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 5
 ```
 #
 ## Usage examples
@@ -279,20 +271,12 @@ sed -i 's/chr//'g stringtie_chr33.gtf
 - For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
 ./genome-download mm10
-wget ftp://ftp.ensembl.org/pub/release-100/gtf/mus_musculus/Mus_musculus.GRCm38.100.gtf.gz
-gunzip Mus_musculus.GRCm38.100.gtf.gz
-sed -i 's/chrUn_//'g target.gtf
-sed -i 's/chr//'g target.gtf
-./annotate-my-genomes target.gtf Mus_musculus.GRCm38.100.gtf mm10.fa 30
+./annotate-my-genomes target.gtf mm10.gtf mm10.fa 30
 ```
 - For rabbit assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
 ./genome-download oryCun2
-wget ftp://ftp.ensembl.org/pub/release-100/gtf/oryctolagus_cuniculus/Oryctolagus_cuniculus.OryCun2.0.100.gtf.gz
-gunzip Oryctolagus_cuniculus.OryCun2.0.100.gtf.gz
-sed -i 's/chrUn_//'g target.gtf
-sed -i 's/chr//'g target.gtf
-./annotate-my-genomes target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf oryCun2.fa 30
+./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
 
 #
@@ -300,13 +284,11 @@ sed -i 's/chr//'g target.gtf
 
 ### (1) Gene quantification procedure examples using output GTF file (merged.fixed.gtf):
 - Install HTSeq-count: (please see https://htseq.readthedocs.io/en/release_0.11.1/index.html)
-
 ```
 sudo apt-get install build-essential python2.7-dev python-numpy python-matplotlib python-pysam python-htseq
 ```
 
 - Gene-level quantification using "merged.fixed.gtf" GTF file
-
 ```
 htseq-count --stranded=no --format bam condition1.bam condition2.bam merged.fixed.gtf > gene_counts
 ```
@@ -352,8 +334,7 @@ This can be accomplished by copying merged.fixed.gtf file and an user-provided g
 
 ```
 # Downloading masked Gallus gallus v6 genome
-wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
-gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
+./genome-download galGal6
 
 # generate "commands" file using provided list of genes 
 awk '{print "./get-transcripts merged_with_reference.gtf galGal6.fa " $0}' gene_list.tab > commands
