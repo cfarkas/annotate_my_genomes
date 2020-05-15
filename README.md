@@ -219,6 +219,28 @@ samtools sort aln_galGal6.bam -@ 30 > aln_galGal6.sorted.bam
 samtools index aln_galGal6.sorted.bam -@ 30
 ```
 
+If users also sequenced with Illumina, short reads can be aligned by using hisat2 (https://ccb.jhu.edu/software/hisat2/manual.shtml) and merged with minimap alignments as follows:
+```
+# Install hisat2
+wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.0.4-Linux_x86_64.zip
+unzip hisat2-2.0.4-Linux_x86_64.zip
+sudo cp hisat2-2.0.4/hisat2* /usr/local/bin/
+
+# build hisat2 index
+hisat2-build galGal6.fa -p 40 ./galGal6
+
+# align short illumina reads agains galGal6 genome from USCS, using 30 threads
+hisat2 -x ./galGal6 -p 30 -1 41-A3_S1_R1_001.fastq.gz -2 41-A3_S1_R2_001.fastq.gz | samtools view -bS - > 41.bam
+
+# merge with PacBio alignments (aln_galGal6.bam) with illumina alignments (41.bam), using 30 threads:
+samtools merge PacBio_Illumina_merged.bam aln_galGal6.bam 41.bam -@ 30 -f
+
+# Sort and Index
+samtools sort -o PacBio_Illumina_merged.sorted.bam PacBio_Illumina_merged.bam -@ 30
+samtools index PacBio_Illumina_merged.sorted.bam
+```
+PacBio_Illumina_merged.sorted.bam can be used as input for StringTie. 
+
 #### 2) Obtaining GTF (transcripts.gtf) from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
 ```
 # Alignments from long reads (PacBio)
