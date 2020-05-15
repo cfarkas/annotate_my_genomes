@@ -199,7 +199,7 @@ Binaries are located in bin, genome_1 and test folders, respectively.
 
 ### Obtaining StringTie GTF file for annotation
 
-#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against Gallus gallus v6 genome, using 30 threads). You can use gmap as well. 
+#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome from UCSC, using 30 threads). You can use gmap as well. 
 ```
 # Installing minimap2
 git clone https://github.com/lh3/minimap2
@@ -238,46 +238,45 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
 - NCPUS=10
   - Increase this value to speed-up things :rocket:
 
-2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), reference genome assembly annotation (GTF format: ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz), sequence (fasta format: ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and do the following:
+2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), reference genome assembly annotation (GTF format: ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz), sequence (UCSC fasta format: http://hgdownload.cse.ucsc.edu/goldenpath/${genome}/bigZips/${genome}.2bit) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and do the following:
 
 ```
 # Donwload Gallus gallus v6 GTF file and decompress
 wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz
 gunzip Gallus_gallus.GRCg6a.100.gtf.gz
 
-# Download Gallus gallus v6 fasta file (Masked fasta file, with "rm" prefix) and decompress  
-wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
-gunzip Gallus_gallus.GRCg6a.dna_rm.toplevel.fa.gz
+# Download Gallus gallus v6 fasta file (Masked fasta file, from UCSC repository)
+./genome-download galGal6
 
-# Execute
-./annotate-my-genomes stringtie_chr33.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna_rm.toplevel.fa 5
+# Remove "chr" prefix from stringtie file from UCSC alignment 
+sed -i 's/chr//'g stringtie_chr33.gtf
+
+# Execute in folder
+./annotate-my-genomes stringtie_chr33.gtf Gallus_gallus.GRCg6a.100.gtf galGal6.fa 5
 ```
-#
-# Usage
-
-
-#### Assuming you runned the test ...
-
-1) Place your StringTie GTF assembly to annotate in "genome_1" folder along with Ensembl reference genome (fasta and GTF files)
-
-2) (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10. 
-
-3) Run the pipeline in genome_1 with a GTF named "target.gtf" (as an example) with 30 threads (Important: each thread will use 1 GB of memory, check your machine):
-```
-./annotate-my-genomes target.gtf genome_assembly.gtf genome_assembly.fa 30
-```
-#### To download reference genome files (Ensembl), please visit: https://uswest.ensembl.org/info/data/ftp/index.html
-
 #
 ## Usage examples
 
+#### To download reference genome files (Ensembl), please visit: https://uswest.ensembl.org/info/data/ftp/index.html
+#### To download reference genome sequences (UCSC), use genome-download program from this repository. To check genome names, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
+
+(Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
+
 - For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
-./annotate-my-genomes target.gtf Mus_musculus.GRCm38.100.gtf.gz Mus_musculus.GRCm38.dna_rm.alt.fa 30
+./genome-download mm10
+wget ftp://ftp.ensembl.org/pub/release-100/gtf/mus_musculus/Mus_musculus.GRCm38.100.gtf.gz
+gunzip Mus_musculus.GRCm38.100.gtf.gz
+sed -i 's/chr//'g target.gtf
+./annotate-my-genomes target.gtf Mus_musculus.GRCm38.100.gtf mm10.fa 30
 ```
 - For rabbit assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
 ```
-./annotate-my-genomes target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf Oryctolagus_cuniculus.OryCun2.0.dna_rm.toplevel.fa 30
+./genome-download oryCun2
+wget ftp://ftp.ensembl.org/pub/release-100/gtf/oryctolagus_cuniculus/Oryctolagus_cuniculus.OryCun2.0.100.gtf.gz
+gunzip Oryctolagus_cuniculus.OryCun2.0.100.gtf.gz
+sed -i 's/chr//'g target.gtf
+./annotate-my-genomes target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf oryCun2.fa 30
 ```
 
 #
