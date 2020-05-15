@@ -290,6 +290,27 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ./genome-download oryCun2
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
+## Adding Ensembl annotations
+After run the test/examples, users can add annotations provided in ensembl ftp repository () by using the add-ensembl-annotation pipeline. This pipeline will require:  
+1) final_annotated.gtf output file from annotate_my_genome pipeline
+2)[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)
+3) [Ensembl_reference_genome_fasta]: Non-masked Ensembl genome assembly in fasta format, available here: ftp://ftp.ensembl.org/pub/release-100/fasta/ (check dna, XXX.dna.toplevel.fa.gz file)
+4) UCSC genome prefix to download the matched genome from UCSC. 
+5) Number of threads.
+
+- For chicken assembly, the pipeline will work as follows (inside genome_1 folder):
+```
+# Donloading non-masked Gallus gallus GRCg6a fasta genome assembly from Ensembl
+wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna.toplevel.fa.gz
+gunzip Gallus_gallus.GRCg6a.dna.toplevel.fa.gz
+
+# Donloading Gallus gallus GRCg6a GTF annotation from Ensembl
+wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz
+gunzip Gallus_gallus.GRCg6a.100.gtf.gz
+
+# Running the pipeline on final_annotated.gtf, using galGal6 UCSC prefix and 30 threads for processing:
+./add-ensembl-annotation final_annotated.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna.toplevel.fa galGal6 30
+```
 
 #
 ## Downstream analysis using outputs:
