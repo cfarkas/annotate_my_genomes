@@ -4,7 +4,7 @@ genome=${1}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` {genome}"
+  echo "Usage: ./`basename $0` [genome]"
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
@@ -15,7 +15,7 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` {genome}"
+  echo "Usage: ./`basename $0` [genome]"
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
@@ -26,7 +26,7 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` {genome}"
+  echo "Usage: ./`basename $0` [genome]"
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
@@ -37,7 +37,7 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` {genome}"
+  echo "Usage: ./`basename $0` [genome]"
   echo ""
   echo "This program will download and index the specified genome from the uscs server (goldenpath) including annotation"
   echo ""
@@ -46,10 +46,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: bash ./`basename $0` [genome]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [genome]"; exit 1; }
 
 if [ $# -ne 1 ]; then
-  echo 1>&2 "Usage: bash ./`basename $0`  [genome]"
+  echo 1>&2 "Usage: ./`basename $0`  [genome]"
   exit 3
 fi
 
