@@ -315,6 +315,7 @@ gunzip Gallus_gallus.GRCg6a.100.gtf.gz
 # Running the pipeline on final_annotated.gtf, using galGal6 UCSC prefix and 30 threads for processing:
 ./add-ensembl-annotation final_annotated.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna.toplevel.fa galGal6 30
 ```
+final_annotated.gtf and .gff (located in output_files_ensembl) will contained the ensembl-updated annotation (in UCSC coordinates)
 
 #
 ## Downstream analysis using outputs:
@@ -325,9 +326,9 @@ gunzip Gallus_gallus.GRCg6a.100.gtf.gz
 sudo apt-get install build-essential python2.7-dev python-numpy python-matplotlib python-pysam python-htseq
 ```
 
-- Gene-level quantification using "merged.fixed.gtf" GTF file
+- Gene-level quantification using "final_annotated.gtf" GTF file
 ```
-htseq-count --stranded=no --format bam condition1.bam condition2.bam merged.fixed.gtf > gene_counts
+htseq-count --stranded=no --format bam condition1.bam condition2.bam final_annotated.gtf > gene_counts
 ```
 
 ### (2) "genesGO.tab" and "transcriptsGO.tab" output files usage:
@@ -374,7 +375,7 @@ This can be accomplished by copying merged.fixed.gtf file and an user-provided g
 ./genome-download galGal6
 
 # generate "commands" file using provided list of genes 
-awk '{print "./get-transcripts merged_with_reference.gtf galGal6.fa " $0}' gene_list.tab > commands
+awk '{print "./get-transcripts final_annotated.gtf galGal6.fa " $0}' gene_list.tab > commands
 
 # Execute "commands" file
 bash commands
