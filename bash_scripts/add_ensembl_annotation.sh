@@ -135,8 +135,23 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Converting bed file to GTF using kent tools :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedToGenePred
-wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/genePredToGtf
+if [ -f bedToGenePred ]; then
+    echo "bedToGenePred script found. Continue:"
+    echo ""
+    : 
+else
+    echo "Downloading bedToGenePred script"
+    wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedToGenePred
+fi
+
+if [ -f genePredToGtf ]; then
+    echo "genePredToGtf script found. Continue:"
+    echo ""
+    : 
+else
+    echo "Downloading genePredToGtf script"
+    wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/genePredToGtf
+fi
 chmod 755 bedToGenePred genePredToGtf
 ./bedToGenePred ensembl_aligned.bed /dev/stdout | ./genePredToGtf file /dev/stdin ensembl_aligned.gtf
 printf "${PURPLE}Done. ensembl_aligned.gtf contain Ensembl transcripts mapped to UCSC genome coordinates\n"
