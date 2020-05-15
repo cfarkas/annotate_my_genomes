@@ -30,7 +30,7 @@ echo "make done. Continue with install"
 ./shc/src/shc -f ./bash_scripts/annotate_my_genomes.sh -o ./annotate-my-genomes
 ./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o ./get-transcripts
 ./shc/src/shc -f ./bash_scripts/genome_download.sh -o ./genome-download
-./shc/src/shc -f ./add_ensembl_annotation.sh -o ./add-ensembl-annotation
+./shc/src/shc -f ./bash_scripts/add_ensembl_annotation.sh -o ./add-ensembl-annotation
 mv annotate-my-genomes get-transcripts genome-download add-ensembl-annotation ./bin/
 cp ./bin/annotate-my-genomes ./test/
 cp ./bin/annotate-my-genomes ./genome_1/
