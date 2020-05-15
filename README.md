@@ -25,7 +25,11 @@ This pipeline requieres to run:
 - USCS reference genome annotation (in GTF format)
 - UCSC genome assembly (masked, fasta format)
 
-The two last requirements can be downloaded by using genome-download script provided in this repository
+The two last requirements can be downloaded by using genome-download script provided in this repository:
+```
+./genome-download [genome]
+```
+To check UCSC genome names, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway.
 
 # Dependences:
 
@@ -263,8 +267,7 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 #
 ## Usage examples
 
-#### To download reference genome files (Ensembl), please visit: https://uswest.ensembl.org/info/data/ftp/index.html
-#### To download reference genome sequences (UCSC), use genome-download program from this repository. To check genome names, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
+#### To download reference genome sequences (UCSC), use genome-download program from this repository. To check UCSC genome names, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway
 
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
 
