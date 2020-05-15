@@ -302,7 +302,7 @@ After run the test/examples, users can add annotations located in ensembl by dow
 
 - Number of threads.
 
-For chicken assembly, the pipeline will work as follows (inside genome_1 folder):
+As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
 # Donloading non-masked Gallus gallus GRCg6a fasta genome assembly from Ensembl
 wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna.toplevel.fa.gz
