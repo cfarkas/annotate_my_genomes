@@ -247,10 +247,10 @@ PacBio_Illumina_merged.sorted.bam can be used as input for StringTie.
 stringtie -p 1 -L -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
 
 # Alignments from long and short reads (PacBio + Illumina)
-stringtie -p 1 -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
+stringtie -p 1 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorted.bam
 
 # If the above fails, users can increase -j and -c parameters (useful for large BAM file processing)
-stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
+stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorted.bam
 ```
 
 #
