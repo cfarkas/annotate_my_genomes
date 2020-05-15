@@ -29,7 +29,7 @@ This pipeline requieres to run:
 ```
 ./genome-download [genome]
 ```
-To check UCSC genome names, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway.
+To check UCSC genome prefixes, please visit: https://genome.ucsc.edu/cgi-bin/hgGateway.
 
 OPTIONAL: 3) Ensembl reference genome annotation (in GTF format) including non-masked genome. These requirements can be downloaded here:
 https://uswest.ensembl.org/info/data/ftp/index.html
