@@ -333,7 +333,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
 echo ""
-printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git\n"
+printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n""
 echo ""
 git clone https://github.com/enormandeau/gawn.git
 cd gawn/02_infos/
@@ -346,13 +346,13 @@ cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
 echo ""
-printf "${PURPLE}::: Starting GAWN transcript annotation\n"
+printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"\n"
 echo ""
 cd /${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
 echo ""
 echo ""
-printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::\n"
+printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"\n"
 echo ""
 ###########################################
 # Extracting GO terms for each transcript #
@@ -408,7 +408,7 @@ rm STRG_genes_withGO genes_withGO.tab genes_with_GO.tab
 sed 's/ /\t/' genesGO.tab > genesGO1.tab
 mv genesGO1.tab genesGO.tab
 echo ""
-printf "${PURPLE}::: Done. GO terms were succesfully extracted :::\n"
+printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
 echo ""
 ######################################
 # Gene Prediction Step with Augustus #
@@ -433,7 +433,7 @@ cd ..
 export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
 ./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
 echo ""
-printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...\n"
+printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 15. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
@@ -450,7 +450,7 @@ rm cds.fa prot.fa
 ##########################################
 sed 's/.t1"/"/' coding_transcript.gtf > coding_transcripts.gtf
 echo ""
-printf "${PURPLE}::: Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory :::\n"
+printf "${PURPLE}::: Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory :::${CYAN}\n"
 echo ""
 rm coding_transcript.gtf 
 #############################
@@ -463,7 +463,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Moving results to merged_annotation folder
 ############################################
 echo ""
-printf "${PURPLE}::: Moving results to merged_annotation folder :::\n"
+printf "${PURPLE}::: Moving results to merged_annotation folder :::${CYAN}\n"
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
