@@ -121,17 +121,6 @@ cd fasta_ushuffle
 make
 sudo cp ushuffle /usr/local/bin/
 sudo cp fasta_ushuffle /usr/local/bin/
-
-# Testing if FEELnc works 
-
-git clone https://github.com/tderrien/FEELnc
-cd FEELnc/test/
-# Filter
-FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-# Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
-# Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
 ```
 
 ### Obtaining and installing up-to-date SAMtools with htslib (version >= 1.9)
@@ -272,7 +261,8 @@ gunzip Gallus_gallus.GRCg6a.100.gtf.gz
 # Download Gallus gallus v6 fasta file (Masked fasta file, from UCSC repository)
 ./genome-download galGal6
 
-# Remove "chr" prefix from stringtie file from UCSC alignment 
+# Remove "chr" and "chrUn_" prefix from stringtie file from UCSC alignment to match Ensembl GTF annotation
+sed -i 's/chrUn_//'g stringtie_chr33.gtf
 sed -i 's/chr//'g stringtie_chr33.gtf
 
 # Execute in folder
@@ -291,6 +281,7 @@ sed -i 's/chr//'g stringtie_chr33.gtf
 ./genome-download mm10
 wget ftp://ftp.ensembl.org/pub/release-100/gtf/mus_musculus/Mus_musculus.GRCm38.100.gtf.gz
 gunzip Mus_musculus.GRCm38.100.gtf.gz
+sed -i 's/chrUn_//'g target.gtf
 sed -i 's/chr//'g target.gtf
 ./annotate-my-genomes target.gtf Mus_musculus.GRCm38.100.gtf mm10.fa 30
 ```
@@ -299,6 +290,7 @@ sed -i 's/chr//'g target.gtf
 ./genome-download oryCun2
 wget ftp://ftp.ensembl.org/pub/release-100/gtf/oryctolagus_cuniculus/Oryctolagus_cuniculus.OryCun2.0.100.gtf.gz
 gunzip Oryctolagus_cuniculus.OryCun2.0.100.gtf.gz
+sed -i 's/chrUn_//'g target.gtf
 sed -i 's/chr//'g target.gtf
 ./annotate-my-genomes target.gtf Oryctolagus_cuniculus.OryCun2.0.100.gtf oryCun2.fa 30
 ```
