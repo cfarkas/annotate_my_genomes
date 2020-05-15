@@ -292,16 +292,15 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ```
 ## Adding Ensembl annotations
 After run the test/examples, users can add annotations located in ensembl by downloading GTF and correspondent fasta aseemblies from ftp repository (ftp://ftp.ensembl.org/pub/release-100/). These files can be used as inputs for the add-ensembl-annotation pipeline. This pipeline will require:  
+- final_annotated.gtf output file from annotate_my_genome pipeline
 
-1) final_annotated.gtf output file from annotate_my_genome pipeline
+- [Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)
 
-2)[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)
+- [Ensembl_reference_genome_fasta]: Non-masked Ensembl genome assembly in fasta format, available here: ftp://ftp.ensembl.org/pub/release-100/fasta/ (check dna, XXX.dna.toplevel.fa.gz file)
 
-3) [Ensembl_reference_genome_fasta]: Non-masked Ensembl genome assembly in fasta format, available here: ftp://ftp.ensembl.org/pub/release-100/fasta/ (check dna, XXX.dna.toplevel.fa.gz file)
+- UCSC genome prefix to download the matched genome from UCSC. 
 
-4) UCSC genome prefix to download the matched genome from UCSC. 
-
-5) Number of threads.
+- Number of threads.
 
 - For chicken assembly, the pipeline will work as follows (inside genome_1 folder):
 ```
