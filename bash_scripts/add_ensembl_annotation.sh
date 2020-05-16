@@ -164,7 +164,9 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 6. Overlapping final_annotated.gtf transcripts with Ensembl GTF :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare ${1}
+grep "STRG." ${1} > STRG.gtf
+grep -v "STRG." ${1} > non_STRG.gtf
+gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare STRG.gtf
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -174,16 +176,16 @@ echo ""
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.STRG.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.STRG.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.STRG.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.STRG.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
@@ -194,9 +196,9 @@ echo ""
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
-awk '{print $4"\t"$1}' UCSC_compare.${1}.tmap > UCSC_compare.${1}.tmap.1
-tail -n +2 UCSC_compare.${1}.tmap.1 > UCSC_compare.${1}.tmap.2
-awk '!/-/' UCSC_compare.${1}.tmap.2 > namelist
+awk '{print $4"\t"$1}' UCSC_compare.STRG.gtf.tmap > UCSC_compare.STRG.gtf.tmap.1
+tail -n +2 UCSC_compare.STRG.gtf.tmap.1 > UCSC_compare.STRG.gtf.tmap.2
+awk '!/-/' UCSC_compare.STRG.gtf.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
@@ -214,7 +216,7 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat ${1} | parallel --pipe -j ${5} sed -f sed.script > merged_with_reference.gtf
+cat STRG.gtf | parallel --pipe -j ${5} sed -f sed.script > merged_with_reference.gtf
 rm -f sed.script fileA fileB
 printf "${PURPLE}::: Done. Gene_id field was replaced in the final_annotated.gtf file and merged_with_reference.gtf was generated with these changes\n"
 echo ""
@@ -265,7 +267,7 @@ paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat merged_with_reference.gtf | parallel --pipe -j ${5} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB annotated_genes*
 echo ""
-printf "${PURPLE}::: Done. Gene_id field was replaced and intermediate merged.gtf was generated with these changes. Continue with GTF validation\n"
+printf "${PURPLE}::: Done. Gene_id field was replaced and intermediate merged.gtf file was generated with these changes. Continue with GTF validation\n"
 echo ""
 #######################################
 # Re-formatting merged.fixed.gtf file #
@@ -300,11 +302,11 @@ printf "${YELLOW}::: 12. Re-generating final GTF file to annotate :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cat non_STRG.gtf STRG_annotated.gtf > final.gtf
-agat_sp_ensembl_output_style.pl -g final.gtf -o final_annotated.gff
-gffread final_anotated.gff -T -o final_annotated_ensembl.gtf
-rm non_STRG.gtf STRG_annotated.gtf final.gtf
+agat_sp_ensembl_output_style.pl -g final.gtf -o final_annotated_ensembl1.gff
+gffread final_anotated.gff -T -o final_annotated_ensembl1.gtf
+rm non_STRG.gtf STRG_annotated.gtf final.gtf final_annotated_ensembl1.gff
 echo ""
-printf "${PURPLE}::: Re-formatting was done. A GTF called final_annotated_ensembl.gtf file is ready for annotation :::\n"
+printf "${PURPLE}::: Re-formatting was done. An intermediate GTF file called final_annotated_ensembl1.gtf file is ready for annotation :::\n"
 
 ############################################
 # FEELnc long noncoding RNA identification #
@@ -316,7 +318,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 rm -r -f FEELnc
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ensembl_aligned.gtf ${4}.fa final_annotated_ensembl.gtf /${dir1}/FEELnc/
+cp ensembl_aligned.gtf ${4}.fa final_annotated_ensembl1.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -346,7 +348,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 14.  Running FEELnc on final_annotated.gtf file :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i final_annotated_ensembl.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated_ensembl1.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
 # Classifier
@@ -363,12 +365,12 @@ cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
 tail -n +2 lncRNA_genes > lncRNA_transcripts
 rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.coding.gtf
+grep -w -F -f lncRNA_transcripts final_annotated_ensembl1.gtf > merged.fixed.lncRNAs.gtf
+grep --invert-match -F -f lncRNA_transcripts final_annotated_ensembl1.gtf > merged.fixed.coding.gtf
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
-rm final_annotated_ensembl.gtf
+rm final_annotated_ensembl1.gtf
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final.annotated.gtf file...\n"
 echo ""
