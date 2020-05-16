@@ -131,33 +131,19 @@ echo ""
 bamToBed -i ensembl_aligned.sorted.bam > ensembl_aligned.bed
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Converting bed file to GTF using kent tools :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 5. Converting bed file to GTF using AGAT and gffread :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+agat_convert_bed2gff.pl --bed ensembl_aligned.bed -o ensembl_aligned.gff
+sed -i 's/ID=//'g ensembl_aligned.gff
+sed -i 's/Name=/ID=/'g ensembl_aligned.gff
+gffread ensembl_aligned.gff --gene2exon -o ensembl_aligned.gff3
+gffread ensembl_aligned.gff3 -T -o ensembl_aligned.gtf
 echo ""
-if [ -f bedToGenePred ]; then
-    echo "bedToGenePred script found. Continue:"
-    echo ""
-    : 
-else
-    echo "Downloading bedToGenePred script"
-    wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/bedToGenePred
-fi
-
-if [ -f genePredToGtf ]; then
-    echo "genePredToGtf script found. Continue:"
-    echo ""
-    : 
-else
-    echo "Downloading genePredToGtf script"
-    wget http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/genePredToGtf
-fi
-chmod 755 bedToGenePred genePredToGtf
-./bedToGenePred ensembl_aligned.bed /dev/stdout | ./genePredToGtf file /dev/stdin ensembl_aligned.gtf
 printf "${PURPLE}Done. ensembl_aligned.gtf contain Ensembl transcripts mapped to UCSC genome coordinates\n"
 echo ""
 printf "${PURPLE}::: Removing intermediate files\n"
-rm ensembl_aligned.bed ensembl_aligned.sorted.bam* ensembl_aligned.sam ensembl_aligned.bam
+rm ensembl_aligned.bed ensembl_aligned.sorted.bam* ensembl_aligned.sam ensembl_aligned.bam ensembl_aligned.gf*
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -233,7 +219,7 @@ perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' annotated_g
 sed -i 's/transcript_id //g' transcript_gene_names.txt
 sed -i 's/;/\t/g' transcript_gene_names.txt
 sed -i 's/gene_id//g' transcript_gene_names.txt
-sed 's/"//g' transcript_gene_names.txt > outfile
+sed -i 's/"//g' transcript_gene_names.txt
 sed -i 's/"//g' transcript_gene_names.txt
 # generating replaced gene names with matched original stringtie isoforms
 awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
