@@ -303,7 +303,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cat non_STRG.gtf STRG_annotated.gtf > final.gtf
 agat_sp_ensembl_output_style.pl -g final.gtf -o final_annotated_ensembl1.gff
-gffread final_anotated.gff -T -o final_annotated_ensembl1.gtf
+gffread final_annotated_ensembl1.gff -T -o final_annotated_ensembl1.gtf
 rm non_STRG.gtf STRG_annotated.gtf final.gtf final_annotated_ensembl1.gff
 echo ""
 printf "${PURPLE}::: Re-formatting was done. An intermediate GTF file called final_annotated_ensembl1.gtf file is ready for annotation :::\n"
