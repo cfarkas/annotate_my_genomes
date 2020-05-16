@@ -2,7 +2,7 @@
 {
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-stringtie_gtf=${1}
+final_annotated.gtf=${1}
 Ensembl_reference_genome_gtf=${2}
 Ensembl_reference_genome_fasta=${3}
 UCSC_genome_prefix=${4}
@@ -164,8 +164,8 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 6. Overlapping final_annotated.gtf transcripts with Ensembl GTF :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-grep "STRG." final_annotated.gtf > STRG.gtf
-grep -v "STRG." final_annotated.gtf > non_STRG.gtf
+grep "STRG." ${1} > STRG.gtf
+grep -v "STRG." ${1} > non_STRG.gtf
 gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare STRG.gtf
 printf "${PURPLE}Done\n"
 echo ""
