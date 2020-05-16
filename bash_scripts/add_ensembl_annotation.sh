@@ -231,10 +231,10 @@ awk '{print $1}' < transcript_gene_names.unique.tab > replaced_gene_names.tab
 awk '{ printf "%06d.%d\t%s\n",(!a[$1]++? ++c:c),a[$1],$0 }' replaced_gene_names.tab > replaced_gene_names_iterate.tab
 # generating isoforms IDs
 tr '.' '\t' < replaced_gene_names_iterate.tab > replaced_gene_names_iterate_sep.tab
-awk '{print $3"."$2}' replaced_gene_names_iterate_sep.tab > isoforms_per_gene
+awk '{print $5}' replaced_gene_names_iterate_sep.tab > isoforms_per_gene
 # align transcript_gene_names.unique.tab with new isoforms
 paste -d'\t' transcript_gene_names.unique.tab isoforms_per_gene > isoforms_per_gene_concatenated
-awk '{print $2"\t"$3}' isoforms_per_gene_concatenated > isoforms_per_gene_concatenated.tab
+awk '{print $1"\t"$2"."$3}' isoforms_per_gene_concatenated > isoforms_per_gene_concatenated.tab
 # generate file for sed script, as "namelist"
 awk '{print $1}' isoforms_per_gene_concatenated.tab  > A
 awk '{print $2}' isoforms_per_gene_concatenated.tab  > B
@@ -243,7 +243,7 @@ sed 's/$/"/' A.1 > A.2
 sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist_isoforms
-rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_* outfile
+rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_*
 ##################################
 # Getting isoform names replaced #
 ##################################
@@ -255,56 +255,22 @@ rm -f sed.script fileA fileB annotated_genes*
 echo ""
 printf "${PURPLE}::: Done. Gene_id field was replaced and intermediate merged.gtf file was generated with these changes. Continue with GTF validation\n"
 echo ""
-#######################################
-# Re-formatting merged.fixed.gtf file #
-#######################################
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Re-formatting final_annotated.gtf using standard gff/gtf specifications :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-agat_sp_ensembl_output_style.pl -g merged.gtf -o merged.fixed.gff
-gffread merged.fixed.gff -T -o STRG_fixed.gtf
-echo ""
-echo ""
-printf "${PURPLE}::: Re-formatting was done. The new GTF file is called STRG_fixed.gtf\n"
-echo ""
-rm merged.fixed*
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Reformatting GTF with AGAT/gffread tools to obtain final GTF :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-##########################################
-# Re-formatting final_annotated.gtf file
-##########################################
-echo "::: Re-formatting STRG_fixed.gtf using standard gff/gtf specifications"
-agat_sp_ensembl_output_style.pl -g STRG_fixed.gtf -o STRG_fixed.gff
-gffread STRG_fixed.gff -T -o STRG_annotated.gtf
-rm STRG_fixed.g*
-echo ""
-printf "${PURPLE}::: Re-formatting was done. The new GTF file is called STRG_annotated.gtf :::\n"
-echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Re-generating final GTF file to annotate :::\n"
+printf "${YELLOW}::: 10. Re-generating final GTF file to annotate :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-cat non_STRG.gtf STRG_annotated.gtf > final.gtf
-agat_sp_ensembl_output_style.pl -g final.gtf -o final_annotated_ensembl1.gff
-gffread final_annotated_ensembl1.gff -T -o final_annotated_ensembl1.gtf
-rm non_STRG.gtf STRG_annotated.gtf final.gtf final_annotated_ensembl1.gff
-echo ""
-printf "${PURPLE}::: Re-formatting was done. An intermediate GTF file called final_annotated_ensembl1.gtf file is ready for annotation :::\n"
-
+cat non_STRG.gtf merged.gtf > final_annotated_ensembl.gtf
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 11. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 rm -r -f FEELnc
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ensembl_aligned.gtf ${4}.fa final_annotated_ensembl1.gtf /${dir1}/FEELnc/
+cp ensembl_aligned.gtf ${4}.fa final_annotated_ensembl.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -325,16 +291,16 @@ FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_b
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
 echo ""
-printf "${PURPLE}::: FEELnc Test done. Continue with final_annotated.gtf file :::\n"
+printf "${PURPLE}::: FEELnc Test done. Continue with final_annotated_ensembl.gtf file :::\n"
 echo ""
 cd ..
 echo ""
 ### Running FEELnc
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 14.  Running FEELnc on final_annotated.gtf file :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 12.  Running FEELnc on final_annotated_ensembl.gtf file :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i final_annotated_ensembl1.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated_ensembl.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
 # Classifier
@@ -342,42 +308,8 @@ FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ens
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
-echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 15. Parsing FEELnc output :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::${CYAN}\n"
-cp candidate_lncRNA_classes.txt /${dir1}/
-cd /${dir1}/
-awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
-tail -n +2 lncRNA_genes > lncRNA_transcripts
-rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts final_annotated_ensembl1.gtf > merged.fixed.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts final_annotated_ensembl1.gtf > merged.fixed.coding.gtf
-sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
-rm final_annotated_ensembl1.gtf
-echo ""
-printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final.annotated.gtf file...\n"
-echo ""
-rm merged_fixed.gtf
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 16. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation...\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-##########################################
-# Re-formatting final_annotated.gtf file
-##########################################
-printf "${PURPLE}::: Re-formatting final.annotated.gtf using standard gff/gtf specifications\n"
-agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated_ensembl.gff
-gffread final_annotated_ensembl.gff -T -o final_annotated_ensembl.gtf
-echo ""
-printf "${PURPLE}::: Re-formatting was done. The new GTF file is called final_annotated_ensembl.gtf :::\n"
-echo ""
-rm final.annotated.gtf
-echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 17. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 13. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
@@ -393,7 +325,7 @@ echo ""
 echo "Done"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 18. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 14. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -424,7 +356,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 19. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 15. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -482,7 +414,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 20. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 16. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -501,7 +433,7 @@ echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 21. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
+printf "${YELLOW}::: 17. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcript.gtf
 gffread -x cds.fa -g transcripts.fa coding_transcript.gtf
@@ -522,7 +454,7 @@ rm coding_transcript.gtf
 # Configuring Summary Results
 #############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 22. Configuring Summary Results :::\n"
+printf "${YELLOW}::: 18. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ############################################
 # Moving results to merged_annotation folder
@@ -532,7 +464,7 @@ printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
 mv candidate_lncRNA_classes.txt final_annotated_ensembl.gff final_annotated_ensembl.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged_fixed.gtf merged.fixed.lncRNAs.gtf merged.gtf merged_with_reference.gtf UCSC_compare*
+rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
