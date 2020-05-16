@@ -326,7 +326,7 @@ rm annotated_ensembl.g*
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated_ensembl.gtf
-agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated_ensembl.gff
+agat_sp_ensembl_output_style.pl -g final_annotated_ensembl.gtf -o final_annotated_ensembl.gff
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated_ensembl.gtf file...\n"
 echo ""
@@ -486,7 +486,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
 rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare*
 echo ""
@@ -497,7 +497,7 @@ echo "All Done. The transcripts were classified in ./output_files_ensembl"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated.gtf (standard GTF) and correspondent gff file (final_annotated.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
+echo "GTF file final_annotated_ensembl.gtf (standard GTF) and correspondent gff file (final_annotated_ensembl.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
