@@ -103,16 +103,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Donwload USCS reference genome in fasta format :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-if [ -f ${4}.2bit ]; then
-    echo "${4}.2bit found. Continue:"
-    ./twoBitToFa ${genome}.2bit ${genome}.fa
-    samtools faidx ${genome}.fa
-    echo ""
-    : 
-else
-    echo "Downloading ${4} genome"
-    ./genome-download ${4} 
-fi
+./genome-download ${4}
 printf "${PURPLE}Done. ${4}.fa is located in current directory\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
