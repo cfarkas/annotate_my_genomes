@@ -164,8 +164,8 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 6. Overlapping final_annotated.gtf transcripts with Ensembl GTF :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-grep "STRG." ${1} > STRG.gtf
-grep -v "STRG." ${1} > non_STRG.gtf
+grep "STRG." final_annotated.gtf > STRG.gtf
+grep -v "STRG." final_annotated.gtf > non_STRG.gtf
 gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare STRG.gtf
 printf "${PURPLE}Done\n"
 echo ""
