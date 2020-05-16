@@ -325,10 +325,10 @@ grep --invert-match -F -f lncRNA_transcripts annotated_ensembl.gtf > merged.fixe
 rm annotated_ensembl.g*
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
-agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
+cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated_ensembl.gtf
+agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated_ensembl.gff
 echo ""
-printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
+printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated_ensembl.gtf file...\n"
 echo ""
 rm merged.fixed.gff merged.fixed.gtf merged.fixed.lncRNAs.gtf merged.fixed.coding.gtf
 echo ""
@@ -336,7 +336,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\
 printf "${YELLOW}::: 14. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread -w transcripts.fa -g ${4}.fa final_annotated.gtf
+gffread -w transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
