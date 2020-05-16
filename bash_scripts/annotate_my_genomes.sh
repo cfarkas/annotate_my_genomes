@@ -161,7 +161,7 @@ perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' annotated_g
 sed -i 's/transcript_id //g' transcript_gene_names.txt
 sed -i 's/;/\t/g' transcript_gene_names.txt
 sed -i 's/gene_id//g' transcript_gene_names.txt
-sed 's/"//g' transcript_gene_names.txt > outfile
+sed -i 's/"//g' transcript_gene_names.txt
 sed -i 's/"//g' transcript_gene_names.txt
 # generating replaced gene names with matched original stringtie isoforms
 awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
@@ -270,29 +270,16 @@ grep -w -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.lncRNAs.gtf
 grep --invert-match -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.coding.gtf
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
+cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
+agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
 echo ""
-printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final.annotated.gtf file...\n"
+printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
 echo ""
 rm merged.fixed.gff merged.fixed.gtf 
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Reformatting GTF with AGAT/gffread tools to obtain final GTF and continue with GAWN annotation...\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-##########################################
-# Re-formatting final.annotated.gtf file
-##########################################
-echo "::: Re-formatting final.annotated.gtf using standard gff/gtf specifications"
-agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated.gff
-gffread final_annotated.gff -T -o final_annotated.gtf
-echo ""
-printf "${PURPLE}::: Re-formatting was done. The new GTF file is called final_annotated.gtf :::\n"
-echo ""
-rm final.annotated.gtf
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Obtaining Transcripts in FASTA format with gffread :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
 echo ""
@@ -307,7 +294,7 @@ echo ""
 echo "Done"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 10. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -338,7 +325,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 11. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -396,7 +383,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 12. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -415,7 +402,7 @@ echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 14. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
+printf "${YELLOW}::: 13. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcript.gtf
 gffread -x cds.fa -g transcripts.fa coding_transcript.gtf
@@ -436,7 +423,7 @@ rm coding_transcript.gtf
 # Configuring Summary Results
 #############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 15. Configuring Summary Results :::\n"
+printf "${YELLOW}::: 14. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ############################################
 # Moving results to merged_annotation folder
