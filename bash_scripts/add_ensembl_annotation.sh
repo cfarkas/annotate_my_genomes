@@ -2,7 +2,7 @@
 {
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-final_annotated.gtf=${1}
+final_annotated=${1}
 Ensembl_reference_genome_gtf=${2}
 Ensembl_reference_genome_fasta=${3}
 UCSC_genome_prefix=${4}
@@ -10,11 +10,11 @@ threads=${5}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
   echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated.gtf]: annotate_my_genomes gtf output"
+  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -29,11 +29,11 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
   echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated.gtf]: annotate_my_genomes gtf output"
+  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -48,11 +48,11 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
   echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated.gtf]: annotate_my_genomes gtf output"
+  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -67,11 +67,11 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
   echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated.gtf]: annotate_my_genomes gtf output"
+  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -84,10 +84,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [final_annotated.gtf] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"; exit 1; }
 
 if [ $# -ne 5 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [final_annotated.gtf] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo 1>&2 "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   exit 3
 fi
 
