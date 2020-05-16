@@ -164,9 +164,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 6. Overlapping final_annotated.gtf transcripts with Ensembl GTF :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-grep "STRG." ${1} > STRG.gtf
-grep -v "STRG." ${1} > non_STRG.gtf
-gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare STRG.gtf
+gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare ${1}
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -216,7 +214,7 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged_with_reference.gtf
+cat ${1} | parallel --pipe -j ${5} sed -f sed.script > merged_with_reference.gtf
 rm -f sed.script fileA fileB
 printf "${PURPLE}::: Done. Gene_id field was replaced in the final_annotated.gtf file and merged_with_reference.gtf was generated with these changes\n"
 echo ""
@@ -264,7 +262,7 @@ rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_conc
 awk '{print $1}' namelist_isoforms > fileA
 awk '{print $2}' namelist_isoforms > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged_with_reference.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
+cat merged_with_reference.gtf | parallel --pipe -j ${5} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB annotated_genes*
 echo ""
 printf "${PURPLE}::: Done. Gene_id field was replaced and intermediate merged.gtf was generated with these changes. Continue with GTF validation\n"
@@ -303,10 +301,10 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cat non_STRG.gtf STRG_annotated.gtf > final.gtf
 agat_sp_ensembl_output_style.pl -g final.gtf -o final_annotated.gff
-gffread final_anotated.gff -T -o final_annotated.gtf
+gffread final_anotated.gff -T -o final_annotated_ensembl.gtf
 rm non_STRG.gtf STRG_annotated.gtf final.gtf
 echo ""
-printf "${PURPLE}::: Re-formatting was done. A GTF called final_annotated.gtf file is ready for annotation :::\n"
+printf "${PURPLE}::: Re-formatting was done. A GTF called final_annotated_ensembl.gtf file is ready for annotation :::\n"
 
 ############################################
 # FEELnc long noncoding RNA identification #
@@ -318,7 +316,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 rm -r -f FEELnc
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ensembl_aligned.gtf ${4}.fa final_annotated.gtf /${dir1}/FEELnc/
+cp ensembl_aligned.gtf ${4}.fa final_annotated_ensembl.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -348,7 +346,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 14.  Running FEELnc on final_annotated.gtf file :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i final_annotated.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated_ensembl.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
 # Classifier
@@ -370,6 +368,7 @@ grep --invert-match -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final.annotated.gtf
+rm final_annotated_ensembl.gtf
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final.annotated.gtf file...\n"
 echo ""
@@ -382,10 +381,10 @@ echo ""
 # Re-formatting final_annotated.gtf file
 ##########################################
 printf "${PURPLE}::: Re-formatting final.annotated.gtf using standard gff/gtf specifications\n"
-agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated.gff
-gffread final_annotated.gff -T -o final_annotated.gtf
+agat_sp_ensembl_output_style.pl -g final.annotated.gtf -o final_annotated_ensembl.gff
+gffread final_annotated_ensembl.gff -T -o final_annotated_ensembl.gtf
 echo ""
-printf "${PURPLE}::: Re-formatting was done. The new GTF file is called final_annotated.gtf :::\n"
+printf "${PURPLE}::: Re-formatting was done. The new GTF file is called final_annotated_ensembl.gtf :::\n"
 echo ""
 rm final.annotated.gtf
 echo ""
@@ -393,7 +392,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\
 printf "${YELLOW}::: 17. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread -w transcripts.fa -g ${4}.fa final_annotated.gtf
+gffread -w transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
@@ -543,7 +542,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated_ensembl.gff final_annotated_ensembl.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
 rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged_fixed.gtf merged.fixed.lncRNAs.gtf merged.gtf merged_with_reference.gtf UCSC_compare*
 echo ""
@@ -554,7 +553,7 @@ echo "All Done. The transcripts were classified in ./output_files_ensembl"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated.gtf (standard GTF) and correspondent gff file (final_annotated.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
+echo "GTF file final_annotated_ensembl.gtf (standard GTF) and correspondent gff file (final_annotated_ensembl.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
