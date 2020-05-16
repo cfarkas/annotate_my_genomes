@@ -259,7 +259,11 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 10. Re-generating final GTF file to annotate :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-cat non_STRG.gtf merged.gtf > final_annotated_ensembl.gtf
+cat non_STRG.gtf merged.gtf > annotated_ensembl.gtf
+sed -i 's/lncRNA/StringTie/' annotated_ensembl.gtf
+sed -i 's/coding/StringTie/' annotated_ensembl.gtf
+printf "${PURPLE}::: All done. annotated_ensembl.gtf contained full classification of transcripts. Continue with lncRNA classification ...\n"
+echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
@@ -270,7 +274,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 rm -r -f FEELnc
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ensembl_aligned.gtf ${4}.fa final_annotated_ensembl.gtf /${dir1}/FEELnc/
+cp ensembl_aligned.gtf ${4}.fa annotated_ensembl.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -300,7 +304,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 12.  Running FEELnc on final_annotated_ensembl.gtf file :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i final_annotated_ensembl.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i annotated_ensembl.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
 # Classifier
@@ -308,11 +312,31 @@ FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ens
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
+printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 13. Parsing FEELnc output :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
+cp candidate_lncRNA_classes.txt /${dir1}/
+cd /${dir1}/
+awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
+tail -n +2 lncRNA_genes > lncRNA_transcripts
+rm lncRNA_genes
+grep -w -F -f lncRNA_transcripts annotated_ensembl.gtf > merged.fixed.lncRNAs.gtf
+grep --invert-match -F -f lncRNA_transcripts annotated_ensembl.gtf > merged.fixed.coding.gtf
+rm annotated_ensembl.g*
+sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
+sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
+cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
+agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
+echo ""
+printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
+echo ""
+rm merged.fixed.gff merged.fixed.gtf merged.fixed.lncRNAs.gtf merged.fixed.coding.gtf
+echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 14. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread -w transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
+gffread -w transcripts.fa -g ${4}.fa final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
@@ -462,7 +486,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated_ensembl.gff final_annotated_ensembl.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
 rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare*
 echo ""
@@ -473,7 +497,7 @@ echo "All Done. The transcripts were classified in ./output_files_ensembl"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated_ensembl.gtf (standard GTF) and correspondent gff file (final_annotated_ensembl.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
+echo "GTF file final_annotated.gtf (standard GTF) and correspondent gff file (final_annotated.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
