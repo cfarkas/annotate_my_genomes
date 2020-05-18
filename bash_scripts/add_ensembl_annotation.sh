@@ -463,17 +463,9 @@ echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 17. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-gffread augustus.gff3 -T -o coding_transcript.gtf
+gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f ensembl_transcripts.fa -o cds.fa
 agat_sp_extract_sequences.pl -g augustus.gff3 -f ensembl_transcripts.fa -o prot.fa --protein
-##########################################
-# Re-formatting coding_transcripts.gtf
-##########################################
-sed 's/.t1"/"/' coding_transcript.gtf > coding_transcripts.gtf
-echo ""
-printf "${PURPLE}::: Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory :::${CYAN}\n"
-echo ""
-rm coding_transcript.gtf 
 #############################
 # Configuring Summary Results
 #############################
