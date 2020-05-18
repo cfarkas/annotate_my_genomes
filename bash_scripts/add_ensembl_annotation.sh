@@ -337,7 +337,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\
 printf "${YELLOW}::: 14. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread -w transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
+gffread -w ensembl_transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
@@ -364,8 +364,8 @@ dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
 cd /${dir1}/
-cp ${3} /${dir1}/gawn/03_data/genome.fasta
-cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
+cp ${4}.fa /${dir1}/gawn/03_data/genome.fasta
+cp ensembl_transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
 echo ""
@@ -453,7 +453,7 @@ make
 cd ..
 cd ..
 export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
-./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on ensembl_transcripts.fa > augustus.gff3
 echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
