@@ -405,21 +405,9 @@ echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 13. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-gffread augustus.gff3 -T -o coding_transcript.gtf
-gffread -x cds.fa -g transcripts.fa coding_transcript.gtf
-gffread -y prot.fa -g transcripts.fa coding_transcript.gtf
-# Re-formatting
-cat cds.fa |rev|cut -d"." -f1 --complement|rev > transcripts_CDS.fa
-cat prot.fa |rev|cut -d"." -f1 --complement|rev > transcripts_proteins.fa
-rm cds.fa prot.fa
-##########################################
-# Re-formatting coding_transcripts.gtf
-##########################################
-sed 's/.t1"/"/' coding_transcript.gtf > coding_transcripts.gtf
-echo ""
-printf "${PURPLE}::: Done. AUGUSTUS predicted transcripts were summarized in coding_transcripts.gtf file located in current directory :::${CYAN}\n"
-echo ""
-rm coding_transcript.gtf 
+gffread augustus.gff3 -T -o coding_transcripts.gtf
+agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
 #############################
 # Configuring Summary Results
 #############################
@@ -432,7 +420,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf merged.gtf merged_with_reference.gtf UCSC_compare* transcriptome_annotation_table.tsv
 rm refGene.tx*
@@ -452,7 +440,7 @@ echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./ou
 echo ""
 echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files"
 echo ""
-echo "Associated Transcript coding sequences (transcripts_CDS.fa) and correspondent protein sequences (transcripts_proteins.fa) with coding_transcripts.gtf are located in ./output_files"
+echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files"
 echo ""
 echo "GO terms associated to each transcript (and gene), named transcriptsGO.tab and genesGO.tab are located in ./output_files"
 echo ""
