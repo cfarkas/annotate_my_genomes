@@ -496,13 +496,13 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n" 
 echo "All Done. The transcripts were classified in ./output_files_ensembl"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation correspond to transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated_ensembl.gtf and correspondent gff file (final_annotated_ensembl.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field".
+echo "GTF file final_annotated_ensembl.gtf and correspondent gff file (final_annotated_ensembl.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field."
 echo ""
-echo "GTF file ensembl_aligned.gtf corresponding to aligned ensembl transcripts to UCSC genome is located in ./output_files_ensembl.
+echo "GTF file ensembl_aligned.gtf corresponding to aligned ensembl transcripts to UCSC genome is located in ./output_files_ensembl."
 echo ""
-echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
+echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts."
 echo ""
 echo "Associated FASTA file to this GTF, named ensembl_transcripts.fa is located in ./output_files_ensembl"
 echo ""
