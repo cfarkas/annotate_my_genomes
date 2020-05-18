@@ -203,8 +203,11 @@ echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Re-formatting merged.gtf using standard gff/gtf specifications :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-agat_sp_ensembl_output_style.pl -g merged.gtf -o merged.fixed.gff
-gffread merged.fixed.gff -T -o merged_fixed.gtf
+
+agat_sp_fix_features_locations_duplicated.pl -f merged.gtf -o merged.gff
+rm merged.fixed.gtf
+gffread merged.gff -T -o merged_fixed.gtf
+rm merged.gff
 echo ""
 echo ""
 printf "${PURPLE}::: Re-formatting was done. The new GTF file is called merged_fixed.gtf\n"
@@ -271,10 +274,9 @@ sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
 agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
+rm merged_fixed.gtf
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
-echo ""
-rm merged.fixed.gff merged_fixed.gtf 
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Obtaining Transcripts in FASTA format with gffread :::\n"
