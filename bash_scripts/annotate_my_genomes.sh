@@ -217,11 +217,10 @@ cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 6. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
 cp ${3} ${2} merged_fixed.gtf /${dir1}/FEELnc/
-### Cloning FEELnc in current directory
-git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
