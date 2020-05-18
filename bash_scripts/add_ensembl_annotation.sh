@@ -487,13 +487,13 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
 rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n" 
 echo "All Done. The transcripts were classified in ./output_files_ensembl"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
