@@ -461,8 +461,8 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 17. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcript.gtf
-gffread -x cds.fa -g transcripts.fa coding_transcript.gtf
-gffread -y prot.fa -g transcripts.fa coding_transcript.gtf
+gffread -x cds.fa -g ensembl_transcripts.fa coding_transcript.gtf
+gffread -y prot.fa -g ensembl_transcripts.fa coding_transcript.gtf
 # Re-formatting
 cat cds.fa |rev|cut -d"." -f1 --complement|rev > transcripts_CDS.fa
 cat prot.fa |rev|cut -d"." -f1 --complement|rev > transcripts_proteins.fa
@@ -487,9 +487,9 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt ensembl_transcripts.fa ensembl_aligned.gtf transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare*
+rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare* non_STRG.gtf STRG.gtf refGene.txt transcriptome_annotation_table.tsv 
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -502,7 +502,7 @@ echo "GTF file final_annotated_ensembl.gtf (standard GTF) and correspondent gff 
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
-echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files_ensembl"
+echo "Associated FASTA file to this GTF, named ensembl_transcripts.fa is located in ./output_files_ensembl"
 echo ""
 echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files_ensembl"
 echo ""
