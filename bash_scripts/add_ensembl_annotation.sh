@@ -263,6 +263,10 @@ echo ""
 cat non_STRG.gtf merged.gtf > annotated_ensembl.gtf
 sed -i 's/lncRNA/StringTie/' annotated_ensembl.gtf
 sed -i 's/coding/StringTie/' annotated_ensembl.gtf
+agat_sp_fix_features_locations_duplicated.pl -f annotated_ensembl.gtf -o final_annotated.gff
+rm annotated_ensembl.gtf
+gffread final_annotated.gff -T -o annotated_ensembl.gtf
+rm final_annotated.gff
 printf "${PURPLE}::: All done. annotated_ensembl.gtf contained full classification of transcripts. Continue with lncRNA classification ...\n"
 echo ""
 ############################################
@@ -460,12 +464,8 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 17. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcript.gtf
-gffread -x cds.fa -g ensembl_transcripts.fa coding_transcript.gtf
-gffread -y prot.fa -g ensembl_transcripts.fa coding_transcript.gtf
-# Re-formatting
-cat cds.fa |rev|cut -d"." -f1 --complement|rev > transcripts_CDS.fa
-cat prot.fa |rev|cut -d"." -f1 --complement|rev > transcripts_proteins.fa
-rm cds.fa prot.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f ensembl_transcripts.fa -o cds.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f ensembl_transcripts.fa -o prot.fa --protein
 ##########################################
 # Re-formatting coding_transcripts.gtf
 ##########################################
@@ -486,7 +486,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt ensembl_transcripts.fa ensembl_aligned.gtf transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt ensembl_transcripts.fa ensembl_aligned.gtf transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
 rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare* non_STRG.gtf STRG.gtf refGene.txt transcriptome_annotation_table.tsv 
 echo ""
@@ -507,7 +507,7 @@ echo "Associated FASTA file to this GTF, named ensembl_transcripts.fa is located
 echo ""
 echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files_ensembl"
 echo ""
-echo "Associated Transcript coding sequences (transcripts_CDS.fa) and correspondent protein sequences (transcripts_proteins.fa) with coding_transcripts.gtf are located in ./output_files_ensembl"
+echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files_ensembl"
 echo ""
 echo "GO terms associated to each transcript (and gene), named transcriptsGO.tab and genesGO.tab are located in ./output_files_ensembl"
 echo ""
