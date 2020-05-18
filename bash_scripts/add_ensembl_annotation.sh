@@ -275,7 +275,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 rm -r -f FEELnc
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ensembl_aligned.gtf ${4}.fa annotated_ensembl.gtf /${dir1}/FEELnc/
+cp ${4}.gtf ${4}.fa annotated_ensembl.gtf /${dir1}/FEELnc/
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 cd FEELnc
@@ -305,11 +305,11 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 12.  Running FEELnc on final_annotated_ensembl.gtf file :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i annotated_ensembl.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i annotated_ensembl.gtf -a ${4}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ensembl_aligned.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${4}.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
 # Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ensembl_aligned.gtf > candidate_lncRNA_classes.txt
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${4}.gtf > candidate_lncRNA_classes.txt
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
