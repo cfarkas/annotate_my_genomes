@@ -274,7 +274,7 @@ agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
 echo ""
-rm merged.fixed.gff merged.fixed.gtf 
+rm merged.fixed.gff merged_fixed.gtf 
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Obtaining Transcripts in FASTA format with gffread :::\n"
@@ -432,7 +432,7 @@ printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab transcripts_CDS.fa transcripts_proteins.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged_fixed.gtf merged.fixed.lncRNAs.gtf merged.gtf merged_with_reference.gtf UCSC_compare* transcriptome_annotation_table.tsv
+rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf merged.gtf merged_with_reference.gtf UCSC_compare* transcriptome_annotation_table.tsv
 rm refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
