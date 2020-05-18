@@ -103,6 +103,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Donwload USCS reference genome in fasta format :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
+rm -r -f augustus.* FEELnc gawn 
 ./genome-download ${4}
 printf "${PURPLE}Done. ${4}.fa is located in current directory\n"
 echo ""
