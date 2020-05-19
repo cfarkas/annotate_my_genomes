@@ -200,14 +200,12 @@ echo ""
 #######################################
 # Re-formatting merged.gtf file #
 #######################################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Re-formatting merged.gtf using standard gff/gtf specifications :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-
-agat_sp_fix_features_locations_duplicated.pl -f merged.gtf -o merged.gff
-rm merged.fixed.gtf
-gffread merged.gff -T -o merged_fixed.gtf
-rm merged.gff
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 5. Re-formatting merged.gtf using standard gff/gtf specifications with gffread:::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+gffread -E -F --merge merged.gtf -o merged.gff3
+gffread merged.gff3 -T -o merged_fixed.gtf
+rm merged.gtf merged.gff3 
 echo ""
 echo ""
 printf "${PURPLE}::: Re-formatting was done. The new GTF file is called merged_fixed.gtf\n"
@@ -259,7 +257,6 @@ FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
-echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 8. Parsing FEELnc output :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
@@ -273,7 +270,7 @@ grep --invert-match -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.cod
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
-agat_sp_ensembl_output_style.pl -g final_annotated.gtf -o final_annotated.gff
+gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm merged_fixed.gtf
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
