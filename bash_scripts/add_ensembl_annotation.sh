@@ -124,7 +124,6 @@ samtools sort ensembl_aligned.bam -@ ${5} > ensembl_aligned.sorted.bam
 samtools index ensembl_aligned.sorted.bam -@ ${5}
 printf "${PURPLE}Done. Mapped transcripts are called ensembl_aligned.sorted.bam\n"
 echo ""
-rm ensembl_aligned.sam ensembl_aligned.bam
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 4. Obtaining bed file from alignments by using bedtools bamtobed :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
@@ -156,9 +155,9 @@ grep -v "STRG." ${1} > non_STRG.gtf
 gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare STRG.gtf
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Writting novel discoveries to Stats.txt :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 7. Writting novel discoveries to Stats.txt (just for STRG genes) :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 # Stats
 exec 3<> Stats.txt
