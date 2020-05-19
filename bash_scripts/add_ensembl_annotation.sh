@@ -263,10 +263,10 @@ echo ""
 cat non_STRG.gtf merged.gtf > annotated_ensembl.gtf
 sed -i 's/lncRNA/StringTie/' annotated_ensembl.gtf
 sed -i 's/coding/StringTie/' annotated_ensembl.gtf
-agat_sp_fix_features_locations_duplicated.pl -f annotated_ensembl.gtf -o final_annotated.gff
+gffread -E -F --merge annotated_ensembl.gtf -o annotated.gff3
 rm annotated_ensembl.gtf
-gffread final_annotated.gff -T -o annotated_ensembl.gtf
-rm final_annotated.gff
+gffread annotated.gff3 -T -o annotated_ensembl.gtf
+rm annotated.gff3
 printf "${PURPLE}::: All done. annotated_ensembl.gtf contained full classification of transcripts. Continue with lncRNA classification ...\n"
 echo ""
 ############################################
@@ -330,7 +330,7 @@ rm annotated_ensembl.g*
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated_ensembl.gtf
-agat_sp_ensembl_output_style.pl -g final_annotated_ensembl.gtf -o final_annotated_ensembl.gff
+gffread -E -F --merge final_annotated_ensembl.gtf -o final_annotated_ensembl.gff
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated_ensembl.gtf file...\n"
 echo ""
