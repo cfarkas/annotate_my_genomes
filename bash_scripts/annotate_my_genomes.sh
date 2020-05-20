@@ -143,15 +143,13 @@ rm A A.1 A.2 B B.1 B.2
 ###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
-sed -i -e 's/^/gene_id /' fileA
-sed -i 's/.*/;/' fileB
 tmpfile=/tmp/Asasuser.$$
 exec 3< fileA
 exec 4< fileB
-while read –r astring <&3
+while read astring <&3
 do
-        read –r bstring <&4
-        echo 's/"$astring"/"$bstring"/g' >> "$tmpfile"
+        read bstring <&4
+        echo "s/"$astring"/"$bstring"/g" >> "$tmpfile"
 done
 exec 3<&- 4<&-
 cat ${1} | parallel --pipe -j ${4} sed –f "$tmpfile" > merged_with_reference.gtf
@@ -201,15 +199,13 @@ rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_conc
 ##################################
 awk '{print $1}' namelist_isoforms > fileA
 awk '{print $2}' namelist_isoforms > fileB
-sed -i -e 's/^/transcript_id /' fileA
-sed -i 's/.*/;/' fileB
 tmpfile=/tmp/Asasuser.$$
 exec 3< fileA
 exec 4< fileB
-while read –r astring <&3
+while read astring <&3
 do
-        read –r bstring <&4
-        echo 's/"$astring"/"$bstring"/g' >> "$tmpfile"
+        read bstring <&4
+        echo "s/"$astring"/"$bstring"/g" >> "$tmpfile"
 done
 exec 3<&- 4<&-
 cat ${1} | parallel --pipe -j ${4} sed –f "$tmpfile" > merged.gtf
