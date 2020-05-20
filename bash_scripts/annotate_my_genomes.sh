@@ -147,19 +147,6 @@ paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB
 printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes\n"
-echo ""
-#######################################
-# Re-formatting merged.gtf file #
-#######################################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. Re-formatting merged.gtf using standard gff/gtf specifications with gffread:::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-gffread -E -F --merge merged.gtf -o merged.gff3
-gffread merged.gff3 -T -o merged_fixed.gtf
-rm merged.gtf merged.gff3 
-echo ""
-echo ""
-printf "${PURPLE}::: Re-formatting was done. The new GTF file is called merged_fixed.gtf\n"
 printf "${PURPLE}::: Continue with FEELnc long non-coding classification...\n"
 echo ""
 ############################################
@@ -167,12 +154,12 @@ echo ""
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 4. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ${3} ${2} merged_fixed.gtf /${dir1}/FEELnc/
+cp ${3} ${2} merged.gtf /${dir1}/FEELnc/
 cd FEELnc
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
@@ -191,16 +178,16 @@ FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_b
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
 echo ""
-printf "${PURPLE}::: FEELnc Test done. Continue with merged_fixed.gtf file :::\n"
+printf "${PURPLE}::: FEELnc Test done. Continue with merged.gtf file :::\n"
 echo ""
 cd ..
 echo ""
 ### Running FEELnc
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6.  Running FEELnc on merged_fixed.gtf file ...\n"
+printf "${YELLOW}::: 5.  Running FEELnc on merged_fixed.gtf file ...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i merged_fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i merged.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
 # Classifier
@@ -209,25 +196,24 @@ echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Parsing FEELnc output :::\n"
+printf "${YELLOW}::: 6. Parsing FEELnc output :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
 tail -n +2 lncRNA_genes > lncRNA_transcripts
 rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts merged_fixed.gtf > merged.fixed.coding.gtf
-sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
-gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
-rm merged_fixed.gtf
+grep -w -F -f lncRNA_transcripts merged.gtf > merged.lncRNAs.gtf
+grep --invert-match -F -f lncRNA_transcripts merged.gtf > merged.coding.gtf
+sed -i 's/StringTie/lncRNA/' merged.lncRNAs.gtf
+sed -i 's/StringTie/coding/' merged.coding.gtf
+cat merged.coding.gtf merged.lncRNAs.gtf > final_annotated.gtf
+rm merged.gtf
 echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 7. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
@@ -243,7 +229,7 @@ echo ""
 echo "Done"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 8. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -274,7 +260,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 9. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -332,7 +318,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 10. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -368,9 +354,9 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf merged.gtf UCSC_compare* transcriptome_annotation_table.tsv
+rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.coding.gtf merged.lncRNAs.gtf UCSC_compare* transcriptome_annotation_table.tsv
 rm refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -380,7 +366,7 @@ echo "All Done. The transcripts were classified in ./output_files"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated.gtf (standard GTF) and correspondent gff file (final_annotated.gff) are located in ./output_files. These files contains the annotated lncRNA/coding GTF in the second field".
+echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files. This file contain the annotated lncRNA/coding GTF in the second field".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
