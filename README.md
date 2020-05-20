@@ -409,4 +409,5 @@ grep ">" -c noncoding.fa
 To see more examples, please visit and clone https://github.com/cfarkas/annotate_my_genomes_examples.git
 
 ### Notes
-Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc. 
+Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc.
+replacing sed script: https://superuser.com/questions/532874/how-to-replace-a-list-of-strings-by-another-list
