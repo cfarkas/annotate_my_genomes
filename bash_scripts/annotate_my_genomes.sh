@@ -152,7 +152,7 @@ echo ""
 # Re-formatting merged.gtf file #
 #######################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Re-formatting merged.gtf using standard gff/gtf specifications with gffread:::\n"
+printf "${YELLOW}::: 4. Re-formatting merged.gtf using standard gff/gtf specifications with gffread:::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread -E -F --merge merged.gtf -o merged.gff3
 gffread merged.gff3 -T -o merged_fixed.gtf
@@ -167,7 +167,7 @@ echo ""
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 5. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
@@ -197,7 +197,7 @@ cd ..
 echo ""
 ### Running FEELnc
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7.  Running FEELnc on merged_fixed.gtf file ...\n"
+printf "${YELLOW}::: 6.  Running FEELnc on merged_fixed.gtf file ...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i merged_fixed.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
@@ -209,7 +209,7 @@ echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Parsing FEELnc output :::\n"
+printf "${YELLOW}::: 7. Parsing FEELnc output :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
@@ -227,7 +227,7 @@ echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 8. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
@@ -242,9 +242,9 @@ mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
 echo ""
 echo "Done"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Performing gene annotation by using GAWN pipeline :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
@@ -274,7 +274,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 10. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -332,7 +332,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 11. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -351,7 +351,7 @@ echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
+printf "${YELLOW}::: 12. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
@@ -360,7 +360,7 @@ agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --pro
 # Configuring Summary Results
 #############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 14. Configuring Summary Results :::\n"
+printf "${YELLOW}::: 13. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ############################################
 # Moving results to merged_annotation folder
