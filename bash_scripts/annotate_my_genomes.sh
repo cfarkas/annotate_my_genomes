@@ -117,13 +117,13 @@ cat UCSC_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | w
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3. Replacing gene_id field in merged.annotated.gtf file with reference gene_id's :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 3. Replacing gene_id/transcript_id field in input file with reference gene_id's :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-########################################
-# Merging novel transcripts with ref. 
-########################################
+###############################
+# Getting gene names replaced #
+###############################
 awk '{print $4"\t"$1}' UCSC_compare.${1}.tmap > UCSC_compare.${1}.tmap.1
 tail -n +2 UCSC_compare.${1}.tmap.1 > UCSC_compare.${1}.tmap.2
 awk '!/-/' UCSC_compare.${1}.tmap.2 > namelist
@@ -138,16 +138,44 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
-###############################
-# Getting gene names replaced #
-###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB
+echo ""
 printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes\n"
-printf "${PURPLE}::: Continue with FEELnc long non-coding classification...\n"
+echo ""
+printf "${PURPLE}::: Continue formatting isoforms names using ${4} processors\n"
+echo ""
+################################
+# Getting transcripts replaced #
+################################
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' merged.gtf > transcript_gene_names.txt
+awk '{print $3"\t"$4}' transcript_gene_names.txt > transcript_gene_names.tab
+awk '{print $1"\t"$2}' transcript_gene_names.txt > gene_names.tab
+sed -i 's/";//g' gene_names.tab
+tr '.' '\t' < transcript_gene_names.tab > transcript_gene_names.tab1
+paste -d"\t" gene_names.tab transcript_gene_names.tab1 > transcript_gene_names.tab2
+awk '{print $2"."$6}' transcript_gene_names.tab2 > transcript_gene_names.tab3
+rm transcript_gene_names.txt transcript_gene_names.tab transcript_gene_names.tab1 transcript_gene_names.tab2 gene_names.tab
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' merged.gtf > transcript_gene_names.txt
+awk '{print $4}' transcript_gene_names.txt > transcript_STRG.tab
+paste -d"\t" transcript_gene_names.tab3 transcript_STRG.tab > to_replace
+rm transcript_gene_names.txt transcript_STRG.tab transcript_gene_names.tab3
+awk '!visited[$0]++' to_replace > to_replace_uniq
+rm to_replace
+awk '{print $1}' to_replace_uniq > fileA
+awk '{print $2}' to_replace_uniq > fileB
+paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+cat merged.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.fixed.gtf
+rm -f sed.script fileA fileB merged.gtf
+echo ""
+printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
+echo ""
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 4. FEELnc long non-coding classification of transcripts :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
