@@ -143,7 +143,7 @@ rm A A.1 A.2 B B.1 B.2
 ###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1>%\2%/' > sed.script
 cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged_with_reference.gtf
 rm -f sed.script fileA fileB
 printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes\n"
@@ -191,7 +191,7 @@ rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_conc
 ##################################
 awk '{print $1}' namelist_isoforms > fileA
 awk '{print $2}' namelist_isoforms > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1>%\2%/' > sed.script
 cat merged_with_reference.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB annotated_genes*
 echo ""
