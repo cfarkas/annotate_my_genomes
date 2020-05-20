@@ -144,58 +144,9 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged_with_reference.gtf
+cat ${1} | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB
-printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and merged_with_reference.gtf was generated with these changes\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. Formatting Isoforms :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::${CYAN}\n"
-################################
-# Formatting Transcripts names #
-################################
-# Extracting replaced genes names from merged_with_reference.gtf file
-grep -v "gene_id \"STRG." merged_with_reference.gtf > annotated_genes.gtf
-sed 's/\ /\t/g' annotated_genes.gtf > annotated_genes.tab
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' annotated_genes.gtf > transcript_gene_names.txt
-sed -i 's/transcript_id //g' transcript_gene_names.txt
-sed -i 's/;/\t/g' transcript_gene_names.txt
-sed -i 's/gene_id//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-# generating replaced gene names with matched original stringtie isoforms
-awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
-# removing duplicates
-awk '!a[$0]++' transcript_gene_names.tab > transcript_gene_names.unique.tab
-# selecting column of replaced genes names and iterate numbers to obtain fixed isoforms numbers
-awk '{print $1}' < transcript_gene_names.unique.tab > replaced_gene_names.tab
-# iterate numbers in each unique gene_id
-awk '{ printf "%06d.%d\t%s\n",(!a[$1]++? ++c:c),a[$1],$0 }' replaced_gene_names.tab > replaced_gene_names_iterate.tab
-# generating isoforms IDs
-tr '.' '\t' < replaced_gene_names_iterate.tab > replaced_gene_names_iterate_sep.tab
-awk '{print $3"."$2}' replaced_gene_names_iterate_sep.tab > isoforms_per_gene
-# align transcript_gene_names.unique.tab with new isoforms
-paste -d'\t' transcript_gene_names.unique.tab isoforms_per_gene > isoforms_per_gene_concatenated
-awk '{print $2"\t"$3}' isoforms_per_gene_concatenated > isoforms_per_gene_concatenated.tab
-# generate file for sed script, as "namelist"
-awk '{print $1}' isoforms_per_gene_concatenated.tab  > A
-awk '{print $2}' isoforms_per_gene_concatenated.tab  > B
-sed 's/^/"/' A > A.1
-sed 's/$/"/' A.1 > A.2
-sed 's/^/"/' B > B.1
-sed 's/$/"/' B.1 > B.2
-paste -d'\t' A.2 B.2 > namelist_isoforms
-rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_*
-##################################
-# Getting isoform names replaced #
-##################################
-awk '{print $1}' namelist_isoforms > fileA
-awk '{print $2}' namelist_isoforms > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged_with_reference.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
-rm -f sed.script fileA fileB annotated_genes*
-echo ""
-printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and intermediate merged.gtf was generated with these changes. Continue with GTF validation\n"
+printf "${PURPLE}::: Done. Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes\n"
 echo ""
 #######################################
 # Re-formatting merged.gtf file #
@@ -419,7 +370,7 @@ printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf merged.gtf merged_with_reference.gtf UCSC_compare* transcriptome_annotation_table.tsv
+rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf merged.gtf UCSC_compare* transcriptome_annotation_table.tsv
 rm refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
