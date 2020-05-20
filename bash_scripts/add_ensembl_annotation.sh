@@ -202,62 +202,11 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat STRG.gtf | parallel --pipe -j ${5} sed -f sed.script > merged_with_reference.gtf
+cat STRG.gtf | parallel --pipe -j ${5} sed -f sed.script > merged.gtf
 rm -f sed.script fileA fileB
-printf "${PURPLE}::: Done. Gene_id field was replaced in the final_annotated.gtf file and merged_with_reference.gtf was generated with these changes\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Formatting Isoforms :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::${CYAN}\n"
-################################
-# Formatting Transcripts names #
-################################
-# Extracting replaced genes names from merged_with_reference.gtf file
-grep -v "gene_id \"STRG." merged_with_reference.gtf > annotated_genes.gtf
-sed 's/\ /\t/g' annotated_genes.gtf > annotated_genes.tab
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' annotated_genes.gtf > transcript_gene_names.txt
-sed -i 's/transcript_id //g' transcript_gene_names.txt
-sed -i 's/;/\t/g' transcript_gene_names.txt
-sed -i 's/gene_id//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-# generating replaced gene names with matched original stringtie isoforms
-awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
-# removing duplicates
-awk '!a[$0]++' transcript_gene_names.tab > transcript_gene_names.unique.tab
-# selecting column of replaced genes names and iterate numbers to obtain fixed isoforms numbers
-awk '{print $1}' < transcript_gene_names.unique.tab > replaced_gene_names.tab
-# iterate numbers in each unique gene_id
-awk '{ printf "%06d.%d\t%s\n",(!a[$1]++? ++c:c),a[$1],$0 }' replaced_gene_names.tab > replaced_gene_names_iterate.tab
-# generating isoforms IDs
-tr '.' '\t' < replaced_gene_names_iterate.tab > replaced_gene_names_iterate_sep.tab
-awk '{print $5}' replaced_gene_names_iterate_sep.tab > isoforms_per_gene
-# align transcript_gene_names.unique.tab with new isoforms
-paste -d'\t' transcript_gene_names.unique.tab isoforms_per_gene > isoforms_per_gene_concatenated
-awk '{print $1"\t"$2"."$3}' isoforms_per_gene_concatenated > isoforms_per_gene_concatenated.tab
-# generate file for sed script, as "namelist"
-awk '{print $1}' isoforms_per_gene_concatenated.tab  > A
-awk '{print $2}' isoforms_per_gene_concatenated.tab  > B
-sed 's/^/"/' A > A.1
-sed 's/$/"/' A.1 > A.2
-sed 's/^/"/' B > B.1
-sed 's/$/"/' B.1 > B.2
-paste -d'\t' A.2 B.2 > namelist_isoforms
-rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_*
-##################################
-# Getting isoform names replaced #
-##################################
-awk '{print $1}' namelist_isoforms > fileA
-awk '{print $2}' namelist_isoforms > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged_with_reference.gtf | parallel --pipe -j ${5} sed -f sed.script > merged.gtf
-rm -f sed.script fileA fileB annotated_genes*
-echo ""
-printf "${PURPLE}::: Done. Gene_id field was replaced and intermediate merged.gtf file was generated with these changes. Continue with GTF validation\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Re-generating final GTF file to annotate :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Re-generating final GTF file to annotate :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cat non_STRG.gtf merged.gtf > annotated_ensembl.gtf
 sed -i 's/lncRNA/StringTie/' annotated_ensembl.gtf
@@ -273,7 +222,7 @@ echo ""
 ############################################
 cd /${dir1}/
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 10. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 rm -r -f FEELnc
 ### Cloning FEELnc in current directory
@@ -304,7 +253,7 @@ cd ..
 echo ""
 ### Running FEELnc
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12.  Running FEELnc on final_annotated_ensembl.gtf file :::\n"
+printf "${YELLOW}::: 11.  Running FEELnc on final_annotated_ensembl.gtf file :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i annotated_ensembl.gtf -a ${4}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
@@ -316,7 +265,7 @@ echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Parsing FEELnc output :::\n"
+printf "${YELLOW}::: 12. Parsing FEELnc output :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
@@ -336,7 +285,7 @@ echo ""
 rm merged.fixed.gff merged.fixed.gtf merged.fixed.lncRNAs.gtf merged.fixed.coding.gtf
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 14. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 13. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w ensembl_transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
@@ -479,7 +428,7 @@ printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
 mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt ensembl_transcripts.fa ensembl_aligned.gtf transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf merged_with_reference.gtf UCSC_compare* non_STRG.gtf STRG.gtf refGene.txt transcriptome_annotation_table.tsv 
+rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf UCSC_compare* non_STRG.gtf STRG.gtf refGene.txt transcriptome_annotation_table.tsv 
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
