@@ -130,19 +130,11 @@ awk '!/-/' UCSC_compare.${1}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
-awk '{print $1}' namelist_unique_sorted  > A
-awk '{print $2}' namelist_unique_sorted  > B
-sed 's/^/"/' A > A.1
-sed 's/$/"/' A.1 > A.2
-sed 's/^/"/' B > B.1
-sed 's/$/"/' B.1 > B.2
-paste -d'\t' A.2 B.2 > namelist
-rm A A.1 A.2 B B.1 B.2
+awk '{print $1}' namelist_unique_sorted  > fileA
+awk '{print $2}' namelist_unique_sorted  > fileB
 ###############################
 # Getting gene names replaced #
 ###############################
-awk '{print $1}' namelist > fileA
-awk '{print $2}' namelist > fileB
 tmpfile=/tmp/Asasuser.$$
 exec 3< fileA
 exec 4< fileB
@@ -186,14 +178,9 @@ awk '{print $3"."$2}' replaced_gene_names_iterate_sep.tab > isoforms_per_gene
 paste -d'\t' transcript_gene_names.unique.tab isoforms_per_gene > isoforms_per_gene_concatenated
 awk '{print $2"\t"$3}' isoforms_per_gene_concatenated > isoforms_per_gene_concatenated.tab
 # generate file for sed script, as "namelist"
-awk '{print $1}' isoforms_per_gene_concatenated.tab  > A
-awk '{print $2}' isoforms_per_gene_concatenated.tab  > B
-sed 's/^/"/' A > A.1
-sed 's/$/"/' A.1 > A.2
-sed 's/^/"/' B > B.1
-sed 's/$/"/' B.1 > B.2
-paste -d'\t' A.2 B.2 > namelist_isoforms
-rm A A.1 A.2 B B.1 B.2 transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_*
+awk '{print $1}' isoforms_per_gene_concatenated.tab  > fileA
+awk '{print $2}' isoforms_per_gene_concatenated.tab  > fileB
+rm transcript_gene* isoforms_per_gene isoforms_per_gene_concatenated replaced_*
 ##################################
 # Getting isoform names replaced #
 ##################################
