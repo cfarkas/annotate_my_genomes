@@ -197,13 +197,6 @@ gffread -w transcripts.fa -g ${3} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
-printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs folder ...\n"
-echo ""
-mkdir gffcompare_outputs
-mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs
-echo ""
-echo "Done"
-echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
