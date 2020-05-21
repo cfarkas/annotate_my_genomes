@@ -2,7 +2,7 @@
 {
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-final_annotated=${1}
+StringTie_output=${1}
 Ensembl_reference_genome_gtf=${2}
 Ensembl_reference_genome_fasta=${3}
 UCSC_genome_prefix=${4}
@@ -10,11 +10,11 @@ threads=${5}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [StringTie_output] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
-  echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
+  echo "[StringTie_output]: StringTie output"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -29,11 +29,11 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [StringTie_output] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
-  echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
+  echo "[StringTie_output]: StringTie output"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -48,11 +48,11 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [StringTie_output] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
-  echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
+  echo "[StringTie_output]: StringTie output"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -67,11 +67,11 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo "Usage: ./`basename $0` [StringTie_output] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   echo ""
-  echo "This pipeline will Overlap final_annotated.gtf transcripts (GTF format) with current Ensembl annotation"
+  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation"
   echo ""
-  echo "[final_annotated]: annotate_my_genomes gtf output (final_annotated.gtf)"
+  echo "[StringTie_output]: StringTie output"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)"
   echo ""
@@ -84,10 +84,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [StringTie_output] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"; exit 1; }
 
 if [ $# -ne 5 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [final_annotated] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
+  echo 1>&2 "Usage: ./`basename $0` [StringTie_output] [Ensembl_reference_genome_gtf] [Ensembl_reference_genome_fasta] [UCSC_genome_prefix] [threads]"
   exit 3
 fi
 
@@ -146,89 +146,70 @@ printf "${PURPLE}::: Removing intermediate files\n"
 rm ensembl_aligned.bed ensembl_aligned.sorted.bam* ensembl_aligned.sam ensembl_aligned.bam ensembl_aligned.gf*
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Overlapping final_annotated.gtf transcripts with Ensembl GTF :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 6. Overlapping StringTie transcripts with Ensembl GTF :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-grep "STRG." ${1} > STRG.gtf
-grep -v "STRG." ${1} > non_STRG.gtf
-gffcompare -R -r ensembl_aligned.gtf -s ${4}.fa -o UCSC_compare STRG.gtf
+stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
+perl strg_prep.pl merged.gtf > merged_prep.gtf
+sed -i 's/"|/"/g' merged_prep.gtf
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Writting novel discoveries to Stats.txt (just for STRG genes) :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 7. Replacing gene_id/transcript_id field in input file with reference gene_id's :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-# Stats
-exec 3<> Stats.txt
-echo "Number of assembled genes:" >> Stats.txt
-cat UCSC_compare.STRG.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
-echo "" >> Stats.txt
-echo "Number of novel genes:" >> Stats.txt
-cat UCSC_compare.STRG.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
-echo "" >> Stats.txt
-echo "Number of novel transcripts:" >> Stats.txt
-cat UCSC_compare.STRG.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
-echo "" >> Stats.txt
-echo "Number of transcripts matching annotation:" >> Stats.txt
-cat UCSC_compare.STRG.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
-exec 3>&-
-printf "${PURPLE}Done\n"
-echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Replacing gene_id field in final_annotated.gtf file with Ensenbl gene_id's :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-########################################
-# Merging novel transcripts with ref. 
-########################################
-awk '{print $4"\t"$1}' UCSC_compare.STRG.gtf.tmap > UCSC_compare.STRG.gtf.tmap.1
-tail -n +2 UCSC_compare.STRG.gtf.tmap.1 > UCSC_compare.STRG.gtf.tmap.2
-awk '!/-/' UCSC_compare.STRG.gtf.tmap.2 > namelist
-awk '!a[$0]++' namelist > namelist_unique
-tac namelist_unique > namelist_unique_sorted
-rm namelist namelist_unique
-awk '{print $1}' namelist_unique_sorted  > A
-awk '{print $2}' namelist_unique_sorted  > B
+###############################
+# Getting gene names replaced #
+###############################
+awk '$12 !~ /STRG/ { print }' merged_prep.gtf > nonSTRG.gtf
+awk '$12 ~ /STRG/ { print }' merged_prep.gtf > STRG.gtf
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' STRG.gtf > transcript_gene_names.txt
+sed -i 's/transcript_id //g' transcript_gene_names.txt
+sed -i 's/;/\t/g' transcript_gene_names.txt
+sed -i 's/gene_id//g' transcript_gene_names.txt
+sed -i 's/"//g' transcript_gene_names.txt
+sed -i 's/"//g' transcript_gene_names.txt
+# generating replaced gene names with matched original stringtie isoforms
+awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
+# removing duplicates
+awk '!a[$0]++' transcript_gene_names.tab > transcript_gene_names.unique.tab
+awk '$1 !~ /STRG/ { print }' transcript_gene_names.unique.tab > nonSTRG_lines.tab
+tr '.' '\t' < nonSTRG_lines.tab > nonSTRG_lines_sep
+awk '{print $1"."$3"."$4}' nonSTRG_lines_sep > nonSTRG_lines_sep.tab
+paste -d"\t" nonSTRG_lines.tab nonSTRG_lines_sep.tab > nonSTRG_lines_sep1.tab
+awk '{print $2"\t"$3}' nonSTRG_lines_sep1.tab > namelist
+rm nonSTRG_lines*
+awk '{print $1}' namelist > A
+awk '{print $2}' namelist > B
 sed 's/^/"/' A > A.1
 sed 's/$/"/' A.1 > A.2
 sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
-###############################
-# Getting gene names replaced #
-###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat STRG.gtf | parallel --pipe -j ${5} sed -f sed.script > merged.gtf
-rm -f sed.script fileA fileB
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Re-generating final GTF file to annotate :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+cat merged_prep.gtf | parallel --pipe -j ${5} sed -f sed.script > final_annotated_ensembl.gtf
+rm nonSTRG.gtf STRG.gtf replaced_gene_names.tab transcript_gene_names* fileA fileB namelist*
 echo ""
-cat non_STRG.gtf merged.gtf > annotated_ensembl.gtf
-sed -i 's/lncRNA/StringTie/' annotated_ensembl.gtf
-sed -i 's/coding/StringTie/' annotated_ensembl.gtf
-gffread -E -F --merge annotated_ensembl.gtf -o annotated.gff3
-rm annotated_ensembl.gtf
-gffread annotated.gff3 -T -o annotated_ensembl.gtf
-rm annotated.gff3
-printf "${PURPLE}::: All done. annotated_ensembl.gtf contained full classification of transcripts. Continue with lncRNA classification ...\n"
+printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and annotated_ensembl.gtf was generated with these changes\n"
+echo ""
+printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
 echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 8. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 rm -r -f FEELnc
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ${4}.gtf ${4}.fa annotated_ensembl.gtf /${dir1}/FEELnc/
+cp ${4}.gtf ${4}.fa final_annotated_ensembl.gtf /${dir1}/FEELnc/
 cd FEELnc
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
@@ -252,46 +233,27 @@ echo ""
 cd ..
 echo ""
 ### Running FEELnc
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11.  Running FEELnc on final_annotated_ensembl.gtf file :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: Running FEELnc on annotated_ensembl.gtf file :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i annotated_ensembl.gtf -a ${4}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated_ensembl.gtf -a ${4}.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${4}.gtf -b transcript_biotype=protein_coding -g ${4}.fa --mode=shuffle
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${4}.gtf > candidate_lncRNA_classes.txt
-echo ""
-printf "${PURPLE}::: FEELnc calculations were done :::\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Parsing FEELnc output :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
-awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
-tail -n +2 lncRNA_genes > lncRNA_transcripts
-rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts annotated_ensembl.gtf > merged.fixed.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts annotated_ensembl.gtf > merged.fixed.coding.gtf
-rm annotated_ensembl.g*
-sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated_ensembl.gtf
-gffread -E -F --merge final_annotated_ensembl.gtf -o final_annotated_ensembl.gff
 echo ""
-printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated_ensembl.gtf file...\n"
+printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
 echo ""
-rm merged.fixed.gff merged.fixed.gtf merged.fixed.lncRNAs.gtf merged.fixed.coding.gtf
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Obtaining Transcripts in FASTA format with gffread :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w ensembl_transcripts.fa -g ${4}.fa final_annotated_ensembl.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
-echo ""
 echo ""
 printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs_ensembl folder ...\n"
 echo ""
@@ -301,7 +263,7 @@ echo ""
 echo "Done"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 14. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 10. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -332,7 +294,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 15. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 11. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -390,7 +352,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 16. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 12. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -409,7 +371,7 @@ echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 17. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
+printf "${YELLOW}::: 13. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f ensembl_transcripts.fa -o cds.fa
@@ -418,7 +380,7 @@ agat_sp_extract_sequences.pl -g augustus.gff3 -f ensembl_transcripts.fa -o prot.
 # Configuring Summary Results
 #############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 18. Configuring Summary Results :::\n"
+printf "${YELLOW}::: 14. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ############################################
 # Moving results to merged_annotation folder
@@ -426,9 +388,9 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
 mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf final_annotated_ensembl.gff Stats.txt ensembl_transcripts.fa ensembl_aligned.gtf transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated_ensembl.gtf ensembl_transcripts.fa ensembl_aligned.gtf transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf augustus.gff3 logfile_ensembl ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.gtf UCSC_compare* non_STRG.gtf STRG.gtf refGene.txt transcriptome_annotation_table.tsv 
+rm refGene.tx* transcriptome_annotation_table.tsv 
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -437,7 +399,7 @@ echo "All Done. The transcripts were classified in ./output_files_ensembl"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation correspond to transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated_ensembl.gtf and correspondent gff file (final_annotated_ensembl.gff) are located in ./output_files_ensembl. These files contains the annotated lncRNA/coding GTF in the second field."
+echo "GTF file final_annotated_ensembl.gtf is located in ./output_files_ensembl."
 echo ""
 echo "GTF file ensembl_aligned.gtf corresponding to aligned ensembl transcripts to UCSC genome is located in ./output_files_ensembl."
 echo ""
