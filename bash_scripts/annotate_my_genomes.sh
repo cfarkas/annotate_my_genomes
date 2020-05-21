@@ -96,6 +96,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CY
 echo ""
 stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
 perl strg_prep.pl merged.gtf > merged_prep.gtf
+gffcompare -R -r ${2} -s ${3} -o UCSC_compare merged_prep.gtf
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 3. Replacing gene_id/transcript_id field in input file with reference gene_id's :::\n"
@@ -104,9 +105,9 @@ echo ""
 ###############################
 # Getting gene names replaced #
 ###############################
-awk '{print $4"\t"$1}' UCSC_compare.${1}.tmap > UCSC_compare.${1}.tmap.1
-tail -n +2 UCSC_compare.${1}.tmap.1 > UCSC_compare.${1}.tmap.2
-awk '!/-/' UCSC_compare.${1}.tmap.2 > namelist
+awk '{print $4"\t"$1}' UCSC_compare.merged_prep.gtf.tmap > UCSC_compare.merged_prep.gtf.tmap.1
+tail -n +2 UCSC_compare.merged_prep.gtf.tmap.1 > UCSC_compare.merged_prep.gtf.tmap.2
+awk '!/-/' UCSC_compare.merged_prep.gtf.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
