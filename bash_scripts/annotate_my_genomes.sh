@@ -116,7 +116,7 @@ cat UCSC_compare.merged_prep.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
 cat UCSC_compare.merged_prep.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
-mkdir gffcompare_outputs
+mkdir gffcompare_outputs_UCSC
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_UCSC
 printf "${PURPLE}Done\n"
 echo ""
