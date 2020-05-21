@@ -301,13 +301,10 @@ cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-############################################
-# Moving results to merged_annotation folder
-############################################
 echo ""
-printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
-mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
+printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
+mkdir output_files_ensembl
+mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files_ensembl
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
@@ -315,7 +312,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
 echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files.".
 echo ""
