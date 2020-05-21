@@ -302,9 +302,9 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-printf "${PURPLE}::: Moving results to output_files_ensembl folder :::${CYAN}\n"
-mkdir output_files_ensembl
-mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files_ensembl
+printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
+mkdir output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
@@ -312,7 +312,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_ensembl . GAWN annotation is named transcriptome_annotation_table.tsv"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
 echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files.".
 echo ""
@@ -324,7 +324,7 @@ echo "AUGUSTUS GTF file suitable for transcript count quantification is named co
 echo ""
 echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files"
 echo ""
-echo "GO terms associated to each transcript (and gene), named transcriptsGO.tab and genesGO.tab are located in ./output_files"
+echo "GO terms associated to each transcript, named transcriptsGO.tab and genesGO.tab is located in ./output_files"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
