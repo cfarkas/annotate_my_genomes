@@ -5,7 +5,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
-  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from Ensembl. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
+  annotate_my_genomes are a set of scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from Ensembl. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
   
   The pipeline is designed for:
   
