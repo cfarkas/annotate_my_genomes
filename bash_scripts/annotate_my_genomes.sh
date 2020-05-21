@@ -94,7 +94,8 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with Reference :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-stringtie --merge -l STRG -o stringtie_merged.gtf -G ${2} ${1}
+stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
+perl strg_prep.pl merged.gtf > merged_prep.gtf
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 3. Replacing gene_id/transcript_id field in input file with reference gene_id's :::\n"
