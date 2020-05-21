@@ -161,6 +161,95 @@ rm nonSTRG.gtf STRG.gtf transcript_gene_names* fileA fileB namelist*
 echo ""
 printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and final_annotated.gtf was generated with these changes\n"
 echo ""
+printf "${PURPLE}::: Continue with protein-coding annotation\n" 
+echo ""
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 3 Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+echo ""
+gffread -w transcripts.fa -g ${3} final_annotated.gtf
+echo ""
+printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
+echo ""
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 4 Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+################################################################
+# Configuring Gawn Inputs, config file and running GAWN pipeline
+################################################################
+echo ""
+printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n"
+echo ""
+git clone https://github.com/enormandeau/gawn.git
+cd gawn/02_infos/
+dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+echo "Done"
+echo ""
+cd /${dir1}/
+cp ${3} /${dir1}/gawn/03_data/genome.fasta
+cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
+rm /${dir2}/gawn_config.sh
+cp gawn_config.sh /${dir2}/gawn_config.sh
+echo ""
+printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
+echo ""
+cd /${dir1}/gawn/
+./gawn 02_infos/gawn_config.sh
+echo ""
+echo ""
+printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
+echo ""
+###########################################
+# Extracting GO terms for each transcript #
+###########################################
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 5 Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+echo ""
+cd /${dir1}/
+cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
+cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
+tr ';' '\t' < transcripts_GO > transcripts_GO_sep
+column -t transcripts_GO_sep > transcripts_GO.tab
+tail -n +2 transcripts_GO.tab > transcriptsGO.tab
+rm transcripts_GO*
+printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
+echo ""
+######################################
+# Gene Prediction Step with Augustus #
+######################################
+cd /${dir1}/
+echo ""
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 6. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+echo ""
+printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
+echo ""
+echo ""
+wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
+gunzip augustus.2.5.5.tar.gz
+tar -xvf augustus.2.5.5.tar
+cd augustus.2.5.5/src/
+make
+cd ..
+cd ..
+export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
+echo ""
+printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
+echo ""
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 8. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+gffread augustus.gff3 -T -o coding_transcripts.gtf
+agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
+
+
+
+
+
 printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
 echo ""
 ############################################
@@ -211,88 +300,12 @@ printf "${PURPLE}::: FEELnc calculations were done. The output is called candida
 echo ""
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-gffread -w transcripts.fa -g ${3} final_annotated.gtf
-echo ""
-printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Performing gene annotation by using GAWN pipeline :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-################################################################
-# Configuring Gawn Inputs, config file and running GAWN pipeline
-################################################################
-echo ""
-printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n"
-echo ""
-git clone https://github.com/enormandeau/gawn.git
-cd gawn/02_infos/
-dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-echo "Done"
-echo ""
-cd /${dir1}/
-cp ${3} /${dir1}/gawn/03_data/genome.fasta
-cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
-rm /${dir2}/gawn_config.sh
-cp gawn_config.sh /${dir2}/gawn_config.sh
-echo ""
-printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
-echo ""
-cd /${dir1}/gawn/
-./gawn 02_infos/gawn_config.sh
-echo ""
-echo ""
-printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
-echo ""
-###########################################
-# Extracting GO terms for each transcript #
-###########################################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-cd /${dir1}/
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
-tr ';' '\t' < transcripts_GO > transcripts_GO_sep
-column -t transcripts_GO_sep > transcripts_GO.tab
-tail -n +2 transcripts_GO.tab > transcriptsGO.tab
-rm transcripts_GO*
-printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
-echo ""
-######################################
-# Gene Prediction Step with Augustus #
-######################################
-cd /${dir1}/
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
-echo ""
-echo ""
-wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
-gunzip augustus.2.5.5.tar.gz
-tar -xvf augustus.2.5.5.tar
-cd augustus.2.5.5/src/
-make
-cd ..
-cd ..
-export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
-./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
-echo ""
-printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-gffread augustus.gff3 -T -o coding_transcripts.gtf
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
+
+
+
+
+
+
 #############################
 # Configuring Summary Results
 #############################
