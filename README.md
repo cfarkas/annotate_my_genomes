@@ -25,14 +25,15 @@ This pipeline requieres to run:
 
 1) StringTie assembled transcripts (in GTF format)
 
-2) USCS reference genome annotation (in GTF format) and genome assembly (non-masked, fasta format). These requirements can be downloaded by using the genome-download program provided in this repository as follows: 
+2) USCS/Ensembl reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded by using the genome-download program provided in this repository plus genome prefix as follows: 
 ```
 ./genome-download [genome]
 ```
-(Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.)
-
-Ensembl reference genome annotation (in GTF format) including non-masked genome. These requirements can be downloaded from here:
-https://uswest.ensembl.org/info/data/ftp/index.html
+Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example for latest mouse assembly (mm10)
+```
+./genome-download mm10
+```
+will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and Ensembl GTF (mm10_ensGene.gtf).
 
 # Dependences:
 
@@ -267,10 +268,10 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). Go to /annotate_my_genomes/test and do the following:
 
 ```
-# Download Gallus gallus v6 fasta assembly with matched GTF file (Masked fasta file, from UCSC repository)
+# Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
 ./genome-download galGal6
 
-# Execute in folder
+# Execute in folder with 20 threads as example
 ./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 20
 ```
 #
@@ -291,29 +292,14 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
 ## Adding Ensembl annotations
-Users can add annotations from Ensembl by downloading GTF and correspondent fasta aseemblies from ftp repository (ftp://ftp.ensembl.org/pub/release-100/). These files can be used as inputs for the add-ensembl-annotation pipeline. This pipeline will require:  
-- StringTie GTF file to annotate
-
-- [Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)
-
-- [Ensembl_reference_genome_fasta]: Non-masked Ensembl genome assembly in fasta format, available here: ftp://ftp.ensembl.org/pub/release-100/fasta/ (check dna, XXX.dna.toplevel.fa.gz file)
-
-- UCSC genome prefix to download the matched genome from UCSC. 
-
-- Number of threads.
-
+Users can add annotations from Ensembl by using the three outputs from ./genome-download program in ./add-ensembl-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
-# Downloading non-masked Gallus gallus GRCg6a fasta genome assembly from Ensembl
-wget ftp://ftp.ensembl.org/pub/release-100/fasta/gallus_gallus/dna/Gallus_gallus.GRCg6a.dna.toplevel.fa.gz
-gunzip Gallus_gallus.GRCg6a.dna.toplevel.fa.gz
+# Downloading galGal6 genome and correspondent UCSC/Ensembl GTF annotations
+./genome-download galGal6
 
-# Downloading Gallus gallus GRCg6a GTF annotation from Ensembl
-wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6a.100.gtf.gz
-gunzip Gallus_gallus.GRCg6a.100.gtf.gz
-
-# Running the pipeline on final_annotated.gtf, using galGal6 UCSC prefix and 30 threads for processing:
-./add-ensembl-annotation StringTie.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna.toplevel.fa galGal6 30
+# Running the pipeline on StringTie.gtf, using Ensembl GTF (galGal6_ensGene.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
+./add-ensembl-annotation StringTie.gtf galGal6_ensGene.gtf galGal6.gtf galGal6.fa 30
 ```
 final_annotated.gtf (located in output_files_ensembl) will contained the merged ensembl-updated annotation (in UCSC coordinates)
 
