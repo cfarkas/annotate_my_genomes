@@ -86,7 +86,7 @@ fi
 
 [ $# -eq 0 ] && { echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
 
-if [ $# -ne 4 ]; then
+if [ $# -ne 5 ]; then
   echo 1>&2 "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   exit 3
 fi
