@@ -55,6 +55,7 @@ fi
 # Obtaining {genome}.fa genome, and indexing
 wget http://hgdownload.cse.ucsc.edu/goldenpath/${genome}/bigZips/${genome}.2bit
 wget http://hgdownload.soe.ucsc.edu/goldenPath/${genome}/database/refGene.txt.gz
+wget http://hgdownload.soe.ucsc.edu/goldenPath/${genome}/database/ensGene.txt.gz
 if [ -f twoBitToFa ]; then
     echo "twoBitToFa script found. Continue:"
     echo ""
@@ -78,5 +79,6 @@ fi
 chmod 755 genePredToGtf
 gunzip refGene.txt.gz
 cut -f 2- refGene.txt | ./genePredToGtf file stdin -source=${genome}_Ref  ${genome}.gtf
+cut -f 2- ensGene.txt | ./genePredToGtf file stdin -source=${genome}_Ref  ${genome}_ensGene.gtf
 echo ""
 echo "All done. ${genome}.fa and ${genome}.gtf files are located in the current directory"
