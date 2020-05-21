@@ -96,6 +96,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CY
 echo ""
 stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
 perl strg_prep.pl merged.gtf > merged_prep.gtf
+sed -i 's/"|/"/g' merged_prep.gtf
 gffcompare -R -r ${2} -s ${3} -o UCSC_compare merged_prep.gtf
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
