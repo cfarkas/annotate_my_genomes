@@ -4,18 +4,21 @@
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 stringtie_gtf=${1}
 Ensembl_reference_genome_gtf=${2}
-reference_genome_fasta=${3}
-threads=${4}
+reference_genome_gtf=${3}
+reference_genome_fasta=${4}
+threads=${5}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file."
+  echo ""
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
   echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
@@ -26,13 +29,15 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file."
+  echo ""
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
   echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
@@ -43,13 +48,15 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file."
+  echo ""
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
   echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
@@ -60,13 +67,15 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
   echo "This pipeline will Overlap StringTie transcripts (GTF format) with current Ensembl annotation and will annotate novel transcripts"
   echo ""
   echo "[stringtie_gtf]: StringTie GTF file"
   echo ""
   echo "[Ensembl_reference_genome_gtf]: Ensembl reference GTF file."
+  echo ""
+  echo "[reference_genome_gtf]: UCSC reference GTF file."
   echo ""
   echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
   echo ""
@@ -75,10 +84,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
 
 if [ $# -ne 4 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo 1>&2 "Usage: ./`basename $0` [stringtie_gtf] [Ensembl_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   exit 3
 fi
 
@@ -97,7 +106,7 @@ echo ""
 stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
 perl strg_prep.pl merged.gtf > merged_prep.gtf
 sed -i 's/"|/"/g' merged_prep.gtf
-gffcompare -R -r ${2} -s ${3} -o Ensembl_compare merged_prep.gtf
+gffcompare -R -r ${2} -s ${4} -o Ensembl_compare merged_prep.gtf
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -158,7 +167,7 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged_prep.gtf | parallel --pipe -j ${4} sed -f sed.script > final_annotated.gtf
+cat merged_prep.gtf | parallel --pipe -j ${5} sed -f sed.script > final_annotated.gtf
 rm nonSTRG.gtf STRG.gtf transcript_gene_names* fileA fileB namelist*
 echo ""
 printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and final_annotated.gtf was generated with these changes\n"
@@ -169,7 +178,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n
 printf "${YELLOW}::: 3 Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread -w ensembl_transcripts.fa -g ${3} final_annotated.gtf
+gffread -w ensembl_transcripts.fa -g ${4} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
@@ -188,7 +197,7 @@ dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
 cd /${dir1}/
-cp ${3} /${dir1}/gawn/03_data/genome.fasta
+cp ${4} /${dir1}/gawn/03_data/genome.fasta
 cp ensembl_transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
@@ -259,7 +268,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ${3} ${2} final_annotated.gtf /${dir1}/FEELnc/
+cp ${4} ${3} final_annotated.gtf /${dir1}/FEELnc/
 cd FEELnc
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
@@ -287,11 +296,11 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: Running FEELnc on final_annotated.gtf file :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i final_annotated.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated.gtf -a ${3} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${3} -b transcript_biotype=protein_coding -g ${4} --mode=shuffle
 # Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2} > candidate_lncRNA_classes.txt
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${3} > candidate_lncRNA_classes.txt
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
 echo ""
@@ -310,7 +319,7 @@ echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_ensembl
 mv candidate_lncRNA_classes.txt final_annotated.gtf ensembl_transcripts.fa transcriptsGO.tab cds.fa prot.fa Stats.txt coding_transcripts.gtf logfile augustus.gff3 ./output_files_ensembl
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
+cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_ensembl/
 rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
