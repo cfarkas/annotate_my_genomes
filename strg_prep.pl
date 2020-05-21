@@ -31,6 +31,6 @@ foreach my $d (@prep) {
       $gadd='|'.join('|', (sort(keys(%$gd))))
     }
  }
- $line=~s/gene_id "STRG\.\d+/gene_id "$gid$gadd/ if $gadd;
+ $line=~s/gene_id "STRG\.\d+/gene_id "$gadd/ if $gadd;
  print $line;
 }
