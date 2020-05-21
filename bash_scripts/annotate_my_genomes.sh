@@ -134,25 +134,19 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged_prep.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
+cat merged_prep.gtf | parallel --pipe -j ${4} sed -f sed.script > final_annotated.gtf
 rm nonSTRG.gtf STRG.gtf replaced_gene_names.tab transcript_gene_names* fileA fileB namelist*
-ref_name=echo "${2}" | awk -F'[.]' '{print $1}'
-sed -i 's/${ref_name}_Ref/StringTie/' merged.gtf
 echo ""
-printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes\n"
+printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and final_annotated.gtf was generated with these changes\n"
 echo ""
 printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
-echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. FEELnc long non-coding classification of transcripts :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 4. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
@@ -181,43 +175,27 @@ echo ""
 cd ..
 echo ""
 ### Running FEELnc
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6.  Running FEELnc on merged_fixed.gtf file ...\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: Running FEELnc on final_annotated.gtf file :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i merged.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${2} -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${2} > candidate_lncRNA_classes.txt
 echo ""
-printf "${PURPLE}::: FEELnc calculations were done :::\n"
+printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Parsing FEELnc output :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
-awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
-tail -n +2 lncRNA_genes > lncRNA_transcripts
-rm lncRNA_genes
-grep -w -F -f lncRNA_transcripts merged.gtf > merged.lncRNAs.gtf
-grep --invert-match -F -f lncRNA_transcripts merged.gtf > merged.coding.gtf
-sed -i 's/StringTie/lncRNA/' merged.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.coding.gtf
-cat merged.coding.gtf merged.lncRNAs.gtf > final_annotated.gtf
-rm merged.gtf
-echo ""
-printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
-echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 5. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
-echo ""
 echo ""
 printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs folder ...\n"
 echo ""
@@ -227,7 +205,7 @@ echo ""
 echo "Done"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 6. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -258,7 +236,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 7. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -315,9 +293,9 @@ echo ""
 ######################################
 cd /${dir1}/
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 8. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
 echo ""
@@ -334,9 +312,9 @@ export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
 echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
 agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
@@ -344,7 +322,7 @@ agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --pro
 # Configuring Summary Results
 #############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 13. Configuring Summary Results :::\n"
+printf "${YELLOW}::: 10. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ############################################
 # Moving results to merged_annotation folder
@@ -354,8 +332,7 @@ printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf Stats.txt transcripts.fa transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
-rm transcripts.fa.fai namelist* isoforms_per_gene_concatenated.tab lncRNA_transcripts merged.coding.gtf merged.lncRNAs.gtf UCSC_compare* transcriptome_annotation_table.tsv
-rm refGene.tx*
+rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -364,7 +341,7 @@ echo "All Done. The transcripts were classified in ./output_files"
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files. This file contain the annotated lncRNA/coding GTF in the second field".
+echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files.".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
