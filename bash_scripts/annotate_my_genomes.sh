@@ -151,7 +151,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
 echo ""
-cp ${3} ${2} merged.gtf /${dir1}/FEELnc/
+cp ${3} ${2} final_annotated.gtf /${dir1}/FEELnc/
 cd FEELnc
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
