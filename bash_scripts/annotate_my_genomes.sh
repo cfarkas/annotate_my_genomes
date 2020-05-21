@@ -97,6 +97,28 @@ echo ""
 stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
 perl strg_prep.pl merged.gtf > merged_prep.gtf
 sed -i 's/"|/"/g' merged_prep.gtf
+gffcompare -R -r ${2} -s ${3} -o UCSC_compare merged_prep.gtf
+printf "${PURPLE}Done\n"
+echo ""
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: Writting novel discoveries to Stats.txt :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+# Stats
+exec 3<> Stats.txt
+echo "Number of assembled genes:" >> Stats.txt
+cat UCSC_compare.merged_prep.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+echo "" >> Stats.txt
+echo "Number of novel genes:" >> Stats.txt
+cat UCSC_compare.merged_prep.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+echo "" >> Stats.txt
+echo "Number of novel transcripts:" >> Stats.txt
+cat UCSC_compare.merged_prep.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+echo "" >> Stats.txt
+echo "Number of transcripts matching annotation:" >> Stats.txt
+cat UCSC_compare.merged_prep.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+mkdir gffcompare_outputs
+mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_UCSC
+printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 2. Replacing gene_id/transcript_id field in input file with reference gene_id's :::\n"
