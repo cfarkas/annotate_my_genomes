@@ -33,12 +33,15 @@ echo "make done. Continue with install"
 ./shc/src/shc -f ./bash_scripts/add_ensembl_annotation.sh -o ./add-ensembl-annotation
 mv annotate-my-genomes get-transcripts genome-download add-ensembl-annotation ./bin/
 cp ./bin/annotate-my-genomes ./test/
+cp ./strg_prep.pl ./test/
 cp ./bin/annotate-my-genomes ./genome_1/
+cp ./strg_prep.pl ./genome_1/
 cp ./bin/genome-download ./test/
 cp ./bin/genome-download ./genome_1/
 cp ./bin/add-ensembl-annotation ./test/
 cp ./bin/add-ensembl-annotation ./genome_1/
 cp ./bin/get-transcripts ./get_transcripts/
+cp ./strg_prep.pl ./bash_scripts/
 echo ""
 echo "All done. Binaries are located in ./bin/ ./genome_1/ and ./test/ folders"
 #
