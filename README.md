@@ -5,33 +5,33 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
-  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio/Oxford Nanopore technologies). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from Ensembl. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
+  annotate_my_genomes are a set of bash scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from Ensembl. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
   
   The pipeline is designed for:
   
 - Use as input GTF file coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
 - Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). A concilliated GTF file is generated with annotated gene names and corresponding StringTie assembled transfrags (transcripts). As example:
 ```
-gene_id "YF5"; transcript_id "YF5.4"
+gene_id "YF5"; transcript_id "YF5.40.1" ---> 40 = assembled transfrag; 1= isoform number.
 (Genes denoted with "STRG" prefix are novel).
 ```
-- The resulting GTF file will be validated by using several tools such as "Validate GTF" tool from Brent Lab: http://mblab.wustl.edu/software.html#validategtf, AGAT: Another Gff Analysis Toolkit (https://github.com/NBISweden/AGAT), and gff utilities (http://ccb.jhu.edu/software/stringtie/gff.shtml). 
+- The resulting GTF file will be validated by using several tools such as AGAT: Another Gff Analysis Toolkit (https://github.com/NBISweden/AGAT), and gff utilities (http://ccb.jhu.edu/software/stringtie/gff.shtml). 
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with FEELnc tool (https://github.com/tderrien/FEELnc).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
-- Complement UCSC annotation with Ensembl annotation, using genome coordinates from UCSC genomes. 
+- Complement annotation using UCSC/Ensembl annotation, using genome coordinates from UCSC genomes. 
 
 This pipeline requieres to run:
 
 1) StringTie assembled transcripts (in GTF format)
 
-2) USCS reference genome annotation (in GTF format) and genome assembly (non-masked, fasta format). These requirements can be downloaded by using the genome-download program provided in this repository. 
+2) USCS reference genome annotation (in GTF format) and genome assembly (non-masked, fasta format). These requirements can be downloaded by using the genome-download program provided in this repository as follows: 
 ```
 ./genome-download [genome]
 ```
-Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.
+(Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.)
 
-OPTIONAL: 3) Ensembl reference genome annotation (in GTF format) including non-masked genome. These requirements can be downloaded here:
+Ensembl reference genome annotation (in GTF format) including non-masked genome. These requirements can be downloaded from here:
 https://uswest.ensembl.org/info/data/ftp/index.html
 
 # Dependences:
@@ -264,14 +264,14 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 - NCPUS=10
   - Increase this value to speed-up things :rocket:
 
-2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (5 for this example). Go to /annotate_my_genomes/test and do the following:
+2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). Go to /annotate_my_genomes/test and do the following:
 
 ```
 # Download Gallus gallus v6 fasta assembly with matched GTF file (Masked fasta file, from UCSC repository)
 ./genome-download galGal6
 
 # Execute in folder
-./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 5
+./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 20
 ```
 #
 ## Usage examples
@@ -280,19 +280,19 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
 
-- For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
+- For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for cpu processing:
 ```
 ./genome-download mm10
 ./annotate-my-genomes target.gtf mm10.gtf mm10.fa 30
 ```
-- For rabbit assembly using "target.gtf" in genome_1 folder, using 30 threads for text processing:
+- For rabbit assembly using "target.gtf" in genome_1 folder, using 30 threads for cpu processing:
 ```
 ./genome-download oryCun2
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
 ## Adding Ensembl annotations
-After run the test/examples, users can add annotations located in ensembl by downloading GTF and correspondent fasta aseemblies from ftp repository (ftp://ftp.ensembl.org/pub/release-100/). These files can be used as inputs for the add-ensembl-annotation pipeline. This pipeline will require:  
-- final_annotated.gtf output file from annotate_my_genome pipeline
+Users can add annotations from Ensembl by downloading GTF and correspondent fasta aseemblies from ftp repository (ftp://ftp.ensembl.org/pub/release-100/). These files can be used as inputs for the add-ensembl-annotation pipeline. This pipeline will require:  
+- StringTie GTF file to annotate
 
 - [Ensembl_reference_genome_gtf]: Ensembl reference GTF file, available here: ftp://ftp.ensembl.org/pub/release-100/gtf/ (check XXX.100.gtf.gz)
 
@@ -313,9 +313,9 @@ wget ftp://ftp.ensembl.org/pub/release-100/gtf/gallus_gallus/Gallus_gallus.GRCg6
 gunzip Gallus_gallus.GRCg6a.100.gtf.gz
 
 # Running the pipeline on final_annotated.gtf, using galGal6 UCSC prefix and 30 threads for processing:
-./add-ensembl-annotation final_annotated.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna.toplevel.fa galGal6 30
+./add-ensembl-annotation StringTie.gtf Gallus_gallus.GRCg6a.100.gtf Gallus_gallus.GRCg6a.dna.toplevel.fa galGal6 30
 ```
-final_annotated.gtf and .gff (located in output_files_ensembl) will contained the ensembl-updated annotation (in UCSC coordinates)
+final_annotated.gtf (located in output_files_ensembl) will contained the merged ensembl-updated annotation (in UCSC coordinates)
 
 #
 ## Downstream analysis using outputs:
@@ -368,7 +368,7 @@ The above gene list in tabular format can also be used to extract:
 - Transcripts sequences associated to each gene. 
 - Align transcript sequences in order to obtain consensus sequences
 
-This can be accomplished by copying merged.fixed.gtf file and an user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ . Execute the following (e.g.: for chicken genome):
+This can be accomplished by copying final_annotated.gtf file and an user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ . Execute the following (e.g.: for chicken genome):
 
 ```
 # Downloading masked Gallus gallus v6 genome
@@ -384,9 +384,6 @@ bash commands
 - {gene_name}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
 
 ### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
-
-- For a detailed characterization of lncRNAs, users can use FEELnc. See here for install requirements: https://github.com/tderrien/FEELnc
-- final_annotated.gtf already contains the annotated lncRNA/coding GTF in the second field. 
 
 To obtain coding and non-coding transcripts use final_annotated.gtf file as follows:
 
@@ -410,4 +407,3 @@ To see more examples, please visit and clone https://github.com/cfarkas/annotate
 
 ### Notes
 Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc.
-replacing sed script: https://superuser.com/questions/532874/how-to-replace-a-list-of-strings-by-another-list
