@@ -136,7 +136,8 @@ awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat merged_prep.gtf | parallel --pipe -j ${4} sed -f sed.script > merged.gtf
 rm nonSTRG.gtf STRG.gtf replaced_gene_names.tab transcript_gene_names* fileA fileB namelist*
-
+ref_name=echo "${2}" | awk -F'[.]' '{print $1}'
+sed -i 's/${ref_name}_Ref/StringTie/' merged.gtf
 echo ""
 printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and merged.gtf was generated with these changes\n"
 echo ""
@@ -151,7 +152,7 @@ echo ""
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 5. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
@@ -181,7 +182,7 @@ cd ..
 echo ""
 ### Running FEELnc
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5.  Running FEELnc on merged_fixed.gtf file ...\n"
+printf "${YELLOW}::: 6.  Running FEELnc on merged_fixed.gtf file ...\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i merged.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
@@ -193,7 +194,7 @@ echo ""
 printf "${PURPLE}::: FEELnc calculations were done :::\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Parsing FEELnc output :::\n"
+printf "${YELLOW}::: 7. Parsing FEELnc output :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
@@ -210,7 +211,7 @@ echo ""
 printf "${PURPLE}::: Parsing is done. The transcripts were classified and added to final_annotated.gtf file...\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 8. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
@@ -226,7 +227,7 @@ echo ""
 echo "Done"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 9. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -257,7 +258,7 @@ echo ""
 # Extracting GO terms for each transcript #
 ###########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::: 10. Extracting GO terms for each transcript :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
@@ -315,7 +316,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 11. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
