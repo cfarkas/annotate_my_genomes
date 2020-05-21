@@ -239,46 +239,6 @@ tr ';' '\t' < transcripts_GO > transcripts_GO_sep
 column -t transcripts_GO_sep > transcripts_GO.tab
 tail -n +2 transcripts_GO.tab > transcriptsGO.tab
 rm transcripts_GO*
-##########################################
-# Extracting GO terms for each Gene
-##########################################
-grep "STRG." transcriptsGO.tab > STRG_transcriptsGO.tab
-grep -v "STRG." transcriptsGO.tab > Annotated_transcriptsGO.tab
-# Working with "STRG" genes
-tr '.' '\t' < STRG_transcriptsGO.tab > STRG_transcripts_GO_splitname
-awk '{$3=""; print $0}' STRG_transcripts_GO_splitname > STRG_transcripts_GO_splitname1
-awk '{print $1"."$2}' < STRG_transcripts_GO_splitname1 > STRG_transcripts_GO_splitname2
-paste -d'\t' STRG_transcripts_GO_splitname2 STRG_transcripts_GO_splitname1 > STRG_transcripts_GO_merged
-awk '{$2=$3=""; print $0}' STRG_transcripts_GO_merged > STRG_genes_GO
-awk '!a[$0]++' STRG_genes_GO > STRG_genesGO
-awk '{print NF}' STRG_genesGO > STRG_numbers
-paste -d'\t' STRG_numbers STRG_genesGO > STRG_genesGO_with_numbers
-awk '{ if ($1>1) { print } }' STRG_genesGO_with_numbers > STRG_GO
-awk '{$1=""; print $0}' STRG_GO > STRG_genes_with_GO
-column -t STRG_genes_with_GO > STRG_genes_withGO
-rm STRG_genes_GO STRG_transcripts_GO_merged STRG_transcripts_GO_splitname* STRG_transcriptsGO.tab STRG_numbers STRG_genesGO STRG_genesGO_with_numbers STRG_genes_with_GO STRG_GO
-# Working with Annotated genes
-tr '.' '\t' < Annotated_transcriptsGO.tab > Annotated_transcripts_GO_splitname
-awk '{$2=""; print $0}' Annotated_transcripts_GO_splitname > Annotated_genes_GO
-awk '!a[$0]++' Annotated_genes_GO > Annotated_genesGO
-awk '{print NF}' Annotated_genesGO > Annotated_numbers
-paste -d'\t' Annotated_numbers Annotated_genesGO > Annotated_genesGO_with_numbers
-awk '{ if ($1>1) { print } }' Annotated_genesGO_with_numbers > Annotated_GO
-awk '{$1=""; print $0}' Annotated_GO > Annotated_genes_with_GO
-column -t Annotated_genes_with_GO > genes_withGO.tab
-rm Annotated_transcriptsGO.tab Annotated_transcripts_GO_splitname Annotated_genes_GO Annotated_genesGO Annotated_numbers Annotated_genesGO_with_numbers Annotated_GO Annotated_genes_with_GO
-# Joining Files in order to create "genesGO.tab" file 
-cat STRG_genes_withGO >> genes_withGO.tab
-sed "s/^ *//;s/ *$//;s/ \{1,\}/ /g" genes_withGO.tab > genes_with_GO.tab
-sed 's/ /\t/' genes_with_GO.tab > genesGO.tab
-awk '{$2=""; print $0}' genesGO.tab > genesGO1.tab
-rm genesGO.tab
-awk '!a[$0]++' genesGO1.tab > genesGO.tab
-rm genesGO1.tab
-rm STRG_genes_withGO genes_withGO.tab genes_with_GO.tab
-sed 's/ /\t/' genesGO.tab > genesGO1.tab
-mv genesGO1.tab genesGO.tab
-echo ""
 printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
 echo ""
 ######################################
@@ -323,7 +283,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab genesGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 ./output_files
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
 rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
