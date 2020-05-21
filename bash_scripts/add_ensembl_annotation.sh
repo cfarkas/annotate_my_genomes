@@ -192,7 +192,7 @@ awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat merged_prep.gtf | parallel --pipe -j ${5} sed -f sed.script > final_annotated_ensembl.gtf
-rm nonSTRG.gtf STRG.gtf replaced_gene_names.tab transcript_gene_names* fileA fileB namelist*
+rm nonSTRG.gtf STRG.gtf transcript_gene_names* fileA fileB namelist*
 echo ""
 printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and annotated_ensembl.gtf was generated with these changes\n"
 echo ""
