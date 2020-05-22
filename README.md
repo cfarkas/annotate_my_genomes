@@ -5,15 +5,15 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
-  annotate_my_genomes are a set of scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
+  annotate_my_genomes is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures, with annotation of gene_id/transcript_id. 
   
   The pipeline is designed for:
   
-- Use as input GTF file coming from StringTie tool using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
+- Use as input GTF file coming from StringTie using long sequencing reads settings (for documentation, please see http://ccb.jhu.edu/software/stringtie/ and the documentation in this repository).
 - Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). A concilliated GTF file is generated with annotated gene names and corresponding StringTie assembled transfrags (transcripts). As example:
 ```
-gene_id "YF5"; transcript_id "YF5.40.1" ---> 40 = assembled transfrag; 1= isoform number.
-(Genes denoted with "STRG" prefix are novel).
+gene_id "YF5"; transcript_id "STRG.40.1" ---> 40 = assembled transfrag; 1 = isoform number.
+(transcripts denoted with "STRG" prefix are novel).
 ```
 - The resulting GTF file will be validated by using several tools such as AGAT: Another Gff Analysis Toolkit (https://github.com/NBISweden/AGAT), and gff utilities (http://ccb.jhu.edu/software/stringtie/gff.shtml). 
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
