@@ -291,7 +291,7 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ./genome-download oryCun2
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
-## Adding full NCBI annotations
+## Adding NCBI annotations
 Users can add annotations from Ensembl by using the three outputs from ./genome-download program in ./add-ncbi-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
