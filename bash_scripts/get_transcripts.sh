@@ -1,7 +1,7 @@
 #!/bin/bash
 
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-merged_with_reference=${1}
+final_annotated=${1}
 reference_genome=${2}
 gene_name=${3}
 
@@ -22,7 +22,7 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
   echo ""
   echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
@@ -37,7 +37,7 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
   echo ""
   echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
@@ -52,7 +52,7 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [merged_with_reference] [reference_genome] [gene_name]"
+  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
   echo ""
   echo "This script will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
   echo ""
@@ -73,7 +73,7 @@ if [ $# -ne 3 ]; then
 fi
 echo "Working in $dir"
 echo ""
-echo "Obtaining GTF for the given gene_name using merged_with_reference.gtf file"
+echo "Obtaining GTF for the given gene_name using final_annotated.gtf file"
 grep "\<${3}\>" ${1} > ${3}.gtf
 echo "Done."
 echo ""
