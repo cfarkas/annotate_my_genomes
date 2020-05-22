@@ -299,7 +299,7 @@ As example, the pipeline will work as follows (chicken assembly, inside test fol
 ./genome-download galGal6
 
 # Running the pipeline on StringTie.gtf, using NCBI GTF (galGal6_ncbiRefSeq.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
-./add-ensembl-annotation StringTie.gtf galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
+./add-ncbi-annotation StringTie.gtf galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
 ```
 final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
@@ -368,24 +368,6 @@ bash commands
 ``` 
 
 - {gene_name}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
-
-### (4) I need to annotate and characterize the different types of long-noncoding RNAs in the transcriptome:
-
-To obtain coding and non-coding transcripts use final_annotated.gtf file as follows:
-
-```
-grep "coding" final_annotated.gtf > final_annotated.coding.gtf
-grep "lncRNA" final_annotated.gtf > final_annotated.lncRNAs.gtf
-
-gffread -w noncoding.fa -g galGal6.fa final_annotated.coding.gtf
-gffread -w coding.fa -g galGal6.fa final_annotated.lncRNAs.gtf
-
-# Number of coding transcripts
-grep ">" -c coding.fa
-
-# Number of noncoding transcripts
-grep ">" -c noncoding.fa
-```
 
 ### More Scenarios?
 
