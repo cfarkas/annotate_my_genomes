@@ -5,7 +5,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
-  annotate_my_genomes are a set of scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from Ensembl. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
+  annotate_my_genomes are a set of scripts that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI. Also, coding sequences in nucleotides and correspondent proteins sequences can be reconstructed from these procedures. 
   
   The pipeline is designed for:
   
@@ -19,13 +19,13 @@ gene_id "YF5"; transcript_id "YF5.40.1" ---> 40 = assembled transfrag; 1= isofor
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
 - Assess coding potential of each assembled transcript with FEELnc tool (https://github.com/tderrien/FEELnc).
 - Assign to each transcripts and genes gene ontology terms (GO) and output formatted tables compatibles with WEGO annotation server: (http://wego.genomics.org.cn/). 
-- Complement annotation using UCSC/Ensembl annotation, using genome coordinates from UCSC genomes. 
+- Complement annotation using UCSC/NCBI annotation, using genome coordinates from UCSC genomes. 
 
 This pipeline requieres to run:
 
 1) StringTie assembled transcripts (in GTF format)
 
-2) USCS/Ensembl reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded by using the genome-download program provided in this repository plus genome prefix as follows: 
+2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded by using the genome-download program provided in this repository plus genome prefix as follows: 
 ```
 ./genome-download [genome]
 ```
@@ -33,7 +33,7 @@ Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As e
 ```
 ./genome-download mm10
 ```
-will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and Ensembl GTF (mm10_ensGene.gtf).
+will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
 
 # Dependences:
 
@@ -291,17 +291,17 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ./genome-download oryCun2
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
-## Adding Ensembl annotations
-Users can add annotations from Ensembl by using the three outputs from ./genome-download program in ./add-ensembl-annotation. 
+## Adding full NCBI annotations
+Users can add annotations from Ensembl by using the three outputs from ./genome-download program in ./add-ncbi-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
-# Downloading galGal6 genome and correspondent UCSC/Ensembl GTF annotations
+# Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
 ./genome-download galGal6
 
-# Running the pipeline on StringTie.gtf, using Ensembl GTF (galGal6_ensGene.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
-./add-ensembl-annotation StringTie.gtf galGal6_ensGene.gtf galGal6.gtf galGal6.fa 30
+# Running the pipeline on StringTie.gtf, using NCBI GTF (galGal6_ncbiRefSeq.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
+./add-ensembl-annotation StringTie.gtf galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
 ```
-final_annotated.gtf (located in output_files_ensembl) will contained the merged ensembl-updated annotation (in UCSC coordinates)
+final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
 #
 ## Downstream analysis using outputs:
