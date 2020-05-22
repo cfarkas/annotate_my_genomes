@@ -78,7 +78,7 @@ else
 fi
 chmod 755 genePredToGtf
 gunzip refGene.txt.gz
-gunzip ensGene.txt.gz
+gunzip ncbiRefSeq.txt.gz
 cut -f 2- refGene.txt | ./genePredToGtf file stdin -source=${genome}_Ref  ${genome}.gtf
 cut -f 2- ncbiRefSeq.txt | ./genePredToGtf file stdin -source=${genome}_Ref  ${genome}_ncbiRefSeq.gtf
 echo ""
