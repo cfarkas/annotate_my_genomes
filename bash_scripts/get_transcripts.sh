@@ -74,7 +74,7 @@ fi
 echo "Working in $dir"
 echo ""
 echo "Obtaining GTF for the given gene_name using merged_with_reference.gtf file"
-grep "\<${3}\>" merged_with_reference.gtf > ${3}.gtf
+grep "\<${3}\>" ${1} > ${3}.gtf
 echo "Done."
 echo ""
 echo "Obtaining gene-associated transcripts in fasta format"
