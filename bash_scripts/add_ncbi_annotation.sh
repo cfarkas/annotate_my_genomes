@@ -116,16 +116,16 @@ echo ""
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat NCBI_compare.merged_prep.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.final_annotated.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat NCBI_compare.merged_prep.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.final_annotated.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat NCBI_compare.merged_prep.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.final_annotated.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat NCBI_compare.merged_prep.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.final_annotated.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 mkdir gffcompare_outputs_NCBI
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_NCBI
 exec 3>&-
