@@ -106,7 +106,7 @@ echo ""
 stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
 perl strg_prep.pl merged.gtf > final_annotated.gtf
 sed -i 's/"|/"/g' final_annotated.gtf
-gffcompare -R -r ${2} -s ${4} -o NCBI_compare merged_prep.gtf
+gffcompare -R -r ${2} -s ${4} -o NCBI_compare final_annotated.gtf
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -134,7 +134,7 @@ echo ""
 printf "${PURPLE}::: Continue with protein-coding annotation\n" 
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3 Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 2. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w NCBI_transcripts.fa -g ${4} final_annotated.gtf
@@ -142,7 +142,7 @@ echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4 Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 3. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -172,9 +172,9 @@ echo ""
 ###########################################
 # Extracting GO terms for each transcript #
 ###########################################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5 Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 4. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
@@ -191,7 +191,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 5. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -210,7 +210,7 @@ echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
+printf "${YELLOW}::: 6. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f NCBI_transcripts.fa -o cds.fa
@@ -222,7 +222,7 @@ echo ""
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
@@ -251,9 +251,9 @@ echo ""
 cd ..
 echo ""
 ### Running FEELnc
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: Running FEELnc on final_annotated.gtf file :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 8. Running FEELnc on final_annotated.gtf file :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a ${3} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
