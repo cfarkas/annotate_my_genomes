@@ -95,9 +95,9 @@ printf "${YELLOW}::: 1. Overlapping StringTie transcripts with Reference :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 stringtie --merge -l STRG -o merged.gtf -G ${2} ${1}
-perl strg_prep.pl merged.gtf > merged_prep.gtf
-sed -i 's/"|/"/g' merged_prep.gtf
-gffcompare -R -r ${2} -s ${3} -o UCSC_compare merged_prep.gtf
+perl strg_prep.pl merged.gtf > final_annotated.gtf
+sed -i 's/"|/"/g' final_annotated.gtf
+gffcompare -R -r ${2} -s ${3} -o UCSC_compare final_annotated.gtf
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -120,51 +120,10 @@ mkdir gffcompare_outputs_UCSC
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_UCSC
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 2. Replacing gene_id/transcript_id field in input file with reference gene_id's :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-###############################
-# Getting gene names replaced #
-###############################
-awk '$12 !~ /STRG/ { print }' merged_prep.gtf > nonSTRG.gtf
-awk '$12 ~ /STRG/ { print }' merged_prep.gtf > STRG.gtf
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' STRG.gtf > transcript_gene_names.txt
-sed -i 's/transcript_id //g' transcript_gene_names.txt
-sed -i 's/;/\t/g' transcript_gene_names.txt
-sed -i 's/gene_id//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-sed -i 's/"//g' transcript_gene_names.txt
-# generating replaced gene names with matched original stringtie isoforms
-awk '{print $1"\t"$2}' transcript_gene_names.txt > transcript_gene_names.tab
-# removing duplicates
-awk '!a[$0]++' transcript_gene_names.tab > transcript_gene_names.unique.tab
-awk '$1 !~ /STRG/ { print }' transcript_gene_names.unique.tab > nonSTRG_lines.tab
-tr '.' '\t' < nonSTRG_lines.tab > nonSTRG_lines_sep
-awk '{print $1"."$3"."$4}' nonSTRG_lines_sep > nonSTRG_lines_sep.tab
-paste -d"\t" nonSTRG_lines.tab nonSTRG_lines_sep.tab > nonSTRG_lines_sep1.tab
-awk '{print $2"\t"$3}' nonSTRG_lines_sep1.tab > namelist
-rm nonSTRG_lines*
-awk '{print $1}' namelist > A
-awk '{print $2}' namelist > B
-sed 's/^/"/' A > A.1
-sed 's/$/"/' A.1 > A.2
-sed 's/^/"/' B > B.1
-sed 's/$/"/' B.1 > B.2
-paste -d'\t' A.2 B.2 > namelist
-rm A A.1 A.2 B B.1 B.2
-awk '{print $1}' namelist > fileA
-awk '{print $2}' namelist > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat merged_prep.gtf | parallel --pipe -j ${4} sed -f sed.script > final_annotated.gtf
-rm nonSTRG.gtf STRG.gtf transcript_gene_names* fileA fileB namelist*
-echo ""
-printf "${PURPLE}::: Gene_id field was replaced in the stringtie GTF file and final_annotated.gtf was generated with these changes\n"
-echo ""
 printf "${PURPLE}::: Continue with protein-coding annotation\n" 
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3 Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 2. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w transcripts.fa -g ${3} final_annotated.gtf
@@ -172,7 +131,7 @@ echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4 Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 3. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -202,9 +161,9 @@ echo ""
 ###########################################
 # Extracting GO terms for each transcript #
 ###########################################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5 Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 4. Extracting GO terms for each transcript :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
@@ -221,7 +180,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::: 5. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
@@ -240,7 +199,7 @@ echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
+printf "${YELLOW}::: 6. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
@@ -252,7 +211,7 @@ echo ""
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/tderrien/FEELnc.git
@@ -281,9 +240,9 @@ echo ""
 cd ..
 echo ""
 ### Running FEELnc
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: Running FEELnc on final_annotated.gtf file :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 8. Running FEELnc on final_annotated.gtf file :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a ${2} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
@@ -298,9 +257,9 @@ cd /${dir1}/
 #############################
 # Configuring Summary Results
 #############################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Configuring Summary Results :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files
