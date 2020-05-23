@@ -323,7 +323,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_NCBI
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa transcriptsGO.tab cds.fa prot.fa Stats.txt coding_transcripts.gtf logfile augustus.gff3 ./output_files_NCBI
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa transcriptsGO.tab cds.fa prot.fa Stats.txt coding_transcripts.gtf logfile augustus.gff3 ./output_files_NCBI/
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_NCBI/
 rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
