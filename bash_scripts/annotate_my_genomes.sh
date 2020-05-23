@@ -298,36 +298,36 @@ sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
 cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
-#############################
-# Configuring Summary Results
-#############################
+###############################
+# Configuring Summary Results #
+###############################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 12. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
-mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 Stats.txt ./output_files
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files/
+mkdir output_files_UCSC
+mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 Stats.txt ./output_files_UCSC/
+cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_UCSC/
 rm transcriptome_annotation_table.tsv refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files . GAWN annotation is named transcriptome_annotation_table.tsv"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_UCSC . GAWN annotation is named transcriptome_annotation_table.tsv"
 echo ""
-echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files.".
+echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files_UCSC.".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
-echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files"
+echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files_UCSC"
 echo ""
-echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files"
+echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files_UCSC"
 echo ""
-echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files"
+echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files_UCSC"
 echo ""
-echo "GO terms associated to each transcript, named transcriptsGO.tab is located in ./output_files"
+echo "GO terms associated to each transcript, named transcriptsGO.tab is located in ./output_files_UCSC"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
