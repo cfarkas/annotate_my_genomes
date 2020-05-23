@@ -101,9 +101,9 @@ NC='\033[0m' # No Color
 echo "Cleaning directory..."
 rm -r -f augustus.* FEELnc gawn 
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 1. Overlapping final_annotated.gtf transcripts with Ensembl GTF :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 1. Overlapping StringTie transcripts with NCBI annotation :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffcompare -R -r ${2} -s ${4} -o UCSC_compare ${1}
 printf "${PURPLE}Done\n"
@@ -128,9 +128,9 @@ cat UCSC_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | w
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3. Replacing gene_id field in final_annotated.gtf file with Ensenbl gene_id's :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 3. Replacing gene_id field in final_annotated.gtf file with NCBI gene_id's :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 ########################################
 # Merging novel transcripts with ref. 
