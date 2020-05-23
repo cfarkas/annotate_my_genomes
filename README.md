@@ -13,7 +13,6 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 - Conciliate current gene annotation from an organism with this GTF and expand this annotation by annotating novel transcripts with GAWN (Genome Annotation Without Nightmares, please see https://github.com/enormandeau/gawn). A concilliated GTF file is generated with annotated gene names and corresponding StringTie assembled transfrags (transcripts). As example:
 ```
 gene_id "YF5"; transcript_id "STRG.40.1" ---> 40 = assembled transfrag; 1 = isoform number.
-(transcripts denoted with "STRG" prefix are novel).
 ```
 - The resulting GTF file will be validated by using several tools such as AGAT: Another Gff Analysis Toolkit (https://github.com/NBISweden/AGAT), and gff utilities (http://ccb.jhu.edu/software/stringtie/gff.shtml). 
 - Perform gene prediction on reconstructed transcripts with Augustus software. Please see (http://augustus.gobics.de/)
@@ -317,57 +316,36 @@ sudo apt-get install build-essential python2.7-dev python-numpy python-matplotli
 htseq-count --stranded=no --format bam condition1.bam condition2.bam final_annotated.gtf > gene_counts
 ```
 
-### (2) "genesGO.tab" and "transcriptsGO.tab" output files usage:
-- A gene list in tabular format (e.g.: coming from differential expression analysis from genes or transcripts) can be intersected with these output files by using the galaxy framework (https://usegalaxy.org/). A gene list can be the following:
+### (2) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
 
-```
-less gene_list.tab
-
-STRG.14047
-GMPPB
-STRG.26267
-MSX2
-STRG.12490
-HMGA1
-...
-```
-
-can be intersected with "genesGO.tab" output file, containing annotated GO terms. 
-```
-less genesGO.tab
-
-ARF5    GO:0005737 GO:0005794 GO:0005886 GO:0005525 GO:0006886 GO:0016192
-GCC1    GO:0005829 GO:0005794 GO:0000139 GO:0005886
-MIR1651 GO:0005829 GO:0043231 GO:0019903 GO:0043666
-LMF2    GO:0005737 GO:0016604 GO:0048471 GO:0001691 GO:0017112 GO:0001558 GO:0043087 GO:0007283
-...
-```
-Following these simple steps in galaxy: https://usegalaxy.org/u/carlosfarkas/h/joining-user-genelist-with-genegotab-file
-
-The file number 4, "Cut on data 3" file can be inputted in WEGO 2.0 server (http://wego.genomics.org.cn/) in native format, to explore and plot GO terms. 
-
-- IMPORTANT: if you copied the gene list from excel and you paste it in a txt file, you must convert this file to tabular and remove non ASCII characters. Galaxy (https://usegalaxy.org/) can easily do this by uploading the .txt file and executing Text Manipulation --> Convert delimiters to TAB in a single step.   
-
-### (3) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
-
-The above gene list in tabular format can also be used to extract: 
+A gene list in tabular format can also be used to extract: 
 - Transcripts sequences associated to each gene. 
 - Align transcript sequences in order to obtain consensus sequences
 
 This can be accomplished by copying final_annotated.gtf file and an user-provided gene list in tabular format (such as gene_list.tab) to get_transcripts folder/ . Execute the following (e.g.: for chicken genome):
 
 ```
+# Get gene list in tabular format (gene_id.tab) from final_annotated.gtf. In this example we will obtain all genes in the transcriptome:
+
+perl -lne 'print "@m" if @m=(/((?:gene_id)\s+\S+)/g);' final_annotated.gtf > gene_id.tab
+sed -i 's/gene_id//g' gene_id.tab && sed -i 's/"//g' gene_id.tab && sed -i 's/;//g' gene_id.tab
+awk '{print $1}' gene_id.tab > gene_id.1.tab
+awk 'seen[$0]++ == 1' gene_id.1.tab > gene_id.tab
+rm gene_id.1.tab
+
 # Downloading masked Gallus gallus v6 genome
 ./genome-download galGal6
 
 # generate "commands" file using provided list of genes 
-awk '{print "./get-transcripts final_annotated.gtf galGal6.fa " $0}' gene_list.tab > commands
+awk '{print "./get-transcripts final_annotated.gtf galGal6.fa " $0}' gene_id.tab > commands
 
 # Execute "commands" file
 bash commands
 ``` 
 
-- {gene_name}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
+- {gene_id}.fa contains transcripts per gene in fasta format. {gene_id}.gtf contains transcripts per gene in GTF format.
+
+- {gene_id}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
 
 ### More Scenarios?
 
