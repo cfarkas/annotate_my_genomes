@@ -266,7 +266,7 @@ FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_b
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
 echo ""
-printf "${PURPLE}::: FEELnc Test done. Continue with merged.gtf file :::\n"
+printf "${PURPLE}::: FEELnc Test done. Continue with final_annotated.gtf file :::\n"
 echo ""
 cd ..
 echo ""
