@@ -317,9 +317,9 @@ gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 12. Configuring Summary Results :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-############################################
-# Moving results to merged_annotation folder
-############################################
+#######################################
+# Moving results to output_files_NCBI #
+#######################################
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_NCBI
