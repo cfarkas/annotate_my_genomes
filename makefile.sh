@@ -41,6 +41,7 @@ cp ./bin/genome-download ./genome_1/
 cp ./bin/add-ncbi-annotation ./test/
 cp ./bin/add-ncbi-annotation ./genome_1/
 cp ./bin/get-transcripts ./get_transcripts/
+cp ./bin/genome-download ./get_transcripts/
 cp ./strg_prep.pl ./bash_scripts/
 echo ""
 echo "All done. Binaries are located in ./bin/ ./genome_1/ and ./test/ folders"
