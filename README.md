@@ -305,7 +305,7 @@ final_annotated.gtf (located in output_files_NCBI) will contained the merged NCB
 #
 ## Downstream analysis using outputs:
 
-### (1) Gene quantification procedure examples using output GTF file (merged.fixed.gtf):
+### (1) Gene quantification procedure examples using output GTF file (final_annotated.gtf):
 - Install HTSeq-count: (please see https://htseq.readthedocs.io/en/release_0.11.1/index.html)
 ```
 sudo apt-get install build-essential python2.7-dev python-numpy python-matplotlib python-pysam python-htseq
