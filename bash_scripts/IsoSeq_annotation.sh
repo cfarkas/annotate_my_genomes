@@ -114,7 +114,7 @@ echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 2.  Obtaining StringTie assembled transcripts from PacBio IsoSeq alignments :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-stringtie -p 0 -L -v -a 0 -s 0 -f 0 -t -o IsoSeq_aligned.gtf IsoSeq_aligned.sorted.bam
+stringtie -p 1 -L -v -a 1 -s 1 -f 0 -t -o IsoSeq_aligned.gtf IsoSeq_aligned.sorted.bam
 echo ""
 printf "${PURPLE}Done. IsoSeq_aligned.gtf from StringTie assembler contain IsoSeq transcripts mapped to UCSC genome coordinates\n"
 echo ""
