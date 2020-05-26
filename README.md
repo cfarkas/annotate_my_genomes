@@ -326,14 +326,14 @@ cp polished.hq.fasta.gz polished.lq.fasta.gz polished.hq.fastq.gz polished.lq.fa
 gunzip polished.hq.fasta.gz
 ```
 
-Users can overlap IsoSeq transcripts (polished.hq.fasta) with gene annotation from NCBI by using the three outputs from ./genome-download program by using ./IsoSeq-annotation. 
+Users can overlap IsoSeq transcripts (polished.hq.fasta) with gene annotation from NCBI by using the three outputs from ./genome-download program by using ./annotate-isoseq. 
 As example, the pipeline will work as follows (chicken assembly, inside genome_1 folder):
 ```
 # Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
 ./genome-download galGal6
 
 # Running the pipeline on polished.hq.fasta, using NCBI GTF (galGal6_ncbiRefSeq.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
-./IsoSeq-annotation polished.hq.fasta galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
+./annotate-isoseq polished.hq.fasta galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
 ```
 final_annotated.gtf (located in output_files_IsoSeq) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
