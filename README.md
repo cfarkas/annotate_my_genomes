@@ -315,25 +315,30 @@ As example, we will obtain high-quality IsoSeq transcripts (polished.hq.fasta) f
 # Activate conda enviroment
 conda activate anaCogent5.2
 
-# Consensus, Cluster and Polish IsoSeq raw reads using 30 threads
+# Consensus sequences from IsoSeq raw reads using 30 threads
 ccs subreads.bam ccs.bam --noPolish --minPasses 1 -j 30
+
+# bam to fastq conversion of ccs reads
+samtools bam2fq ccs.bam > ccs.fastq
+
+# Cluster and Polishing ccs reads to obtain high-quality transcripts
 isoseq3 cluster ccs.bam unpolished.bam -j 30
 isoseq3 polish unpolished.transcriptset.xml subreads.bam polished.bam -j 30
 mkdir final_sequences
 cp polished.hq.fasta.gz polished.lq.fasta.gz polished.hq.fastq.gz polished.lq.fastq.gz ./final_sequences/
 
-# decompress polished.hq.fasta.gz to downstream applications
+# Decompress polished.hq.fasta.gz to downstream applications
 gunzip polished.hq.fasta.gz
 ```
 
-Users can overlap IsoSeq transcripts (polished.hq.fasta) with gene annotation from NCBI by using the three outputs from ./genome-download program by using ./annotate-IsoSeq. 
-As example, the pipeline will work as follows (chicken assembly, inside genome_1 folder):
+Users can overlap IsoSeq transcripts (polished.hq.fasta) or consensus sequences (ccs.fastq) reads with gene annotation from NCBI by using the three outputs from ./genome-download program by using ./annotate-IsoSeq. 
+As example, the pipeline will work as with ccs.fastq reads (chicken assembly, inside genome_1 folder):
 ```
 # Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
 ./genome-download galGal6
 
 # Running the pipeline on polished.hq.fasta, using NCBI GTF (galGal6_ncbiRefSeq.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
-./annotate-IsoSeq polished.hq.fasta galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
+./annotate-IsoSeq ccs.fastq galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
 ```
 final_annotated.gtf (located in output_files_IsoSeq) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
