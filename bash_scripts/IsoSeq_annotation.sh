@@ -105,7 +105,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 1.  Mapping IsoSeq transcripts to UCSC genome, using ${5} threads :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-minimap2 -ax splice ${4}.fa IsoSeq_transcripts.fa > IsoSeq_aligned.sam -t ${5}
+minimap2 -ax splice ${4} IsoSeq_transcripts.fa > IsoSeq_aligned.sam -t ${5}
 samtools view -S -b IsoSeq_aligned.sam -@ ${5} > IsoSeq_aligned.bam
 samtools sort IsoSeq_aligned.bam -@ ${5} > IsoSeq_aligned.sorted.bam
 samtools index IsoSeq_aligned.sorted.bam -@ ${5}
@@ -137,7 +137,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 4. Overlapping StringTie transcripts with NCBI annotation :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffcompare -R -r ${2} -s ${4} -o UCSC_compare IsoSeq_aligned.gtf
+gffcompare -R -r ${2} -s ${4} -o NCBI_compare IsoSeq_aligned.gtf
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -147,16 +147,16 @@ echo ""
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat UCSC_compare.IsoSeq_aligned.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.IsoSeq_aligned.gtf.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat UCSC_compare.IsoSeq_aligned.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.IsoSeq_aligned.gtf.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat UCSC_compare.IsoSeq_aligned.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.IsoSeq_aligned.gtf.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat UCSC_compare.IsoSeq_aligned.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.IsoSeq_aligned.gtf.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
@@ -167,9 +167,9 @@ echo ""
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
-awk '{print $4"\t"$1}' UCSC_compare.IsoSeq_aligned.gtf.tmap > UCSC_compare.IsoSeq_aligned.gtf.tmap.1
-tail -n +2 UCSC_compare.IsoSeq_aligned.gtf.tmap.1 > UCSC_compare.IsoSeq_aligned.gtf.tmap.2
-awk '!/-/' UCSC_compare.IsoSeq_aligned.gtf.tmap.2 > namelist
+awk '{print $4"\t"$1}' NCBI_compare.IsoSeq_aligned.gtf.tmap > NCBI_compare.IsoSeq_aligned.gtf.tmap.1
+tail -n +2 NCBI_compare.IsoSeq_aligned.gtf.tmap.1 > NCBI_compare.IsoSeq_aligned.gtf.tmap.2
+awk '!/-/' NCBI_compare.IsoSeq_aligned.gtf.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
