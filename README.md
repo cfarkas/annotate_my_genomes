@@ -42,9 +42,11 @@ Ubuntu/linux may come with GCC/G++ compilers <= version 6. To complile augustus 
 sudo apt-get update 
 sudo apt-get install build-essential software-properties-common -y
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-## Important: if you have problems with this steps, users may do the following in order to fix it:
+
+## Important: if you have problems with these steps, users may do the following in order to fix it:
 # sudo apt-get remove python3-apt
 # sudo apt-get install python3-apt
+
 sudo apt-get update
 sudo apt-get install gcc-6 g++-6 -y
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
