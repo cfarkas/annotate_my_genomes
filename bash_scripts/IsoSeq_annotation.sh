@@ -2,7 +2,7 @@
 {
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-IsoSeq_fasta_transcripts=${1}
+IsoSeq_reads=${1}
 NCBI_reference_genome_gtf=${2}
 reference_genome_gtf=${3}
 reference_genome_fasta=${4}
@@ -10,11 +10,11 @@ threads=${5}
 
 if [ "$1" == "-h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [IsoSeq_fasta_transcripts] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [IsoSeq_reads] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap IsoSeq transcripts (fasta format) with current NCBI annotation and will annotate novel transcripts"
+  echo "This pipeline will Overlap IsoSeq reads/transcripts (fasta/fastq format) with current NCBI annotation and will annotate novel transcripts"
   echo ""
-  echo "[IsoSeq_fasta_transcripts]: IsoSeq transcripts in fasta format, output from IsoSeq pipeline"
+  echo "[IsoSeq_reads]: IsoSeq reads/transcripts in fastq/fasta format, output from IsoSeq pipeline"
   echo ""
   echo "[NCBI_reference_genome_gtf]: NCBI reference GTF file."
   echo ""
@@ -29,11 +29,11 @@ fi
 
 if [ "$1" == "-help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [IsoSeq_fasta_transcripts] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [IsoSeq_reads] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap IsoSeq transcripts (fasta format) with current NCBI annotation and will annotate novel transcripts"
+  echo "This pipeline will Overlap IsoSeq reads/transcripts (fasta/fastq format) with current NCBI annotation and will annotate novel transcripts"
   echo ""
-  echo "[IsoSeq_fasta_transcripts]: IsoSeq transcripts in fasta format, output from IsoSeq pipeline"
+  echo "[IsoSeq_reads]: IsoSeq reads/transcripts in fastq/fasta format, output from IsoSeq pipeline"
   echo ""
   echo "[NCBI_reference_genome_gtf]: NCBI reference GTF file."
   echo ""
@@ -48,11 +48,11 @@ fi
 
 if [ "$1" == "--h" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [IsoSeq_fasta_transcripts] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [IsoSeq_reads] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap IsoSeq transcripts (fasta format) with current NCBI annotation and will annotate novel transcripts"
+  echo "This pipeline will Overlap IsoSeq reads/transcripts (fasta/fastq format) with current NCBI annotation and will annotate novel transcripts"
   echo ""
-  echo "[IsoSeq_fasta_transcripts]: IsoSeq transcripts in fasta format, output from IsoSeq pipeline"
+  echo "[IsoSeq_reads]: IsoSeq reads/transcripts in fastq/fasta format, output from IsoSeq pipeline"
   echo ""
   echo "[NCBI_reference_genome_gtf]: NCBI reference GTF file."
   echo ""
@@ -67,11 +67,11 @@ fi
 
 if [ "$1" == "--help" ]; then
   echo ""
-  echo "Usage: ./`basename $0` [IsoSeq_fasta_transcripts] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo "Usage: ./`basename $0` [IsoSeq_reads] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   echo ""
-  echo "This pipeline will Overlap IsoSeq transcripts (fasta format) with current NCBI annotation and will annotate novel transcripts"
+  echo "This pipeline will Overlap IsoSeq reads/transcripts (fasta/fastq format) with current NCBI annotation and will annotate novel transcripts"
   echo ""
-  echo "[IsoSeq_fasta_transcripts]: IsoSeq transcripts in fasta format, output from IsoSeq pipeline"
+  echo "[IsoSeq_reads]: IsoSeq reads/transcripts in fastq/fasta format, output from IsoSeq pipeline"
   echo ""
   echo "[NCBI_reference_genome_gtf]: NCBI reference GTF file."
   echo ""
@@ -84,10 +84,10 @@ if [ "$1" == "--help" ]; then
   exit 0
 fi
 
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [IsoSeq_fasta_transcripts] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
+[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [IsoSeq_reads] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
 
 if [ $# -ne 5 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [IsoSeq_fasta_transcripts] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
+  echo 1>&2 "Usage: ./`basename $0` [IsoSeq_reads] [NCBI_reference_genome_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
   exit 3
 fi
 
