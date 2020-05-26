@@ -129,9 +129,9 @@ echo ""
 gffcompare -R -r ${2} -s ${4} -o NCBI_compare IsoSeq_aligned.gtf
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Writting novel discoveries to Stats.txt (just for STRG genes) :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 5. Writting novel discoveries to Stats.txt :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 # Stats
 exec 3<> Stats.txt
