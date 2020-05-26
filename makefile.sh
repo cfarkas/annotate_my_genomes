@@ -31,7 +31,7 @@ echo "make done. Continue with install"
 ./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o ./get-transcripts
 ./shc/src/shc -f ./bash_scripts/genome_download.sh -o ./genome-download
 ./shc/src/shc -f ./bash_scripts/add_ncbi_annotation.sh -o ./add-ncbi-annotation
-./shc/src/shc -f ./bash_scripts/IsoSeq_annotation.sh annotate-IsoSeq
+./shc/src/shc -f ./bash_scripts/IsoSeq_annotation.sh -o ./annotate-IsoSeq
 mv annotate-my-genomes get-transcripts genome-download add-ncbi-annotation annotate-IsoSeq ./bin/
 cp ./bin/annotate-my-genomes ./test/
 cp ./bin/annotate-my-genomes ./genome_1/
