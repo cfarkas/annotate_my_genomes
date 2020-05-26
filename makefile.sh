@@ -31,18 +31,18 @@ echo "make done. Continue with install"
 ./shc/src/shc -f ./bash_scripts/get_transcripts.sh -o ./get-transcripts
 ./shc/src/shc -f ./bash_scripts/genome_download.sh -o ./genome-download
 ./shc/src/shc -f ./bash_scripts/add_ncbi_annotation.sh -o ./add-ncbi-annotation
-mv annotate-my-genomes get-transcripts genome-download add-ncbi-annotation ./bin/
+./shc/src/shc -f ./bash_scripts/IsoSeq_annotation.sh IsoSeq-annotation
+mv annotate-my-genomes get-transcripts genome-download add-ncbi-annotation IsoSeq-annotation ./bin/
 cp ./bin/annotate-my-genomes ./test/
-cp ./strg_prep.pl ./test/
 cp ./bin/annotate-my-genomes ./genome_1/
-cp ./strg_prep.pl ./genome_1/
 cp ./bin/genome-download ./test/
 cp ./bin/genome-download ./genome_1/
 cp ./bin/add-ncbi-annotation ./test/
 cp ./bin/add-ncbi-annotation ./genome_1/
+cp ./bin/IsoSeq-annotation ./test/
+cp ./bin/IsoSeq-annotation ./genome_1/
 cp ./bin/get-transcripts ./get_transcripts/
 cp ./bin/genome-download ./get_transcripts/
-cp ./strg_prep.pl ./bash_scripts/
 echo ""
 echo "All done. Binaries are located in ./bin/ ./genome_1/ and ./test/ folders"
 #
