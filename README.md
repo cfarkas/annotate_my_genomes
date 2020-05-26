@@ -291,7 +291,7 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
 ## Adding NCBI annotations
-Users can add annotations from NCBI by using the three outputs from ./genome-download program in ./add-ncbi-annotation. 
+Users can add annotations from NCBI by using the three outputs from ./genome-download program by using ./add-ncbi-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
 # Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
@@ -313,7 +313,7 @@ As example, we will obtain high-quality IsoSeq transcripts (polished.hq.fasta) f
 # Activate conda enviroment
 conda activate anaCogent5.2
 
-# Consensus, Cluster and Polish IsoSeq raw reads
+# Consensus, Cluster and Polish IsoSeq raw reads using 30 threads
 ccs subreads.bam ccs.bam --noPolish --minPasses 1 -j 30
 isoseq3 cluster ccs.bam unpolished.bam -j 30
 isoseq3 polish unpolished.transcriptset.xml subreads.bam polished.bam -j 30
@@ -324,8 +324,8 @@ cp polished.hq.fasta.gz polished.lq.fasta.gz polished.hq.fastq.gz polished.lq.fa
 gunzip polished.hq.fasta.gz
 ```
 
-Users can overlap IsoSeq transcripts (polished.hq.fasta) with gene annotation from NCBI by using the three outputs from ./genome-download program in ./add-IsoSeq-annotation. 
-As example, the pipeline will work as follows (chicken assembly, inside test folder):
+Users can overlap IsoSeq transcripts (polished.hq.fasta) with gene annotation from NCBI by using the three outputs from ./genome-download program by using ./add-IsoSeq-annotation. 
+As example, the pipeline will work as follows (chicken assembly, inside genome_1 folder):
 ```
 # Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
 ./genome-download galGal6
