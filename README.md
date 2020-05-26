@@ -291,7 +291,7 @@ stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorte
 ./annotate-my-genomes target.gtf oryCun2.gtf oryCun2.fa 30
 ```
 ## Adding NCBI annotations
-Users can add annotations from Ensembl by using the three outputs from ./genome-download program in ./add-ncbi-annotation. 
+Users can add annotations from NCBI by using the three outputs from ./genome-download program in ./add-ncbi-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
 # Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
@@ -301,6 +301,38 @@ As example, the pipeline will work as follows (chicken assembly, inside test fol
 ./add-ncbi-annotation StringTie.gtf galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
 ```
 final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+
+## Overlap NCBI annotations to IsoSeq transcripts
+IsoSeq protocol is a very-well established computational framwork to obtain high-quality assembled transcripts from PacBio IsoSeq chemistry as depicted here: https://github.com/PacificBiosciences/IsoSeq.
+A suitable protocol from PacBio reads to polished transcripts can be found here: https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda.
+```
+# To install all dependences and anaCogent5.2 enviroment, follow these instructions:
+https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda#installing-isoseq-using-anaconda
+
+# Activate conda enviroment
+conda activate anaCogent5.2
+
+# Working with "subreads.bam" PacBio IsoSeq raw reads as example: Consensus, Cluster and Polish these reads as follows
+ccs subreads.bam ccs.bam --noPolish --minPasses 1 -j 30
+isoseq3 cluster ccs.bam unpolished.bam -j 30
+isoseq3 polish unpolished.transcriptset.xml subreads.bam polished.bam -j 30
+mkdir final_sequences
+cp polished.hq.fasta.gz polished.lq.fasta.gz polished.hq.fastq.gz polished.lq.fastq.gz ./final_sequences/
+
+# decompress polished.hq.fasta.gz to downstream applications
+gunzip polished.hq.fasta.gz
+```
+
+Users can overlap IsoSeq transcripts (polished.hq.fasta) with gene annotation from NCBI by using the three outputs from ./genome-download program in ./add-IsoSeq-annotation. 
+As example, the pipeline will work as follows (chicken assembly, inside test folder):
+```
+# Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
+./genome-download galGal6
+
+# Running the pipeline on polished.hq.fasta, using NCBI GTF (galGal6_ncbiRefSeq.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
+./add-IsoSeq-annotation polished.hq.fasta galGal6_ncbiRefSeq.gtf galGal6.gtf galGal6.fa 30
+```
+final_annotated.gtf (located in output_files_IsoSeq) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
 #
 ## Downstream analysis using outputs:
