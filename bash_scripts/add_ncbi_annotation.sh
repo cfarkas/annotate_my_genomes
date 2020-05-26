@@ -108,9 +108,9 @@ echo ""
 gffcompare -R -r ${2} -s ${4} -o UCSC_compare ${1}
 printf "${PURPLE}Done\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 2. Writting novel discoveries to Stats.txt (just for STRG genes) :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 2. Writting novel discoveries to Stats.txt :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 # Stats
 exec 3<> Stats.txt
