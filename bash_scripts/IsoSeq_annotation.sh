@@ -101,9 +101,9 @@ NC='\033[0m' # No Color
 echo "Cleaning directory..."
 rm -r -f augustus.* FEELnc gawn 
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1.  Mapping IsoSeq transcripts to UCSC genome, using ${5} threads :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 minimap2 -ax splice ${4} ${1} > IsoSeq_aligned.sam -t ${5}
 samtools view -S -b IsoSeq_aligned.sam -@ ${5} > IsoSeq_aligned.bam
@@ -111,30 +111,19 @@ samtools sort IsoSeq_aligned.bam -@ ${5} > IsoSeq_aligned.sorted.bam
 samtools index IsoSeq_aligned.sorted.bam -@ ${5}
 printf "${PURPLE}Done. Mapped transcripts are called IsoSeq_aligned.sorted.bam\n"
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 2. Obtaining bed file from alignments by using bedtools bamtobed :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 2.  Obtaining StringTie assembled transcripts from PacBio IsoSeq alignments :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+stringtie -p 1 -L -v -a 4 -o IsoSeq_aligned.gtf IsoSeq_aligned.sorted.bam
 echo ""
-bamToBed -i IsoSeq_aligned.sorted.bam > IsoSeq_aligned.bed
-printf "${PURPLE}Done\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 3. Converting bed file to GTF using AGAT and gffread :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-agat_convert_bed2gff.pl --bed IsoSeq_aligned.bed -o IsoSeq_aligned.gff
-sed -i 's/ID=//'g IsoSeq_aligned.gff
-sed -i 's/Name=/ID=/'g IsoSeq_aligned.gff
-gffread IsoSeq_aligned.gff --gene2exon -o IsoSeq_aligned.gff3
-gffread IsoSeq_aligned.gff3 -T -o IsoSeq_aligned.gtf
-echo ""
-printf "${PURPLE}Done. IsoSeq_aligned.gtf contain IsoSeq transcripts mapped to UCSC genome coordinates\n"
+printf "${PURPLE}Done. IsoSeq_aligned.gtf from StringTie assembler contain IsoSeq transcripts mapped to UCSC genome coordinates\n"
 echo ""
 printf "${PURPLE}::: Removing intermediate files\n"
 rm IsoSeq_aligned.bed IsoSeq_aligned.sorted.bam* IsoSeq_aligned.sam IsoSeq_aligned.bam IsoSeq_aligned.gf*
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. Overlapping StringTie transcripts with NCBI annotation :::\n"
+printf "${YELLOW}::: 3. Overlapping StringTie transcripts with NCBI annotation :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffcompare -R -r ${2} -s ${4} -o NCBI_compare IsoSeq_aligned.gtf
