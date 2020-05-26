@@ -172,7 +172,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${
 echo ""
 gffread -w NCBI_transcripts.fa -g ${4} final_annotated.gtf
 echo ""
-printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
+printf "${PURPLE}::: Done. NCBI_transcripts.fa are located in current directory\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Performing gene annotation by using GAWN pipeline :::\n"
