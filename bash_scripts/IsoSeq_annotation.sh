@@ -119,7 +119,7 @@ echo ""
 printf "${PURPLE}Done. IsoSeq_aligned.gtf from StringTie assembler contain IsoSeq transcripts mapped to UCSC genome coordinates\n"
 echo ""
 printf "${PURPLE}::: Removing intermediate files\n"
-rm IsoSeq_aligned.bed IsoSeq_aligned.sorted.bam* IsoSeq_aligned.sam IsoSeq_aligned.bam IsoSeq_aligned.gf*
+rm IsoSeq_aligned.sorted.bam* IsoSeq_aligned.sam IsoSeq_aligned.bam
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
