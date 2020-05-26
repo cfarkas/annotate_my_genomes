@@ -105,7 +105,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 1.  Mapping IsoSeq transcripts to UCSC genome, using ${5} threads :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-minimap2 -ax splice ${4} IsoSeq_transcripts.fa > IsoSeq_aligned.sam -t ${5}
+minimap2 -ax splice ${4} ${1} > IsoSeq_aligned.sam -t ${5}
 samtools view -S -b IsoSeq_aligned.sam -@ ${5} > IsoSeq_aligned.bam
 samtools sort IsoSeq_aligned.bam -@ ${5} > IsoSeq_aligned.sorted.bam
 samtools index IsoSeq_aligned.sorted.bam -@ ${5}
