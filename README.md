@@ -305,14 +305,15 @@ final_annotated.gtf (located in output_files_NCBI) will contained the merged NCB
 ## Overlap NCBI annotations to IsoSeq transcripts
 IsoSeq protocol is a very-well established computational framwork to obtain high-quality assembled transcripts from PacBio IsoSeq chemistry as depicted here: https://github.com/PacificBiosciences/IsoSeq.
 A suitable protocol from PacBio reads to polished transcripts can be found here: https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda.
-```
 # To install all dependences and anaCogent5.2 enviroment, follow these instructions:
 https://github.com/PacificBiosciences/IsoSeq_SA3nUP/wiki/Tutorial:-Installing-and-Running-Iso-Seq-3-using-Conda#installing-isoseq-using-anaconda
 
+As example, we will obtain high-quality IsoSeq transcripts (polished.hq.fasta) from "subreads.bam" PacBio IsoSeq raw reads, as follows: 
+```
 # Activate conda enviroment
 conda activate anaCogent5.2
 
-# Working with "subreads.bam" PacBio IsoSeq raw reads as example: Consensus, Cluster and Polish these reads as follows
+# Consensus, Cluster and Polish IsoSeq raw reads
 ccs subreads.bam ccs.bam --noPolish --minPasses 1 -j 30
 isoseq3 cluster ccs.bam unpolished.bam -j 30
 isoseq3 polish unpolished.transcriptset.xml subreads.bam polished.bam -j 30
