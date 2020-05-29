@@ -399,8 +399,9 @@ sed -i 's/;/\t/g' final_annotated.tab
 sed -i 's/gene_id//g' final_annotated.tab
 sed -i 's/"//g' final_annotated.tab
 awk '!a[$0]++' final_annotated.tab > genes_and_transcripts.tab && rm final_annotated.tab
+awk '{print $1"\t"$2}' genes_and_transcripts.tab > genes-and-transcripts.tab && rm genes_and_transcripts.tab
 ``` 
-genes_and_transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format.
+genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format.
 
 ### More Scenarios?
 
