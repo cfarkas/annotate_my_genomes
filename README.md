@@ -391,6 +391,17 @@ bash commands
 
 - {gene_id}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
 
+### (3) Obtaining genes and matched transcripts from final_annotated.gtf
+``` 
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' final_annotated.gtf > final_annotated.tab
+sed -i 's/transcript_id //g' final_annotated.tab
+sed -i 's/;/\t/g' final_annotated.tab
+sed -i 's/gene_id//g' final_annotated.tab
+sed -i 's/"//g' final_annotated.tab
+awk '!a[$0]++' final_annotated.tab > genes_and_transcripts.tab && rm final_annotated.tab
+``` 
+genes_and_transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format.
+
 ### More Scenarios?
 
 To see more examples, please visit and clone https://github.com/cfarkas/annotate_my_genomes_examples.git
