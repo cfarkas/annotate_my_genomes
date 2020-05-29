@@ -355,6 +355,10 @@ sudo apt-get install build-essential python2.7-dev python-numpy python-matplotli
 ```
 htseq-count --stranded=no --format bam condition1.bam condition2.bam final_annotated.gtf > gene_counts
 ```
+To obtain a suitable count table for R, do
+```
+tac gene_counts | sed "1,5{d}" | tac > count_table
+```
 
 ### (2) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
 
