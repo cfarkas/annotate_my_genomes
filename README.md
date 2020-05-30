@@ -405,13 +405,13 @@ genes-and-transcripts.tab contains the list of assembled genes and corresponding
 
 ### (4) get-homologues-est analysis (find orthologs in other species)
 
-Installing get-homologues
+Installing get-homologues: for documentation see https://github.com/eead-csic-compbio/get_homologues
 ``` 
 git clone https://github.com/eead-csic-compbio/get_homologues.git
 cd get_homologues/
 perl install.pl   # press Y in every step
 ``` 
-In this case ww will find orthologs chicken transcripts using human annotated transcripts. Download hg38 human genome using genome-download program and obtain cds sequences with AGAT
+In this case we will find orthologs chicken transcripts using human annotated transcripts. Download hg38 human genome using genome-download program and obtain cds sequences with AGAT
 ``` 
 ./genome-download hg38
 agat_sp_extract_sequences.pl -g hg38.gtf -f hg38.fa -o hg38_cds.fa
