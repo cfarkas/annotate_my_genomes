@@ -403,6 +403,29 @@ awk '{print $1"\t"$2}' genes_and_transcripts.tab > genes-and-transcripts.tab && 
 ``` 
 genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format.
 
+### (4) get-homologues-est analysis (find orthologs in other species)
+
+Installing get-homologues
+``` 
+git clone https://github.com/eead-csic-compbio/get_homologues.git
+cd get_homologues/
+perl install.pl   # press Y in every step
+``` 
+In this case ww will find orthologs chicken transcripts using human annotated transcripts. Download hg38 human genome using genome-download program and obtain cds sequences with AGAT
+``` 
+./genome-download hg38
+agat_sp_extract_sequences.pl -g hg38.gtf -f hg38.fa -o hg38_cds.fa
+```  
+Copy cds.fa from annotate_my_genomes output_files_NCBI as galGal6_cds.fa and perform the analysis
+``` 
+cp ./path/to/annotate_my_genomes/genome_1/output_files_NCBI/cds.fa ./galGal6_cds.fa
+mkdir chicken_vs_human
+mv galGal6_cds.fa hg38_cds.fa ./chicken_vs_human
+# Execute get_homologues using 20 threads
+perl ./get_homologues/get_homologues-est.pl -d chicken_vs_human -M -c -z -A -n 20
+``` 
+Folder inside "chicken_vs_human_est_homologues" new folder will contain the results. 
+
 ### More Scenarios?
 
 To see more examples, please visit and clone https://github.com/cfarkas/annotate_my_genomes_examples.git
