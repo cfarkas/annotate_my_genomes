@@ -421,8 +421,8 @@ Copy cds.fa from annotate_my_genomes output_files_NCBI as galGal6_cds.fa and per
 cp ./path/to/annotate_my_genomes/genome_1/output_files_NCBI/cds.fa ./galGal6_cds.fa
 mkdir chicken_vs_human
 mv galGal6_cds.fa hg38_cds.fa ./chicken_vs_human
-# Execute get_homologues using 20 threads
-perl ./get_homologues/get_homologues-est.pl -d chicken_vs_human -M -c -z -A -n 20
+# Execute get_homologues using 20 threads, -min% sequence identity 70 and min% coverage of shortest sequence 50
+perl ./get_homologues/get_homologues-est.pl -d chicken_vs_human -M -c -z -A -n 20 -S 70 -C 50
 ``` 
 Folder inside "chicken_vs_human_est_homologues" new folder will contain the results. 
 
