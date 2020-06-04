@@ -359,8 +359,31 @@ To obtain a suitable count table for R, do
 ```
 tac gene_counts | sed "1,5{d}" | tac > count_table
 ```
+### (2) Obtaining genes and matched transcripts from final_annotated.gtf
+``` 
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' final_annotated.gtf > final_annotated.tab
+sed -i 's/transcript_id //g' final_annotated.tab
+sed -i 's/;/\t/g' final_annotated.tab
+sed -i 's/gene_id//g' final_annotated.tab
+sed -i 's/"//g' final_annotated.tab
+awk '!a[$0]++' final_annotated.tab > genes_and_transcripts.tab && rm final_annotated.tab
+awk '{print $1"\t"$2}' genes_and_transcripts.tab > genes-and-transcripts.tab && rm genes_and_transcripts.tab
+``` 
+genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format. This file can be used to obtain novel/known genes in the trascriptome as follows:
 
-### (2) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
+``` 
+awk '{print $1}' genes-and-transcripts.tab > genes.tab 
+
+# Novel genes
+grep "STRG." genes.tab -c
+grep "STRG." genes.tab > novel-genes.tab
+
+# Known genes  
+grep -v "STRG." genes.tab -c
+grep -v "STRG." genes.tab > known-genes.tab
+``` 
+
+### (3) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
 
 A gene list in tabular format can also be used to extract: 
 - Transcripts sequences associated to each gene. 
@@ -390,30 +413,6 @@ bash commands
 - {gene_id}.fa contains transcripts per gene in fasta format. {gene_id}.gtf contains transcripts per gene in GTF format.
 
 - {gene_id}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
-
-### (3) Obtaining genes and matched transcripts from final_annotated.gtf
-``` 
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' final_annotated.gtf > final_annotated.tab
-sed -i 's/transcript_id //g' final_annotated.tab
-sed -i 's/;/\t/g' final_annotated.tab
-sed -i 's/gene_id//g' final_annotated.tab
-sed -i 's/"//g' final_annotated.tab
-awk '!a[$0]++' final_annotated.tab > genes_and_transcripts.tab && rm final_annotated.tab
-awk '{print $1"\t"$2}' genes_and_transcripts.tab > genes-and-transcripts.tab && rm genes_and_transcripts.tab
-``` 
-genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format. This file can be used to obtain Novel/Known genes in the trascriptome as follows:
-
-``` 
-awk '{print $1}' genes-and-transcripts.tab > genes.tab 
-
-# Novel genes
-grep "STRG." genes.tab -c
-grep "STRG." genes.tab > novel-genes.tab
-
-# Known genes  
-grep -v "STRG." genes.tab -c
-grep -v "STRG." genes.tab > known-genes.tab
-``` 
 
 ### (4) get-homologues-est analysis (find orthologs in other species)
 
