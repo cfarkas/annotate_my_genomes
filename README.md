@@ -401,7 +401,19 @@ sed -i 's/"//g' final_annotated.tab
 awk '!a[$0]++' final_annotated.tab > genes_and_transcripts.tab && rm final_annotated.tab
 awk '{print $1"\t"$2}' genes_and_transcripts.tab > genes-and-transcripts.tab && rm genes_and_transcripts.tab
 ``` 
-genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format.
+genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format. This file can be used to obtain Novel/Known genes in the trascriptome as follows:
+
+``` 
+awk '{print $1}' genes-and-transcripts.tab > genes.tab 
+
+# Novel genes
+grep "STRG." genes.tab -c
+grep "STRG." genes.tab > novel-genes.tab
+
+# Known genes  
+grep -v "STRG." genes.tab -c
+grep -v "STRG." genes.tab > known-genes.tab
+``` 
 
 ### (4) get-homologues-est analysis (find orthologs in other species)
 
