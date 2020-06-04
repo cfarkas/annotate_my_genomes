@@ -369,19 +369,45 @@ sed -i 's/"//g' final_annotated.tab
 awk '!a[$0]++' final_annotated.tab > genes_and_transcripts.tab && rm final_annotated.tab
 awk '{print $1"\t"$2}' genes_and_transcripts.tab > genes-and-transcripts.tab && rm genes_and_transcripts.tab
 ``` 
-genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format. This file can be used to obtain novel/known genes in the trascriptome as follows:
+genes-and-transcripts.tab contains the list of assembled genes and corresponding transcripts, in tabular format. This file can be used to obtain novel/known transcripts and further coding/lncRNA classification of these transcripts as follows:
 
 ``` 
 awk '{print $1}' genes-and-transcripts.tab > genes.tab 
 
-# Novel genes
+# Novel genes list
 grep "STRG." genes.tab -c
 grep "STRG." genes.tab > novel-genes.tab
 
-# Known genes  
+# Known genes list
 grep -v "STRG." genes.tab -c
 grep -v "STRG." genes.tab > known-genes.tab
+
+# Parsing final_annotated.gtf file by splitting novel/known and coding/lncRNA transcripts
+grep -w -F -f novel-genes.tab final_annotated.gtf > novel-genes.gtf
+grep -w -F -f known-genes.tab final_annotated.gtf > known-genes.gtf
+grep "coding" known-genes.gtf > known-genes-coding.gtf
+grep "lncRNA" known-genes.gtf > known-genes-lncRNA.gtf
+grep "coding" novel-genes.gtf > novel-genes-coding.gtf
+grep "lncRNA" novel-genes.gtf > novel-genes-lncRNA.gtf
+
+# gffread can be used to obtain transcripts in each GTF file (in example, by using galGal6.fa genome)
+
+gffread -w known-genes-coding.fa -g galGal6.fa known-genes-coding.gtf
+gffread -w known-genes-lncRNA.fa -g galGal6.fa known-genes-lncRNA.gtf
+gffread -w novel-genes-coding.fa -g galGal6.fa novel-genes-coding.gtf
+gffread -w novel-genes-lncRNA.fa -g galGal6.fa novel-genes-lncRNA.gtf
+
+# coding known genes
+grep ">" known-genes-coding.fa -c
+# non-coding known genes
+grep ">" known-genes-lncRNA.fa -c
+
+# coding novel genes
+grep ">" novel-genes-coding.fa -c
+# non-coding novel genes
+grep ">" novel-genes-lncRNA.fa -c
 ``` 
+As expected, coding genes will surpass the number of non-coding genes in mammalian genomes.
 
 ### (3) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
 
