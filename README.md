@@ -359,7 +359,9 @@ To obtain a suitable count table for R, do
 ```
 tac gene_counts | sed "1,5{d}" | tac > count_table
 ```
-### (2) Obtaining genes and matched transcripts from final_annotated.gtf
+### (2) Transcriptome metrics
+
+To accomplish all of these examples, users will need final_annotated.gtf file (output from this pipeline) and the reference genome in fasta format. Obtaining list of genes and matched transcripts (genes-and-transcripts.tab) from final_annotated.gtf
 ``` 
 perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' final_annotated.gtf > final_annotated.tab
 sed -i 's/transcript_id //g' final_annotated.tab
@@ -375,14 +377,13 @@ genes-and-transcripts.tab contains the list of assembled genes and corresponding
 awk '{print $1}' genes-and-transcripts.tab > genes.tab 
 
 # Novel genes list
-grep "STRG." genes.tab -c
 grep "STRG." genes.tab > novel-genes.tab
 
 # Known genes list
-grep -v "STRG." genes.tab -c
 grep -v "STRG." genes.tab > known-genes.tab
 
-# Parsing final_annotated.gtf file by splitting novel/known and coding/lncRNA transcripts
+# Parsing final_annotated.gtf file to obtain novel/known and coding/lncRNA transcripts, respectively. 
+
 grep -w -F -f novel-genes.tab final_annotated.gtf > novel-genes.gtf
 grep -w -F -f known-genes.tab final_annotated.gtf > known-genes.gtf
 grep "coding" known-genes.gtf > known-genes-coding.gtf
@@ -392,22 +393,65 @@ grep "lncRNA" novel-genes.gtf > novel-genes-lncRNA.gtf
 
 # gffread can be used to obtain transcripts in each GTF file (in example, by using galGal6.fa genome)
 
-gffread -w known-genes-coding.fa -g galGal6.fa known-genes-coding.gtf
-gffread -w known-genes-lncRNA.fa -g galGal6.fa known-genes-lncRNA.gtf
-gffread -w novel-genes-coding.fa -g galGal6.fa novel-genes-coding.gtf
-gffread -w novel-genes-lncRNA.fa -g galGal6.fa novel-genes-lncRNA.gtf
+gffread -w known-transcripts-coding.fa -g galGal6.fa known-genes-coding.gtf
+gffread -w known-transcripts-lncRNA.fa -g galGal6.fa known-genes-lncRNA.gtf
+gffread -w novel-transcripts-coding.fa -g galGal6.fa novel-genes-coding.gtf
+gffread -w novel-transcripts-lncRNA.fa -g galGal6.fa novel-genes-lncRNA.gtf
 
-# coding known genes
-grep ">" known-genes-coding.fa -c
-# non-coding known genes
-grep ">" known-genes-lncRNA.fa -c
 
-# coding novel genes
-grep ">" novel-genes-coding.fa -c
-# non-coding novel genes
-grep ">" novel-genes-lncRNA.fa -c
+# Counting coding known transcripts
+grep ">" known-transcripts-coding.fa -c 
+# Counting non-coding known genes
+grep ">" known-transcripts-lncRNA.fa -c
+
+# Counting coding novel transcripts
+grep ">" novel-transcripts-coding.fa -c
+# Counting non-coding novel transcripts
+grep ">" novel-transcripts-lncRNA.fa -c 
 ``` 
-As expected, coding genes will surpass the number of non-coding genes in mammalian genomes.
+As expected, coding transcripts will surpass the number of non-coding genes in mammalian genomes.
+Looking the same as above, at the gene level:
+```
+# known coding genes counts
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' known-genes-coding.gtf > known-genes-coding.tab
+sed -i 's/transcript_id //g' known-genes-coding.tab
+sed -i 's/;/\t/g' known-genes-coding.tab
+sed -i 's/gene_id//g' known-genes-coding.tab
+sed -i 's/"//g' known-genes-coding.tab
+awk '{print $1}' known-genes-coding.tab > known-genes-coding.tabular && rm known-genes-coding.tab
+awk '!a[$0]++' known-genes-coding.tabular > known-genes-coding.tab && rm known-genes-coding.tabular
+cat known-genes-coding.tab | wc -l
+
+# known non-coding genes counts
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' known-genes-lncRNA.gtf > known-genes-lncRNA.tab
+sed -i 's/transcript_id //g' known-genes-lncRNA.tab
+sed -i 's/;/\t/g' known-genes-lncRNA.tab
+sed -i 's/gene_id//g' known-genes-lncRNA.tab
+sed -i 's/"//g' known-genes-lncRNA.tab
+awk '{print $1}' known-genes-lncRNA.tab > known-genes-lncRNA.tabular && rm known-genes-lncRNA.tab
+awk '!a[$0]++' known-genes-lncRNA.tabular > known-genes-lncRNA.tab && rm known-genes-lncRNA.tabular
+cat known-genes-lncRNA.tab | wc -l
+
+# novel coding gene counts
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' novel-genes-coding.gtf > novel-genes-coding.tab
+sed -i 's/transcript_id //g' novel-genes-coding.tab
+sed -i 's/;/\t/g' novel-genes-coding.tab
+sed -i 's/gene_id//g' novel-genes-coding.tab
+sed -i 's/"//g' novel-genes-coding.tab
+awk '{print $1}' novel-genes-coding.tab > novel-genes-coding.tabular && rm novel-genes-coding.tab
+awk '!a[$0]++' novel-genes-coding.tabular > novel-genes-coding.tab && rm novel-genes-coding.tabular
+cat novel-genes-coding.tab | wc -l
+
+# novel non-coding genes counts
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' novel-genes-lncRNA.gtf > novel-genes-lncRNA.tab
+sed -i 's/transcript_id //g' novel-genes-lncRNA.tab
+sed -i 's/;/\t/g' novel-genes-lncRNA.tab
+sed -i 's/gene_id//g' novel-genes-lncRNA.tab
+sed -i 's/"//g' novel-genes-lncRNA.tab
+awk '{print $1}' novel-genes-lncRNA.tab > novel-genes-lncRNA.tabular && rm novel-genes-lncRNA.tab
+awk '!a[$0]++' novel-genes-lncRNA.tabular > novel-genes-lncRNA.tab && rm novel-genes-lncRNA.tabular
+cat novel-genes-lncRNA.tab | wc -l  
+```
 
 ### (3) I need the transcript sequences matching each gene. Also validate conserved regions with qPCR. What can I do?:
 
