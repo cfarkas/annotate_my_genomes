@@ -296,9 +296,9 @@ FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${3
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Parsing FEELnc output :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 11. Parsing GAWN and FEELnc outputs :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
@@ -308,9 +308,17 @@ grep -w -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.lncRNAs.gtf
 grep --invert-match -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.coding.gtf
 rm final_annotated.gtf
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-sed -i 's/StringTie/coding/' merged.fixed.coding.gtf
-cat merged.fixed.coding.gtf merged.fixed.lncRNAs.gtf > final_annotated.gtf
+cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
+awk '{print $1"\t"$2}' transcriptome_annotation_table.tsv > coding_list
+awk -F'\t' '$2!=""' coding_list > coding_list.tab
+tail -n +2 "coding_list.tab" > coding_transcripts
+rm coding_lis*
+grep -w -F -f coding_transcripts merged.fixed.coding.gtf > coding-genes.gtf
+grep --invert-match -F -f coding_transcripts merged.fixed.coding.gtf > other-genes.gtf
+sed -i 's/StringTie/coding/' coding-genes.gtf
+cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
+rm transcriptome_annotation_table.tsv
 #############################
 # Configuring Summary Results
 #############################
