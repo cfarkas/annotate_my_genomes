@@ -312,13 +312,14 @@ cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
 awk '{print $1"\t"$2}' transcriptome_annotation_table.tsv > coding_list
 awk -F'\t' '$2!=""' coding_list > coding_list.tab
 tail -n +2 "coding_list.tab" > coding_transcripts
-rm coding_lis*
-grep -w -F -f coding_transcripts merged.fixed.coding.gtf > coding-genes.gtf
+awk '{print $1}' coding_transcripts > coding_transcripts.tab
+rm coding_lis* coding_transcripts lncRNA_transcripts
+grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
 grep --invert-match -F -f coding_transcripts merged.fixed.coding.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
-rm transcriptome_annotation_table.tsv
+rm coding_transcripts.tab
 #############################
 # Configuring Summary Results
 #############################
