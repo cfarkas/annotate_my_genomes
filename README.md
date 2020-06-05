@@ -518,8 +518,10 @@ blastp -db 9031 -max_hsps 1 -max_target_seqs 1 -out blast_results -query novel-t
 # Parsing blast results (min_identity 90, min_alignment_length 100). Thanks to: https://github.com/sandyjmacdonald
 git clone https://github.com/sandyjmacdonald/blast_parser.git  # requires BioPython installed. 
 python ./blast_parser/blast_parser.py -i blast_results -e 1e-20 -p 90 -a 100 > parsed_results.txt
+# Removing queries with no hits
+awk -F'\t' '$2!=""' parsed_results.txt > parsed_results.tab
 ```
-parsed_results.txt will contain matched proteins to the provided reference. Proteins with identity closed to 100% are good paralog candidates (if not missed genes in the reference).
+parsed_results.tab will contain matched proteins to the provided reference. Proteins with identity closed to 100% are good paralog candidates (if not missed genes in the reference).
 
 ### (5) get-homologues-est analysis (find orthologs in other species)
 
