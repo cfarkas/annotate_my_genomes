@@ -336,7 +336,7 @@ tail -n +2 "coding_list.tab" > coding_transcripts
 awk '{print $1}' coding_transcripts > coding_transcripts.tab
 rm coding_lis* coding_transcripts lncRNA_transcripts
 grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
-grep --invert-match -F -f coding_transcripts merged.fixed.coding.gtf > other-genes.gtf
+grep --invert-match -F -f coding_transcripts.tab merged.fixed.coding.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
