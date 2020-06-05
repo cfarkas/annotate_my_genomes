@@ -484,7 +484,44 @@ bash commands
 
 - {gene_id}.cons files contain conserved regions within transcripts and could suitable for PCR primer picking. Users can go to https://www.ncbi.nlm.nih.gov/tools/primer-blast/ , paste this sequences and pick appropiate primers, specifying the genome to discard off-targets. Aditionally, users can compare a precomputed primer list for each gene here: https://gecftools.epfl.ch/getprime
 
-### (4) get-homologues-est analysis (find orthologs in other species)
+### (4) Identifying paralogs in novel proteins from transcriptome
+
+Since transcriptome_annotation_table.tsv contain most closed matched to each protein in the transcriptome (using uniprot databases from different species), users can employ donwload_proteome_uniprot.pl script to download up-to-date proteome of the species of interest (providing taxid to the script) to refine these results. Then, by using novel-transcripts-coding.fa file (generated in the previous step), the predicted transcriptome can be blasted against the reference proteome to find paralogs/missed genes as follows:
+```
+# Donwload gallus gallus proteome (taxid 9031)
+perl download_proteome_uniprot.pl 9031
+
+# Augustus prediction of novel-transcripts-coding.fa sequences
+
+wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
+gunzip augustus.2.5.5.tar.gz
+tar -xvf augustus.2.5.5.tar
+cd augustus.2.5.5/src/
+make
+cd ..
+cd ..
+export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on novel-transcripts-coding.fa > augustus.gff3
+
+# Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT
+
+gffread augustus.gff3 -T -o coding_transcripts.gtf
+agat_sp_extract_sequences.pl -g augustus.gff3 -f novel-transcripts-coding.fa -o novel-transcripts-coding-cds.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f novel-transcripts-coding.fa -o novel-transcripts-coding-prot.fa --protein
+
+# making blast database
+makeblastdb -in 9031.fasta -dbtype 'prot' -out 9031
+
+# Blasting protein sequences (using 20 threads, max targets= 1, output format=xml)
+blastp -db 9031 -max_hsps 1 -max_target_seqs 1 -out blast_results -query novel-transcripts-coding-prot.fa -num_threads 20 -outfmt 5
+
+# Parsing blast results (min_identity 90, min_alignment_length 100). Thanks to: https://github.com/sandyjmacdonald
+git clone https://github.com/sandyjmacdonald/blast_parser.git  # requires BioPython installed. 
+python ./blast_parser/blast_parser.py -i blast_results -e 1e-20 -p 90 -a 100 > parsed_results.txt
+```
+parsed_results.txt will contain matched proteins to the provided reference. Proteins with identity closed to 100% are good paralog candidates (if not missed genes in the reference).
+
+### (5) get-homologues-est analysis (find orthologs in other species)
 
 Installing get-homologues: for documentation see https://github.com/eead-csic-compbio/get_homologues
 ``` 
