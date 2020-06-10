@@ -404,7 +404,7 @@ gffread -w novel-transcripts-other.fa -g galGal6.fa novel-genes-other.gtf
 
 # Counting coding known transcripts
 grep ">" known-transcripts-coding.fa -c 
-# Counting non-coding known genes
+# Counting non-coding known transcripts
 grep ">" known-transcripts-lncRNA.fa -c
 # Counting other expressed features
 grep ">" known-transcripts-other.fa -c
