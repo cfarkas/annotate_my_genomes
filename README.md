@@ -2,7 +2,7 @@
 ### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
-#### For detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
+#### For documentation and detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
@@ -25,7 +25,8 @@ with these requirements users can run the following pipeline as follows (as exam
 ```
 * users can use mm10_ncbiRefSeq.gtf instead to mm10.gtf to increase the annotation. 
 
-# Dependences ###(installation procedures of every dependence is detailed in our wiki page):
+# Dependences 
+### (installation procedures of every dependence is detailed in our wiki page)
 
 #### Mandatory
 - gcc and g++ compilers, version >= 6 
@@ -41,6 +42,16 @@ with these requirements users can run the following pipeline as follows (as exam
 #### Optional
 - EMBOSS toolkit (Open Source software for molecular biology)
 - Clustal Omega (DNA/Protein alignment program)
+
+some of these packages can be achieved via conda in a single command-line:
+```
+conda install -c bioconda stringtie
+conda install -c bioconda gffcompare
+conda install -c bioconda gffread
+conda install -c bioconda blast
+conda install -c bioconda gmap
+conda install -c bioconda bedtools
+```
 
 # Installation: 
 ```
