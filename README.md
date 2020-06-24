@@ -15,13 +15,13 @@ This pipeline requieres to run:
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. 
 ```
-Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example for latest mouse assembly (mm10) will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
+Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example using prefix mm10, users will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
 
-with these requirements users can run the following pipeline as follows (as example for mouse, using 20 threads):
+Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
 ./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
 ```
-* users can use mm10_ncbiRefSeq.gtf instead to mm10.gtf to increase the annotation. 
+* users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example in  
 
 # Dependences 
 ### (installation procedures of every dependence is detailed in our wiki page)
