@@ -34,160 +34,22 @@ Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As e
 ```
 will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
 
-# Dependences:
+# Dependences (installation procedures of every dependence is detailed in our wiki page):
 
-### gcc and g++ compilers, version >= 6 
-Ubuntu/linux may come with GCC/G++ compilers <= version 6. To complile augustus gene prediction tool properly, users must upgrade old gcc/g++ compilers as follows: 
-```
-sudo apt-get update 
-sudo apt-get install build-essential software-properties-common -y
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+#### Mandatory
+- gcc and g++ compilers, version >= 6 
+- StringTie (v2.0 release needed)
+- gffcompare and gffread
+- ncbi-blast+ version (v2.9.0)
+- GMAP genomic aligner program 
+- BEDTools
+- FEELnc : FlExible Extraction of LncRNA 
+- SAMtools with htslib (version >= 1.9)
+- AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format.
 
-## Important: if you have problems with these steps, users may do the following in order to fix it:
-# sudo apt-get remove python3-apt
-# sudo apt-get install python3-apt
-
-sudo apt-get update
-sudo apt-get install gcc-6 g++-6 -y
-sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ g++ /usr/bin/g++-6
-
-# To check new GCC and G++ versions, do the following: 
-g++ --version
-gcc --version
-```
-
-### Obtaining and installing StringTie (v2.0 release needed)
-
-```
-git clone https://github.com/gpertea/stringtie
-cd stringtie
-make release
-sudo cp stringtie /usr/local/bin/
-```
-### Obtaining and installing gffcompare and gffread
-
-```
-git clone https://github.com/gpertea/gclib
-git clone https://github.com/gpertea/gffcompare
-git clone https://github.com/gpertea/gffread
-cd gclib
-make release
-cd ..
-cd gffcompare
-make release
-sudo cp gffcompare trmap /usr/local/bin/
-cd ..
-cd gffread
-make release
-sudo cp gffread /usr/local/bin/
-cd ..
-```
-
-### Installing up-to-date ncbi-blast+ version (v2.9.0)
-#### If you have ncbi-blast+ version > 2.7 is OK, older binaries also work, but GAWN pipeline strongly recommends > v2.7.1+
-
-```
-# To remove older ncbi-blast+ binaries from your system 
-sudo apt-get remove ncbi-blast+
-
-# Installing ncbi-blast+ version 2.9.0
-
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/LATEST/ncbi-blast-2.9.0+-x64-linux.tar.gz
-tar -xzvf ncbi-blast-2.9.0+-x64-linux.tar.gz
-rm ncbi-blast-2.9.0+-x64-linux.tar.gz
-cd ncbi-blast-2.9.0+/bin/
-sudo cp * /usr/local/bin/ 
-```
-### Installing GMAP genomic aligner program 
-#### (for documentation, please see http://research-pub.gene.com/gmap/)
-
-```
-sudo apt-get install gmap
-```
-
-### Obtaining and Installing BEDTools
-Complete instructions can be found in https://bedtools.readthedocs.io/en/latest/content/installation.html. Users with privileges can accomplish with sudo: 
-```
-sudo apt-get install bedtools
-```
-
-### Installing dependences for FEELnc : FlExible Extraction of LncRNA 
-#### (for documentation, please see https://github.com/tderrien/FEELnc)
-
-```
-## Perl Requirements: Parallel and BioPerl (with sudo privileges)
-
-sudo perl -MCPAN -e shell
-install Parallel::ForkManager
-install BioPerl
-quit
-
-# Installing KmerInShort 
-
-git clone --recursive https://github.com/rizkg/KmerInShort
-cd KmerInShort
-mkdir build;  cd build;  cmake ..;  make -j 8
-sudo cp KmerInShort /usr/local/bin/
-
-# Installing fasta_ushuffle
-
-git clone git://github.com/agordon/fasta_ushuffle.git
-cd fasta_ushuffle
-make
-sudo cp ushuffle /usr/local/bin/
-sudo cp fasta_ushuffle /usr/local/bin/
-```
-
-### Obtaining and installing up-to-date SAMtools with htslib (version >= 1.9)
-(Old samtools version can also work). Users needs to install version up to date of these three packages. Users can first install htslib v1.9 and then samtools with bcftools v1.9, respectively. For downloading these packages, see http://www.htslib.org/download/). The latter can be accomplish by downloading the three packages, decompressing it, and doing the following:
-```
-wget https://github.com/samtools/htslib/releases/download/1.10.2/htslib-1.10.2.tar.bz2
-bzip2 -d htslib-1.10.2.tar.bz2
-tar -xvf htslib-1.10.2.tar
-rm htslib-1.10.2.tar
-cd htslib-1.10.2    # and similarly for samtools
-sudo ./configure --prefix=/usr/local/bin
-sudo make
-sudo make install
-# this step is only for samtools
-sudo cp samtools /usr/local/bin/
-
-# Similarly as htslib, samtools and bcftools can be downloaded as follows:
-
-wget https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2
-wget https://github.com/samtools/bcftools/releases/download/1.10.2/bcftools-1.10.2.tar.bz2
-```
-
-Then in a terminal type
->samtools
-
-to check 1.10 version (using htslib v1.10)
-
-### Obtaining and installing EMBOSS toolkit (Open Source software for molecular biology)
-Complete instructions can be found at the webpage: https://ssbio.readthedocs.io/en/latest/instructions/emboss.html. A way to install it can be the following:
-```
-sudo apt-get install emboss
-```
-### Obtaining and installing Clustal Omega (DNA/Protein alignment program)
-Description can be found at the webpage: http://www.clustal.org/omega/. A way to install it can be the following:
-```
-sudo apt-get install clustalo
-```
-
-### Installing AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format.
-For more information, please visit: https://github.com/NBISweden/AGAT
-```
-# Install through bioconda recipe:
-conda install agat
-
-# Standard install
-git clone https://github.com/NBISweden/AGAT.git # Clone AGAT
-cd AGAT                                         # move into AGAT folder
-perl Makefile.PL                                # Check all the dependencies*
-make                                            # Compile
-make test                                       # Test
-make install                                    # Install
-```
+#### Optional
+- EMBOSS toolkit (Open Source software for molecular biology)
+- Clustal Omega (DNA/Protein alignment program)
 
 # Installation: 
 
@@ -200,64 +62,6 @@ cd annotate_my_genomes
 bash makefile.sh
 ```
 Binaries are located in bin, genome_1 and test folders, respectively.
-
-### Obtaining StringTie GTF file for annotation
-
-#### 1) Alignment of long sequencing reads using minimap aligner (e.g.: against galGal6 genome from UCSC, using 30 threads). You can use gmap as well. 
-```
-# Installing minimap2
-git clone https://github.com/lh3/minimap2
-cd minimap2 && make
-sudo cp minimap2 /usr/local/bin/
-
-# Convert PacBio subreads (bam files) to fastq
-samtools bam2fq m54027_190807_082031.subreads.bam > reads.fastq
-
-# Download Gallus gallus v6 fasta file (use genome-download program from this repository, located in ./bin folder)
-./genome-download galGal6
-
-# Aligning with minimap2
-minimap2 -ax splice galGal6.fa reads.fastq > aln_galGal6.sam -t 30
-samtools view -S -b aln_galGal6.sam -@ 30 > aln_galGal6.bam
-samtools sort aln_galGal6.bam -@ 30 > aln_galGal6.sorted.bam
-samtools index aln_galGal6.sorted.bam -@ 30
-```
-
-If users also sequenced with Illumina, short reads can be aligned by using hisat2 (https://ccb.jhu.edu/software/hisat2/manual.shtml) and merged with minimap alignments as follows:
-```
-# Install hisat2
-wget ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-2.0.4-Linux_x86_64.zip
-unzip hisat2-2.0.4-Linux_x86_64.zip
-sudo cp hisat2-2.0.4/hisat2* /usr/local/bin/
-
-# build hisat2 index
-hisat2-build galGal6.fa -p 40 ./galGal6
-
-# align short illumina reads agains galGal6 genome from USCS, using 30 threads
-hisat2 -x ./galGal6 -p 30 -1 41-A3_S1_R1_001.fastq.gz -2 41-A3_S1_R2_001.fastq.gz | samtools view -bS - > 41.bam
-
-# merge with PacBio alignments (aln_galGal6.bam) with illumina alignments (41.bam), using 30 threads:
-samtools merge PacBio_Illumina_merged.bam aln_galGal6.bam 41.bam -@ 30 -f
-
-# Sort and Index
-samtools sort -o PacBio_Illumina_merged.sorted.bam PacBio_Illumina_merged.bam -@ 30
-samtools index PacBio_Illumina_merged.sorted.bam
-```
-PacBio_Illumina_merged.sorted.bam can be used as input for StringTie. 
-
-#### 2) Obtaining GTF (transcripts.gtf) from the above alignment using StringTie (e.g.: using -p: 30 threads, -L: long read settings)
-```
-# Alignments from long reads (PacBio)
-stringtie -p 1 -L -v -a 4 -o transcripts.gtf aln_galGal6.sorted.bam
-
-# Alignments from long and short reads (PacBio + Illumina)
-stringtie -p 1 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorted.bam
-
-# If the above fails, users can increase -j and -c parameters (useful for large BAM file processing)
-stringtie -p 1 -j 2 -c 2 -v -a 4 -o transcripts.gtf PacBio_Illumina_merged.sorted.bam
-```
-
-#
 
 # Quickstart (Running the test)
 
