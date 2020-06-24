@@ -21,7 +21,7 @@ Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
 ./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
 ```
-* users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example in  
+* users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
 
 # Dependences 
 ### (installation procedures of every dependence is detailed in our wiki page)
