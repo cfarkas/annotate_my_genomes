@@ -2,6 +2,8 @@
 ### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
+### For detailed examples, please visit our wiki page :
+
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
   
@@ -13,13 +15,15 @@ This pipeline requieres to run:
 
 2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository plus genome prefix as follows: 
 ```
-./genome-download [genome]
+./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. 
 ```
-Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example for latest mouse assembly (mm10)
+Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example for latest mouse assembly (mm10) will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
+
+with these requirements users can run the following pipeline as follows (as example for mouse, using 20 threads):
 ```
-./genome-download mm10
+./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
 ```
-will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
+* users can use mm10_ncbiRefSeq.gtf instead to mm10.gtf to increase the annotation, as explained down. 
 
 # Dependences (installation procedures of every dependence is detailed in our wiki page):
 
@@ -67,7 +71,15 @@ Binaries are located in bin, genome_1 and test folders, respectively.
 ./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 20
 ```
 
+# Usage
+(Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
+
+- For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for cpu processing:
 ```
+./genome-download mm10
+./annotate-my-genomes target.gtf mm10.gtf mm10.fa 30
+```
+
 ## Adding NCBI annotations
 Users can add annotations from NCBI by using the three outputs from ./genome-download program by using ./add-ncbi-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
@@ -83,7 +95,7 @@ final_annotated.gtf (located in output_files_NCBI) will contained the merged NCB
 
 ### More Scenarios?
 
-To see more examples, please visit and clone https://github.com/cfarkas/annotate_my_genomes_examples.git
+For detailed examples, please visit our wiki page
 
 ### Notes
 Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc.
