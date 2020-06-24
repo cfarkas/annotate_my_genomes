@@ -25,7 +25,7 @@ with these requirements users can run the following pipeline as follows (as exam
 ```
 * users can use mm10_ncbiRefSeq.gtf instead to mm10.gtf to increase the annotation. 
 
-# Dependences (installation procedures of every dependence is detailed in our wiki page):
+# Dependences ###(installation procedures of every dependence is detailed in our wiki page):
 
 #### Mandatory
 - gcc and g++ compilers, version >= 6 
