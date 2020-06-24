@@ -2,7 +2,7 @@
 ### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
-### For detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
+#### For detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
@@ -77,7 +77,7 @@ Binaries are located in bin, genome_1 and test folders, respectively.
 ./annotate-my-genomes target.gtf mm10.gtf mm10.fa 30
 ```
 
-## Adding NCBI annotations
+## Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program by using ./add-ncbi-annotation. 
 As example, the pipeline will work as follows (chicken assembly, inside test folder):
 ```
