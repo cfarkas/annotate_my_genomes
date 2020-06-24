@@ -35,15 +35,15 @@ with these requirements users can run the following pipeline as follows (as exam
 - ncbi-blast+ version (v2.9.0)
 - GMAP genomic aligner program 
 - BEDTools
-- FEELnc : FlExible Extraction of LncRNA 
-- SAMtools with htslib (version >= 1.9)
-- AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format.
+- FEELnc : FlExible Extraction of LncRNA : https://github.com/tderrien/FEELnc
+- SAMtools with htslib (version >= 1.9)  : http://www.htslib.org/download/ 
+- AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format : https://github.com/NBISweden/AGAT
 
 #### Optional
 - EMBOSS toolkit (Open Source software for molecular biology)
 - Clustal Omega (DNA/Protein alignment program)
 
-some of these packages can be achieved via conda in a single command-line:
+These packages except the last three (FEELnc, SAMtools and AGAT) can be achieved via conda in a single command-line as follows:
 ```
 conda install -c bioconda stringtie
 conda install -c bioconda gffcompare
@@ -51,6 +51,9 @@ conda install -c bioconda gffread
 conda install -c bioconda blast
 conda install -c bioconda gmap
 conda install -c bioconda bedtools
+# Optional
+conda install -c bioconda emboss
+conda install -c bioconda clustalo
 ```
 
 # Installation: 
