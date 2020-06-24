@@ -53,12 +53,11 @@ Binaries are located in bin, genome_1 and test folders, respectively.
 
 # Quickstart (Running the test)
 
-1) Optionally, edit number of cpus in /test/gawn_config.sh:
+1) Optionally, edit and increase the number of cpus in /test/gawn_config.sh: NCPUS=10
 
-- NCPUS=10
-  - Increase this value to speed-up things :rocket:
+2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). 
 
-2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). Go to /annotate_my_genomes/test and do the following:
+Go to /annotate_my_genomes/test and do the following:
 
 ```
 # Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
