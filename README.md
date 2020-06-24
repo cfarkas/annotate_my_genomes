@@ -2,7 +2,7 @@
 ### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
-### For detailed examples, please visit our wiki page :
+### For detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 # Pipeline Outline
   Often, genomes from non-model organisms (and even from model organisms) contain reference genome annotation available in GTF format (Gene Transfer Format), but these annotations may fail to capture all genome features. Novel genes and novel transcripts can be absent from reference genome annotations due tissue or stage-specific gene expression when using RNA-seq data for transcript characterization.
@@ -23,7 +23,7 @@ with these requirements users can run the following pipeline as follows (as exam
 ```
 ./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
 ```
-* users can use mm10_ncbiRefSeq.gtf instead to mm10.gtf to increase the annotation, as explained down. 
+* users can use mm10_ncbiRefSeq.gtf instead to mm10.gtf to increase the annotation. 
 
 # Dependences (installation procedures of every dependence is detailed in our wiki page):
 
