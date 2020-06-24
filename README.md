@@ -54,6 +54,14 @@ conda install -c bioconda emboss
 conda install -c bioconda clustalo
 ```
 
+To install anaconda:
+```
+apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6
+wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
+chmod 755 Anaconda3-2020.02-Linux-x86_64.sh
+./Anaconda3-2020.02-Linux-x86_64.sh
+```
+
 # Installation: 
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git
