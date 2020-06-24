@@ -39,7 +39,7 @@ with these requirements users can run the following pipeline as follows (as exam
 - SAMtools with htslib (version >= 1.9)  : http://www.htslib.org/download/ 
 - AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format : https://github.com/NBISweden/AGAT
 
-#### Optional
+#### Optional (for downstream analysis)
 - EMBOSS toolkit (Open Source software for molecular biology)
 - Clustal Omega (DNA/Protein alignment program)
 
@@ -105,7 +105,7 @@ final_annotated.gtf (located in output_files_NCBI) will contained the merged NCB
 
 ### More Scenarios?
 
-- For downstream examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
+- For downstream analysis, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 - For additional examples, please visit https://github.com/cfarkas/annotate_my_genomes_examples
 
 ### Notes
