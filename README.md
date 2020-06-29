@@ -5,7 +5,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 ### For documentation and detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 # Pipeline Outline
-  annotate_my_genomes is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI. Also, coding sequences in nucleotides and correspondent proteins can be inferred.   
+  annotate_my_genomes is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, coding sequences in nucleotides and correspondent proteins can be inferred.   
 
 This pipeline requieres to run:
 
@@ -21,6 +21,8 @@ Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
 ./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
 ```
+will yield an annotated GTF file in the "gene_id" field, transcripts and correspondent protein sequences, along with lncRNA annotation and GO terms. 
+
 * Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
 
 # Dependences 
@@ -54,7 +56,7 @@ conda install -c bioconda emboss
 conda install -c bioconda clustalo
 ```
 
-To install anaconda:
+To install anaconda in ubuntu/linux:
 ```
 apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6
 wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
