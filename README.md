@@ -21,8 +21,15 @@ Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
 ./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
 ```
-will yield an annotated GTF file in the "gene_id" field, transcripts and correspondent protein sequences, along with lncRNA annotation and GO terms. 
-
+will output:
+```
+- final_annotated.gtf: an annotated GTF file in the "gene_id" field, containing novel genes and lncRNA classification (second field in GTF file). 
+- transcripts.fa : associated transcripts from final_annotated.gtf 
+- cds. fa: associated coding sequences to final_annotated.gtf
+- prot.fa  associated protein sequences to final_annotated.gtf
+- coding_transcripts.gtf: GTF file containing cds sequences. 
+- transcriptsGO.tab: annotated Gene Ontology (GO terms) for each transcript. 
+```
 * Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
 
 # Dependences 
