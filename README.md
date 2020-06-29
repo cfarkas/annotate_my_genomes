@@ -1,4 +1,7 @@
-# annotate_my_genomes 
+# annotate_my_genomes
+
+[Pipeline_Scheme.pdf](https://github.com/cfarkas/annotate_my_genomes/files/4843791/Pipeline_Scheme.pdf)
+
 ### :microscope: :hatching_chick: :hatched_chick: 
 Genome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
