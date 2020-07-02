@@ -45,15 +45,15 @@ will output:
 - ncbi-blast+ version (v2.9.0)
 - GMAP genomic aligner program 
 - BEDTools
+- AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format : https://github.com/NBISweden/AGAT
 - FEELnc : FlExible Extraction of LncRNA : https://github.com/tderrien/FEELnc
 - SAMtools with htslib (version >= 1.9)  : http://www.htslib.org/download/ 
-- AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format : https://github.com/NBISweden/AGAT
 
 #### Optional (for downstream analysis)
 - EMBOSS toolkit (Open Source software for molecular biology)
 - Clustal Omega (DNA/Protein alignment program)
 
-These packages except the last three (FEELnc, SAMtools and AGAT) can be achieved via conda in a single command-line as follows:
+These packages except the last two (FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
 ```
 conda install -c bioconda stringtie
 conda install -c bioconda gffcompare
@@ -61,6 +61,7 @@ conda install -c bioconda gffread
 conda install -c bioconda blast
 conda install -c bioconda gmap
 conda install -c bioconda bedtools
+conda install -c bioconda agat
 # Optional
 conda install -c bioconda emboss
 conda install -c bioconda clustalo
