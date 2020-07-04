@@ -78,8 +78,7 @@ chmod 755 Anaconda3-2020.02-Linux-x86_64.sh
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git
 cd annotate_my_genomes
-# make
-bash makefile.sh
+bash makefile.sh             # make  & install
 ```
 Binaries are located in bin, genome_1 and test folders, respectively.
 
