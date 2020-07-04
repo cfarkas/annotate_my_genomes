@@ -36,7 +36,8 @@ will output:
 * Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
 
 # Dependences 
-### (installation procedures of every dependence is detailed in our wiki page)
+
+### (installation procedures of every dependence without conda is detailed in our wiki page)
 
 #### Mandatory
 - gcc and g++ compilers, version >= 6 
@@ -54,7 +55,7 @@ will output:
 - EMBOSS toolkit (Open Source software for molecular biology)
 - Clustal Omega (DNA/Protein alignment program)
 
-Six of these requirements except the first and the last three (gcc/g++, AGAT, FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
+Six of these requirements except the first and the last two (gcc/g++, FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
 ```
 conda install -c conda-forge parallel
 conda install -c bioconda stringtie
@@ -63,6 +64,7 @@ conda install -c bioconda gffread
 conda install -c bioconda blast
 conda install -c bioconda gmap
 conda install -c bioconda bedtools
+conda install -c bioconda agat
 # Optional
 conda install -c bioconda emboss
 conda install -c bioconda clustalo
