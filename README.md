@@ -40,6 +40,7 @@ will output:
 
 #### Mandatory
 - gcc and g++ compilers, version >= 6 
+- parallel library
 - StringTie (v2.0 release needed)
 - gffcompare and gffread
 - ncbi-blast+ version (v2.9.0)
@@ -53,8 +54,9 @@ will output:
 - EMBOSS toolkit (Open Source software for molecular biology)
 - Clustal Omega (DNA/Protein alignment program)
 
-These packages except the last three (AGAT, FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
+Six of these requirements except the first and the last three (gcc/g++, AGAT, FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
 ```
+conda install -c conda-forge parallel
 conda install -c bioconda stringtie
 conda install -c bioconda gffcompare
 conda install -c bioconda gffread
