@@ -42,6 +42,7 @@ will output:
 #### Mandatory
 - gcc and g++ compilers, version >= 6 
 - parallel library
+- cufflinks
 - StringTie (v2.0 release needed)
 - gffcompare and gffread
 - ncbi-blast+ version (v2.9.0)
@@ -58,6 +59,7 @@ will output:
 Six of these requirements except the first and the last two (gcc/g++, FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
 ```
 conda install -c conda-forge parallel
+conda install -c bioconda cufflinks
 conda install -c bioconda stringtie
 conda install -c bioconda gffcompare
 conda install -c bioconda gffread
