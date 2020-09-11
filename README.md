@@ -37,7 +37,7 @@ will output:
 
 # Dependences 
 
-### (installation procedures of every dependence without conda is detailed in our wiki page)
+### (installation procedures of every dependence without conda are detailed in our wiki page)
 
 #### Mandatory
 - gcc and g++ compilers, version >= 6 
