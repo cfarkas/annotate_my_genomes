@@ -128,8 +128,7 @@ final_annotated.gtf (located in output_files_NCBI) will contained the merged NCB
 
 ### More Scenarios?
 
-- For downstream analysis, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
-- For additional examples, please visit https://github.com/cfarkas/annotate_my_genomes_examples
+- For downstream analysis and examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 ### Notes
 Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc.
