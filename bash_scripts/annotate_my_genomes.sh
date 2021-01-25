@@ -208,44 +208,12 @@ tail -n +2 transcripts_GO.tab > transcriptsGO.tab
 rm transcripts_GO*
 printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
 echo ""
-######################################
-# Gene Prediction Step with Augustus #
-######################################
-cd /${dir1}/
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 7. Predicting gene models from transcripts with AUGUSTUS (gff3 format) :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
-echo ""
-echo ""
-wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
-gunzip augustus.2.5.5.tar.gz
-tar -xvf augustus.2.5.5.tar
-cd augustus.2.5.5/src/
-make
-cd ..
-cd ..
-export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
-./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
-echo ""
-printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
-echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-gffread augustus.gff3 -T -o coding_transcripts.gtf
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
-printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
-echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
+printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
 git clone https://github.com/cfarkas/FEELnc.git
@@ -275,9 +243,9 @@ echo ""
 cd ..
 echo ""
 ### Running FEELnc
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Running FEELnc on final_annotated.gtf file :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Running FEELnc on final_annotated.gtf file :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
@@ -288,7 +256,7 @@ echo ""
 printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Parsing GAWN and FEELnc outputs :::\n"
+printf "${YELLOW}::: 10. Parsing GAWN and FEELnc outputs :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
@@ -311,6 +279,40 @@ sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm coding_transcripts.tab
+echo ""
+######################################
+# Gene Prediction Step with Augustus #
+######################################
+cd /${dir1}/
+echo ""
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 11. Predicting gene models from coding transcripts with AUGUSTUS (gff3 format) :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+echo ""
+printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
+echo ""
+echo ""
+wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
+gunzip augustus.2.5.5.tar.gz
+tar -xvf augustus.2.5.5.tar
+cd augustus.2.5.5/src/
+make
+cd ..
+cd ..
+export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
+gffread -w coding-transcripts.fa -g ${3} coding-genes.gtf
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on coding-transcripts.fa > augustus.gff3
+echo ""
+printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
+echo ""
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 12. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+gffread augustus.gff3 -T -o coding_transcripts.gtf
+agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
+printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
+echo ""
 ###############################
 # Configuring Summary Results #
 ###############################
@@ -322,7 +324,7 @@ printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_UCSC
 mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 Stats.txt ./output_files_UCSC/
 cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_UCSC/
-rm transcriptome_annotation_table.tsv refGene.tx*
+rm transcriptome_annotation_table.tsv refGene.tx* coding-transcripts.fa
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
