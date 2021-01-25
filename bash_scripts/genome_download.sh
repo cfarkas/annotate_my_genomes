@@ -83,5 +83,6 @@ gunzip refGene.txt.gz
 gunzip ncbiRefSeq.txt.gz
 cut -f 2- refGene.txt | ./genePredToGtf file stdin -source=${genome}_Ref  ${genome}.gtf
 cut -f 2- ncbiRefSeq.txt | ./genePredToGtf file stdin -source=${genome}_Ref  ${genome}_ncbiRefSeq.gtf
+grep "NM_" ${genome}.gtf > ${genome}_coding.gtf
 echo ""
 echo "All done. ${genome}.fa and ${genome}.gtf files are located in the current directory"
