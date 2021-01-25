@@ -46,6 +46,12 @@ conda env update --file environment.yml                        # install require
 conda activate annotate_my_genomes                             # activate annotate_my_genomes enviroment
 bash makefile.sh                                               # make  & install
 ```
+ncbi-blast+ v2.7.1 is required. To install it, do the following:
+```
+sudo apt-get install ncbi-blast+                               # Ubuntu
+```
+or see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
+
 After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
 # To activate this environment, use
