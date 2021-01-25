@@ -207,7 +207,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${C
 echo ""
 printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n"
 echo ""
-git clone https://github.com/enormandeau/gawn.git
+git clone https://github.com/cfarkas/gawn.git
 cd gawn/02_infos/
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
@@ -282,7 +282,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 9. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ### Cloning FEELnc in current directory
-git clone https://github.com/tderrien/FEELnc.git
+git clone https://github.com/cfarkas/FEELnc.git
 echo ""
 cp ${4} ${3} final_annotated.gtf /${dir1}/FEELnc/
 cd FEELnc
