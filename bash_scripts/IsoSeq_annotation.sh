@@ -286,6 +286,7 @@ git clone https://github.com/cfarkas/FEELnc.git
 echo ""
 cp ${4} ${3} final_annotated.gtf /${dir1}/FEELnc/
 cd FEELnc
+grep "NM_" ${2} > NM_coding.gtf
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
 export PATH=$PATH:${FEELNCPATH}/scripts/
@@ -312,11 +313,11 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 10. Running FEELnc on final_annotated.gtf file :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
-FEELnc_filter.pl -i final_annotated.gtf -a ${3} -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a ${3} -b transcript_biotype=protein_coding -g ${4} --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${4} --mode=shuffle
 # Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a ${3} > candidate_lncRNA_classes.txt
+FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a NM_coding.gtf > candidate_lncRNA_classes.txt
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
 echo ""
