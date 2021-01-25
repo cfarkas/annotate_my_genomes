@@ -1,13 +1,12 @@
 name: annotate_my_genomes # name of environment
 channels:
 - bioconda
-dependencies:         # everything under this, installed by conda
+dependencies:             # everything under this, installed by conda
 - parallel
 - cufflinks
 - stringtie
 - gffcompare
 - gffread
-- bioconda::blast=2.7.1
 - gmap
 - bedtools
 - emboss
