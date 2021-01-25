@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 {
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
