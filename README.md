@@ -43,7 +43,6 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda env update --file environment.yml                        # install required programs 
-conda activate annotate_my_genomes                             # activate annotate_my_genomes enviroment
 bash makefile.sh                                               # make  & install
 ```
 ncbi-blast+ version equal or higher than v2.7.1 is required. To install it, do the following:
