@@ -15,6 +15,7 @@ dependencies:             # everything under this, installed by conda
 - feelnc
 - samtools
 - minimap2
+- augustus
 - r-car
 - bioconductor-edger
 - bioconductor-enhancedvolcano
