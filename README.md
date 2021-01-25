@@ -45,7 +45,9 @@ conda config --add channels bioconda                           # add bioconda ch
 conda env update --file environment.yml                        # install required programs 
 bash makefile.sh                                               # make  & install
 ```
-Users requiere ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
+Users also requeire: 
+- ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
+- gcc/g++ compilers. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#1-gcc-and-g-compilers-version--6
 
 - After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
