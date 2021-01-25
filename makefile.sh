@@ -18,7 +18,7 @@ mkdir genome_1
 mkdir get_transcripts
 cp ./test/gawn_config.sh ./genome_1/
 cp ./test/gawn_config.sh ./bash_scripts/
-git clone https://github.com/neurobin/shc.git
+git clone https://github.com/cfarkas/shc.git
 cd shc/
 ./autogen.sh
 ./configure
