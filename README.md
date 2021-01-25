@@ -36,7 +36,7 @@ will output:
 
 ## Installation:  
 
-### Option 1: Via conda/pip (recommended)
+### Option 1: Installing dependences via conda/pip (recommended)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
@@ -56,7 +56,8 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 #
 #     $ conda deactivate
 ```
-By activating the enviroment, all binaries in the annotate_my_genomes repository can be executed, without further installations. To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
+- By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.  
+- To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
 
 ### Option 2: Without using conda, program by program:
 
