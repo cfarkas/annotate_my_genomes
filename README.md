@@ -64,24 +64,24 @@ By activating the enviroment, all binaries in the annotate_my_genomes repository
 
 ## Quickstart (Running the test)
 
-1) Optionally, edit and increase the number of cpus in /test/gawn_config.sh: NCPUS=10
+1) Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). 
 
-2) Run the pipeline with a set of transcripts from chromosome 33, Gallus gallus genome version "6". Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). 
+2) Optionally, edit and increase the number of cpus in /test/gawn_config.sh: NCPUS=10
 
-Go to /annotate_my_genomes/test and do the following:
+Enter /annotate_my_genomes/test/ directory and execute the following:
 
 ```
 # Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
 ./genome-download galGal6
 
-# Execute in folder with 20 threads as example
+# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads as example
 ./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 20
 ```
 
 ## Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
 
-- For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for cpu processing:
+- As example, to annotate an user-provided mouse GTF file (named "target.gtf" as example) in genome_1 folder, using 30 threads for cpu processing:
 ```
 ./genome-download mm10
 ./annotate-my-genomes target.gtf mm10.gtf mm10.fa 30
