@@ -6,7 +6,7 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 ![Pipeline_Scheme](https://user-images.githubusercontent.com/7016350/85973038-d9469e80-b98e-11ea-864e-03a803368143.jpg)
 
 
-# Pipeline Outline
+## Pipeline Outline
   annotate_my_genomes is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, coding sequences in nucleotides and correspondent proteins can be inferred.   
 
 This pipeline requieres to run:
@@ -62,7 +62,7 @@ By activating the enviroment, all binaries in the annotate_my_genomes repository
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
-# Quickstart (Running the test)
+## Quickstart (Running the test)
 
 1) Optionally, edit and increase the number of cpus in /test/gawn_config.sh: NCPUS=10
 
@@ -78,7 +78,7 @@ Go to /annotate_my_genomes/test and do the following:
 ./annotate-my-genomes stringtie_chr33.gtf galGal6.gtf galGal6.fa 20
 ```
 
-# Usage
+## Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
 
 - For mouse assembly using "target.gtf" in genome_1 folder, using 30 threads for cpu processing:
