@@ -36,7 +36,7 @@ will output:
 
 ## Installation:  
 
-### Option 1: Installing dependences via conda/pip (recommended)
+### Option 1: Installing dependences via anaconda (recommended)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
