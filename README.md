@@ -5,7 +5,6 @@ Genome annotation pipeline using long sequencing reads from non-model (and model
 
 ![Pipeline_Scheme](https://user-images.githubusercontent.com/7016350/85973038-d9469e80-b98e-11ea-864e-03a803368143.jpg)
 
-### For installation, documentation and detailed examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 # Pipeline Outline
   annotate_my_genomes is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, coding sequences in nucleotides and correspondent proteins can be inferred.   
@@ -35,58 +34,33 @@ will output:
 ```
 * Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
 
-# Dependences 
+## Installation:  
 
-### (installation procedures of every dependence without conda are detailed in our wiki page)
+### Option 1: Via conda/pip (recommended)
+- requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
+```
+git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
+cd annotate_my_genomes                                         # enter repository
+conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
+conda env update --file environment.yml                        # install required programs 
+conda activate annotate_my_genomes                             # activate annotate_my_genomes enviroment
+bash makefile.sh                                               # make  & install
+```
+After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
+```
+# To activate this environment, use
+#
+#     $ conda activate annotate_my_genomes
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+```
+By activating the enviroment, all binaries in the annotate_my_genomes repository can be executed, without further installations. To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
 
-#### Mandatory
-- gcc and g++ compilers, version >= 6 
-- parallel library
-- cufflinks
-- StringTie (v2.0 release needed)
-- gffcompare and gffread
-- ncbi-blast+ version (v2.9.0)
-- GMAP genomic aligner program 
-- BEDTools
-- AGAT: Another Gff Analysis Toolkit (AGAT). Suite of tools to handle gene annotations in any GTF/GFF format : https://github.com/NBISweden/AGAT
-- FEELnc : FlExible Extraction of LncRNA : https://github.com/tderrien/FEELnc
-- SAMtools with htslib (version >= 1.9)  : http://www.htslib.org/download/ 
+### Option 2: Without using conda, program by program:
 
-#### Optional (for downstream analysis)
-- EMBOSS toolkit (Open Source software for molecular biology)
-- Clustal Omega (DNA/Protein alignment program)
-
-Six of these requirements except the first and the last two (gcc/g++, FEELnc and SAMtools) can be achieved via conda in a single command-line as follows:
-```
-conda install -c conda-forge parallel
-conda install -c bioconda cufflinks
-conda install -c bioconda stringtie
-conda install -c bioconda gffcompare
-conda install -c bioconda gffread
-conda install -c bioconda blast
-conda install -c bioconda gmap
-conda install -c bioconda bedtools
-conda install -c bioconda agat
-# Optional
-conda install -c bioconda emboss
-conda install -c bioconda clustalo
-```
-
-To install anaconda in ubuntu/linux:
-```
-apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6
-wget https://repo.anaconda.com/archive/Anaconda3-2020.02-Linux-x86_64.sh
-chmod 755 Anaconda3-2020.02-Linux-x86_64.sh
-./Anaconda3-2020.02-Linux-x86_64.sh
-```
-
-# Installation: 
-```
-git clone https://github.com/cfarkas/annotate_my_genomes.git
-cd annotate_my_genomes
-bash makefile.sh             # make  & install
-```
-Binaries are located in bin, genome_1 and test folders, respectively.
+- see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
 # Quickstart (Running the test)
 
