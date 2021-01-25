@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 genome=${1}
 
 if [ "$1" == "-h" ]; then
