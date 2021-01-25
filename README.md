@@ -52,7 +52,7 @@ sudo apt-get install ncbi-blast+                               # Ubuntu
 ```
 or see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
 
-After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
+- After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
 # To activate this environment, use
 #
