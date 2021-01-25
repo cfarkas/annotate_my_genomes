@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 final_annotated=${1}
 reference_genome=${2}
