@@ -228,7 +228,7 @@ make
 cd ..
 cd ..
 export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
-augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
+./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on transcripts.fa > augustus.gff3
 echo ""
 printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
 echo ""
