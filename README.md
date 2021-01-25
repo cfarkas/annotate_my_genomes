@@ -21,7 +21,7 @@ Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As e
 
 Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
-./annotate-my-genomes stringtie.gtf path/to/mm10.gtf path/to/mm10.fa 20
+./annotate-my-genomes stringtie.gtf /path/to/mm10.gtf /path/to/mm10.fa 20
 ```
 will output:
 ```
