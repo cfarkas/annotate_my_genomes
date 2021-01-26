@@ -203,7 +203,7 @@ cd /${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
 echo ""
 echo ""
-printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
+printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/04_annotation/ :::${CYAN}\n"
 echo ""
 #################################
 # Extracting transcriptome hits #
