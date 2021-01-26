@@ -253,6 +253,7 @@ echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Parsing GAWN and FEELnc outputs :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+echo ""
 cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
