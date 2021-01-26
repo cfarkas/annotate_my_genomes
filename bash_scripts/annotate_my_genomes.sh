@@ -192,21 +192,16 @@ echo ""
 echo ""
 printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
 echo ""
-###########################################
-# Extracting GO terms for each transcript #
-###########################################
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+#################################
+# Extracting transcriptome hits #
+#################################
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 6. Extracting transcriptome hits :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
-tr ';' '\t' < transcripts_GO > transcripts_GO_sep
-column -t transcripts_GO_sep > transcripts_GO.tab
-tail -n +2 transcripts_GO.tab > transcriptsGO.tab
-rm transcripts_GO*
-printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
+cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
+printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
@@ -267,8 +262,7 @@ grep -w -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.lncRNAs.gtf
 grep --invert-match -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.coding.gtf
 rm final_annotated.gtf
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-awk '{print $1"\t"$2}' transcriptome_annotation_table.tsv > coding_list
+awk '{print $1"\t"$2}' transcriptome.hits > coding_list
 awk -F'\t' '$2!=""' coding_list > coding_list.tab
 tail -n +2 "coding_list.tab" > coding_transcripts
 awk '{print $1}' coding_transcripts > coding_transcripts.tab
@@ -317,21 +311,21 @@ echo ""
 ###############################
 # Configuring Summary Results #
 ###############################
-printf "${YELLOW}:::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Setting Results :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 12. Moving results to output_files_UCSC folder :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
+printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
 mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa transcriptsGO.tab cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 Stats.txt ./output_files_UCSC/
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_UCSC/
-rm transcriptome_annotation_table.tsv refGene.tx* coding-transcripts.fa
+cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_UCSC/
+rm refGene.tx* coding-transcripts.fa
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_UCSC . GAWN annotation is named transcriptome_annotation_table.tsv"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_UCSC . GAWN protein annotation is named transcriptome.hits"
 echo ""
 echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files_UCSC.".
 echo ""
