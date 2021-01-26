@@ -352,7 +352,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_IsoSeq
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff IsoSeq_transcripts.fa transcriptsGO.tab cds.fa prot.fa Stats.txt coding_transcripts.gtf logfile augustus.gff3 ./output_files_IsoSeq/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff IsoSeq_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf logfile augustus.gff3 ./output_files_IsoSeq/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_IsoSeq/
 rm refGene.tx*
 echo ""
@@ -372,8 +372,6 @@ echo ""
 echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files_IsoSeq"
 echo ""
 echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files_IsoSeq"
-echo ""
-echo "GO terms associated to each transcript, named transcriptsGO.tab is located in ./output_files_IsoSeq"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
