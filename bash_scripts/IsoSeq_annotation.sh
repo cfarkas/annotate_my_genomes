@@ -191,7 +191,7 @@ echo ""
 printf "${PURPLE}::: Continue with protein-coding annotation\n" 
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n"
+printf "${YELLOW}::: 7. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 gffread -w IsoSeq_transcripts.fa -g ${4} final_annotated.gtf
@@ -199,7 +199,7 @@ echo ""
 printf "${PURPLE}::: Done. IsoSeq_transcripts.fa are located in current directory\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 5. Performing gene annotation by using GAWN pipeline :::\n"
+printf "${YELLOW}::: 8. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
@@ -226,21 +226,16 @@ echo ""
 echo ""
 printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
 echo ""
-###########################################
-# Extracting GO terms for each transcript #
-###########################################
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+#################################
+# Extracting transcriptome hits #
+#################################
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Extracting transcriptome hits :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
-tr ';' '\t' < transcripts_GO > transcripts_GO_sep
-column -t transcripts_GO_sep > transcripts_GO.tab
-tail -n +2 transcripts_GO.tab > transcriptsGO.tab
-rm transcripts_GO*
-printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
+cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
+printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
 ######################################
 # Gene Prediction Step with Augustus #
