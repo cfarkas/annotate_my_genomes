@@ -320,7 +320,7 @@ printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
 mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 Stats.txt ./output_files_UCSC/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_UCSC/
-rm refGene.tx* coding-transcripts.fa
+rm coding-transcripts.fa
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
