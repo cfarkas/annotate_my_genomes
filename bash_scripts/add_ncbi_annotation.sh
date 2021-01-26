@@ -324,8 +324,8 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 11. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread augustus.gff3 -T -o coding_transcripts.gtf
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
+agat_sp_extract_sequences.pl -g augustus.gff3 -f NCBI_transcripts.fa -o cds.fa
+agat_sp_extract_sequences.pl -g augustus.gff3 -f NCBI_transcripts.fa -o prot.fa --protein
 printf "${PURPLE}::: All Done. Setting results...\n"
 echo ""
 #############################
