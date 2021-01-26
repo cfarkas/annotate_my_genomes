@@ -205,21 +205,16 @@ echo ""
 echo ""
 printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/05_results/ :::${CYAN}\n"
 echo ""
-###########################################
-# Extracting GO terms for each transcript #
-###########################################
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 6. Extracting GO terms for each transcript :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+#################################
+# Extracting transcriptome hits #
+#################################
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 6. Extracting transcriptome hits :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-cut -d$'\t' -f 1,6 transcriptome_annotation_table.tsv > transcripts_GO
-tr ';' '\t' < transcripts_GO > transcripts_GO_sep
-column -t transcripts_GO_sep > transcripts_GO.tab
-tail -n +2 transcripts_GO.tab > transcriptsGO.tab
-rm transcripts_GO*
-printf "${PURPLE}::: Done. GO terms were succesfully extracted :::${CYAN}\n"
+cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
+printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
 ############################################
 # FEELnc long noncoding RNA identification #
@@ -281,8 +276,7 @@ grep -w -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.lncRNAs.gtf
 grep --invert-match -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.coding.gtf
 rm final_annotated.gtf
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/
-awk '{print $1"\t"$2}' transcriptome_annotation_table.tsv > coding_list
+awk '{print $1"\t"$2}' transcriptome.hits > coding_list
 awk -F'\t' '$2!=""' coding_list > coding_list.tab
 tail -n +2 "coding_list.tab" > coding_transcripts
 awk '{print $1}' coding_transcripts > coding_transcripts.tab
@@ -328,28 +322,25 @@ agat_sp_extract_sequences.pl -g augustus.gff3 -f NCBI_transcripts.fa -o cds.fa
 agat_sp_extract_sequences.pl -g augustus.gff3 -f NCBI_transcripts.fa -o prot.fa --protein
 printf "${PURPLE}::: All Done. Setting results...\n"
 echo ""
-#############################
-# Configuring Summary Results
-#############################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Configuring Summary Results :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-#######################################
-# Moving results to output_files_NCBI #
-#######################################
+###############################
+# Configuring Summary Results #
+###############################
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 12. Moving results to output_files_NCBI folder :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
+printf "${PURPLE}::: Moving results to output_files_NCBI folder :::${CYAN}\n"
 mkdir output_files_NCBI
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa transcriptsGO.tab cds.fa prot.fa Stats.txt coding_transcripts.gtf logfile augustus.gff3 ./output_files_NCBI/
-cp /${dir1}/gawn/05_results/transcriptome_annotation_table.tsv /${dir1}/output_files_NCBI/
-rm transcriptome_annotation_table.tsv refGene.tx*
+cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_NCBI/
+rm refGene.tx*
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo "All Done. The transcripts were classified in ./output_files_NCBI"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_NCBI . GAWN annotation is named transcriptome_annotation_table.tsv"
+echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_NCBI. GAWN protein annotation is named transcriptome.hits"
 echo ""
 echo "GTF file named final_annotated.gtf (and correspondent gff file) are located in ./output_files_NCBI, containing novel genes and lncRNA classification (second field in GTF file)"
 echo ""
