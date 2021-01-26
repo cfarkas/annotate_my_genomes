@@ -279,6 +279,7 @@ sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm coding_transcripts.tab
+echo "All done"
 echo ""
 ######################################
 # Gene Prediction Step with Augustus #
@@ -311,14 +312,14 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 gffread augustus.gff3 -T -o coding_transcripts.gtf
 agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
 agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
-printf "${PURPLE}::: All Done. Continue with FEELnc long non-coding classification...\n"
+printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
 ###############################
 # Configuring Summary Results #
 ###############################
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Configuring Summary Results :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 12. Setting Results :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_UCSC
