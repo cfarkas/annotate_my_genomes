@@ -1,13 +1,13 @@
-# annotate_my_genomes
+# annotate_my_genome
 
 ### :microscope: :hatching_chick: :hatched_chick: 
-Genome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
+Transcriptome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
 ![Pipeline_Scheme](https://user-images.githubusercontent.com/7016350/85973038-d9469e80-b98e-11ea-864e-03a803368143.jpg)
 
 
 ## Pipeline Outline
-  annotate_my_genomes is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, coding sequences in nucleotides and correspondent proteins can be inferred.   
+  annotate_my_genome is a pipeline that aim to annotate transfrags obtained by genome-guided transcriptome assembly strategies (StringTie) coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, coding sequences in nucleotides and correspondent proteins can be inferred.   
 
 This pipeline requieres to run:
 
