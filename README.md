@@ -38,7 +38,6 @@ will output:
 
 ### Option 1: Installing dependences via anaconda (recommended)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
-- zlib-dev library. In ubuntu: ```sudo apt install zlib1g-dev```
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
