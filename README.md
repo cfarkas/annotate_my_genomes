@@ -48,7 +48,7 @@ bash makefile.sh                                               # make  & install
 ```
 Users also will need these two dependences:
 - ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
-- gcc/g++ compiler. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#1-gcc-and-g-compilers-version--6
+- gcc/g++ compiler version >=6. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#1-gcc-and-g-compilers-version--6
 
 After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
