@@ -49,6 +49,7 @@ bash makefile.sh                                               # make  & install
 Users also require: 
 - ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
 - gcc/g++ compiler. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#1-gcc-and-g-compilers-version--6
+- zlib-dev library. In ubuntu do: ``` sudo apt install zlib1g-dev```
 
 After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
