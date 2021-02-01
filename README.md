@@ -1,4 +1,4 @@
-# annotate_my_genome
+# annotate_my_genomes
 
 ### :microscope: :hatching_chick: :hatched_chick: 
 Transcriptome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
