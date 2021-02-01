@@ -38,8 +38,6 @@ will output:
 
 ### Option 1: Installing dependences via anaconda (recommended)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
-- ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
-- gcc/g++ compiler. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#1-gcc-and-g-compilers-version--6
 - zlib-dev library. In ubuntu: ```sudo apt install zlib1g-dev```
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
@@ -49,6 +47,9 @@ conda env update --file environment.yml                        # install require
 conda activate annotate_my_genomes                             # load environment
 bash makefile.sh                                               # make  & install
 ```
+Users also will need these two dependences:
+- ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
+- gcc/g++ compiler. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#1-gcc-and-g-compilers-version--6
 
 After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
