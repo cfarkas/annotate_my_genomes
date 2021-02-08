@@ -180,7 +180,7 @@ awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat IsoSeq_aligned.gtf | parallel --pipe -j ${5} sed -f sed.script > final_annotated.gtf
-rm -f sed.script fileA fileB *tmap.1 *tmap.2
+rm -f fileA fileB *tmap.1 *tmap.2
 printf "${PURPLE}::: Done. Gene_id field was replaced in the IsoSeq_aligned.gtf file and final_annotated.gtf was generated with these changes\n"
 echo ""
 printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs folder ...\n"
