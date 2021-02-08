@@ -310,7 +310,7 @@ sed -i 's/GENE./gene_id="/'g cds.bed
 sed -i 's/~~/";cds_id=/'g cds.bed
 cat cds.fa | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.fa
 cat cds.bed | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.bed
-cat prot.fa | parallel --pipe -j ${4} sed -f sed.script > prot.fixed.bed
+cat prot.fa | parallel --pipe -j ${4} sed -f sed.script > prot.fixed.fa
 rm cds.fa cds.bed prot.fa
 mv cds.fixed.fa cds.fa
 mv cds.fixed.bed cds.bed 
