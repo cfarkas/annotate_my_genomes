@@ -349,6 +349,7 @@ rm cds.fa cds.bed prot.fa
 mv cds.fixed.fa cds.fa
 mv cds.fixed.bed cds.bed 
 mv prot.fixed.fa prot.fa
+rm merged.fixed.coding.gtf namelist
 echo ""
 #########################################
 # Moving results to output_files_IsoSeq #
