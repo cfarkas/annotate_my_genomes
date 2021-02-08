@@ -29,8 +29,7 @@ will output:
 - transcripts.fa : associated transcripts from final_annotated.gtf 
 - cds. fa: associated coding sequences to final_annotated.gtf
 - prot.fa  associated protein sequences to final_annotated.gtf
-- coding_transcripts.gtf: GTF file containing cds sequences. 
-- transcriptsGO.tab: annotated Gene Ontology (GO terms) for each transcript. 
+- coding_transcripts.gtf: GTF file containing cds sequences.  
 ```
 * Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
 
