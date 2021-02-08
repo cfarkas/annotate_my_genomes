@@ -148,7 +148,7 @@ awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat ${1} | parallel --pipe -j ${4} sed -f sed.script > final_annotated.gtf
-rm -f sed.script fileA fileB *tmap.1 *tmap.2
+rm -f fileA fileB *tmap.1 *tmap.2
 printf "${PURPLE}::: Done. Gene_id field was replaced in the StringTie.gtf file and final_annotated.gtf was generated with these changes\n"
 echo ""
 printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs folder ...\n"
@@ -276,37 +276,46 @@ gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm coding_transcripts.tab
 echo "All done"
 echo ""
-######################################
-# Gene Prediction Step with Augustus #
-######################################
+##########################################
+# Gene Prediction Step with TransDecoder #
+##########################################
 cd /${dir1}/
 echo ""
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Predicting gene models from coding transcripts with AUGUSTUS (gff3 format) :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-echo ""
-printf "${PURPLE}::: Progress will be printed for each transcript :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 10. Predicting coding regions from transcripts with coding potential using TransDecoder :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 echo ""
-wget http://augustus.gobics.de/binaries/augustus.2.5.5.tar.gz
-gunzip augustus.2.5.5.tar.gz
-tar -xvf augustus.2.5.5.tar
-cd augustus.2.5.5/src/
-make
-cd ..
-cd ..
-export AUGUSTUS_CONFIG_PATH=./augustus.2.5.5/config/
 gffread -w coding-transcripts.fa -g ${3} coding-genes.gtf
-./augustus.2.5.5/src/augustus --species=human --progress=true --UTR=off --uniqueGeneId=true --gff3=on coding-transcripts.fa > augustus.gff3
+TransDecoder.LongOrfs -m 60 -t coding-transcripts.fa
+TransDecoder.Predict -t coding-transcripts.fa --single_best_only
+awk '{print $1}' coding-transcripts.fa.transdecoder.bed > coding.sequences
+grep "STRG." coding.sequences > coding.hits && rm coding.sequences
 echo ""
-printf "${PURPLE}::: Done. augustus.gff3 file is present in current directory...${CYAN}\n"
+printf "${PURPLE}::: Done. coding-transcripts.fa.transdecoder.gff3 file is present in current directory...${CYAN}\n"
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Converting gff3 to GTF format, collecting coding sequences and proteins with gffread and AGAT :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-gffread augustus.gff3 -T -o coding_transcripts.gtf
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o cds.fa
-agat_sp_extract_sequences.pl -g augustus.gff3 -f transcripts.fa -o prot.fa --protein
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 11. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+gffread coding-transcripts.fa.transdecoder.gff3 -T -o coding_transcripts.gtf
+sed -i 's/GENE.//'g coding_transcripts.gtf
+sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
+sed -i 's/GENE./gene_id="/'g cds.fa
+sed -i 's/~~/" cds_id=/'g cds.fa
+sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.pep > prot.fa
+sed -i 's/GENE./gene_id="/'g prot.fa
+sed -i 's/~~/" cds_id=/'g prot.fa
+sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.bed > cds.bed
+sed -i 's/GENE./gene_id="/'g cds.bed
+sed -i 's/~~/";cds_id=/'g cds.bed
+cat cds.fa | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.fa
+cat cds.bed | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.bed
+cat prot.fa | parallel --pipe -j ${4} sed -f sed.script > prot.fixed.bed
+rm cds.fa cds.bed prot.fa
+mv cds.fixed.fa cds.fa
+mv cds.fixed.bed cds.bed 
+mv prot.fixed.fa prot.fa
+echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
 ###############################
@@ -318,9 +327,9 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
-mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile augustus.gff3 Stats.txt ./output_files_UCSC/
+mv candidate_lncRNA_classes.txt final_annotated.gtf transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt coding.hits ./output_files_UCSC/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_UCSC/
-rm coding-transcripts.fa
+rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
