@@ -339,7 +339,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_NCBI folder :::${CYAN}\n"
 mkdir output_files_NCBI
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa cds.bed Stats.txt coding_transcripts.gtf logfile ./output_files_NCBI/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa cds.bed Stats.txt coding_transcripts.gtf coding.hits logfile ./output_files_NCBI/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_NCBI/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
