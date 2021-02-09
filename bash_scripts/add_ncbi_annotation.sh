@@ -331,7 +331,7 @@ rm cds.fa cds.bed prot.fa
 mv cds.fixed.fa cds.fa
 mv cds.fixed.bed cds.bed 
 mv prot.fixed.fa prot.fa
-rm merged.fixed.coding.gtf namelist coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
+rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 ###############################
 # Configuring Summary Results #
