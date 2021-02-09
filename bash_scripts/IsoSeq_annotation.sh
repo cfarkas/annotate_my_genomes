@@ -333,18 +333,33 @@ printf "${YELLOW}::: 11. Converting gff3 to GTF format and formatting coding seq
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 gffread coding-transcripts.fa.transdecoder.gff3 -T -o coding_transcripts.gtf
 sed -i 's/GENE.//'g coding_transcripts.gtf
+### Working with cds.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
 sed -i 's/GENE./gene_id="/'g cds.fa
 sed -i 's/~~/" transcript_id=/'g cds.fa
 sed -i 's/[.]["]/"/'g cds.fa
+# Removing protein id by expansion
+sed -i 's/[.]p[0-9]  ORF/ ORF/'g cds.fa
+sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g cds.fa
+sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g cds.fa
+### Working with prot.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.pep > prot.fa
 sed -i 's/GENE./gene_id="/'g prot.fa
 sed -i 's/~~/" transcript_id=/'g prot.fa
 sed -i 's/[.]["]/"/'g prot.fa
+# Removing protein id by expansion
+sed -i 's/[.]p[0-9]  ORF/ ORF/'g prot.fa
+sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g prot.fa
+sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g prot.fa
+### Working with cds.bed
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.bed > cds.bed
 sed -i 's/GENE./gene_id="/'g cds.bed
 sed -i 's/~~/";transcript_id=/'g cds.bed
 sed -i 's/[.]["]/"/'g cds.bed
+# Removing protein id by expansion
+sed -i 's/[.]p[0-9]  ORF/ ORF/'g cds.bed
+sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g cds.bed
+sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g cds.bed
 cat cds.fa | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.fa
 cat cds.bed | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${5} sed -f sed.script > prot.fixed.fa
