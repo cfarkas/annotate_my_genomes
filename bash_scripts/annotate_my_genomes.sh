@@ -318,7 +318,7 @@ rm cds.fa cds.bed prot.fa
 mv cds.fixed.fa cds.fa
 mv cds.fixed.bed cds.bed 
 mv prot.fixed.fa prot.fa
-rm merged.fixed.coding.gtf namelist
+rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
@@ -333,7 +333,6 @@ printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa cds.bed coding_transcripts.gtf logfile Stats.txt coding.hits ./output_files_UCSC/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_UCSC/
-rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
