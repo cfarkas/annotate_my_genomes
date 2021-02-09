@@ -301,15 +301,15 @@ gffread coding-transcripts.fa.transdecoder.gff3 -T -o coding_transcripts.gtf
 sed -i 's/GENE.//'g coding_transcripts.gtf
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
 sed -i 's/GENE./gene_id="/'g cds.fa
-sed -i 's/~~/" cds_id=/'g cds.fa
+sed -i 's/~~/" transcript_id=/'g cds.fa
 sed -i 's/[.]["]/"/'g cds.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.pep > prot.fa
 sed -i 's/GENE./gene_id="/'g prot.fa
-sed -i 's/~~/" cds_id=/'g prot.fa
+sed -i 's/~~/" transcript_id=/'g prot.fa
 sed -i 's/[.]["]/"/'g prot.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.bed > cds.bed
 sed -i 's/GENE./gene_id="/'g cds.bed
-sed -i 's/~~/";cds_id=/'g cds.bed
+sed -i 's/~~/";transcript_id=/'g cds.bed
 sed -i 's/[.]["]/"/'g cds.bed
 cat cds.fa | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.fa
 cat cds.bed | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.bed
