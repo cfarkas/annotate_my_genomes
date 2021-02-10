@@ -364,9 +364,15 @@ cat cds.fa | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.fa
 cat cds.bed | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${5} sed -f sed.script > prot.fixed.fa
 rm cds.fa cds.bed prot.fa
-mv cds.fixed.fa cds.fa
-mv cds.fixed.bed cds.bed 
-mv prot.fixed.fa prot.fa
+# generating sed.script2
+awk '{print $1}' transcriptome.hits > transcriptome.A
+awk '{print $2}' transcriptome.hits > transcriptome.B
+paste -d : transcriptome.A transcriptome.B | sed 's/\([^:]*\):\([^:]*\)/s%transcript_id=\1%swissprot_match=\2%/' > sed.script2
+# adding swissprot matches
+cat cds.fixed.fa | parallel --pipe -j 55 sed -f sed.script2 > cds.fa
+cat cds.fixed.bed | parallel --pipe -j 55 sed -f sed.script2 > cds.bed
+cat prot.fixed.fa | parallel --pipe -j 55 sed -f sed.script2 > prot.fa
+rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 #########################################
