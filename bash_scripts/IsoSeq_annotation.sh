@@ -331,8 +331,26 @@ echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 11. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+### Generating sed.script2 and sed.script3
+awk '{print $1}' transcriptome.hits > transcriptome.A
+awk '{print $2}' transcriptome.hits > transcriptome.B
+paste -d : transcriptome.A transcriptome.B | sed 's/\([^:]*\):\([^:]*\)/s%transcript_id=\1%swissprot_match=\2%/' > sed.script2
+paste -d : transcriptome.A transcriptome.B | sed 's/\([^:]*\):\([^:]*\)/s%match_id=\1%swissprot_match=\2%/' > sed.script3
+### Generating GTF file
 gffread coding-transcripts.fa.transdecoder.gff3 -T -o coding_transcripts.gtf
 sed -i 's/GENE.//'g coding_transcripts.gtf
+# removing protein id by expansion
+sed -i 's/[.]p[0-9]//'g coding_transcripts.gtf
+sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
+sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
+# removing transcript id by expansion
+sed -i 's/[.][0-9]~~/~~/'g coding_transcripts.gtf
+sed -i 's/[.][0-9][0-9]~~/~~/'g coding_transcripts.gtf
+sed -i 's/[.][0-9][0-9][0-9]~~/~~/'g coding_transcripts.gtf
+# replacing symbols
+sed -i 's/~~/"; match_id=/'g coding_transcripts.gtf
+cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script3 > coding_transcripts.fixed.gtf
+cat coding_transcripts.fixed.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.gtf
 ### Working with cds.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
 sed -i 's/GENE./gene_id="/'g cds.fa
@@ -364,14 +382,11 @@ cat cds.fa | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.fa
 cat cds.bed | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${5} sed -f sed.script > prot.fixed.fa
 rm cds.fa cds.bed prot.fa
-# generating sed.script2
-awk '{print $1}' transcriptome.hits > transcriptome.A
-awk '{print $2}' transcriptome.hits > transcriptome.B
-paste -d : transcriptome.A transcriptome.B | sed 's/\([^:]*\):\([^:]*\)/s%transcript_id=\1%swissprot_match=\2%/' > sed.script2
 # adding swissprot matches
-cat cds.fixed.fa | parallel --pipe -j 55 sed -f sed.script2 > cds.fa
-cat cds.fixed.bed | parallel --pipe -j 55 sed -f sed.script2 > cds.bed
-cat prot.fixed.fa | parallel --pipe -j 55 sed -f sed.script2 > prot.fa
+cat cds.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > cds.fa
+cat cds.fixed.bed | parallel --pipe -j ${5} sed -f sed.script2 > cds.bed
+cat prot.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > prot.fa
+rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
