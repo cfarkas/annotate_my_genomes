@@ -349,9 +349,9 @@ cat cds.bed | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${4} sed -f sed.script > prot.fixed.fa
 rm cds.fa cds.bed prot.fa
 # adding swissprot matches
-cat cds.fixed.fa | parallel --pipe -j 55 sed -f sed.script2 > cds.fa
-cat cds.fixed.bed | parallel --pipe -j 55 sed -f sed.script2 > cds.bed
-cat prot.fixed.fa | parallel --pipe -j 55 sed -f sed.script2 > prot.fa
+cat cds.fixed.fa | parallel --pipe -j ${4} sed -f sed.script2 > cds.fa
+cat cds.fixed.bed | parallel --pipe -j ${4} sed -f sed.script2 > cds.bed
+cat prot.fixed.fa | parallel --pipe -j ${4} sed -f sed.script2 > prot.fa
 rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
