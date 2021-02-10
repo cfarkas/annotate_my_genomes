@@ -323,9 +323,9 @@ sed -i 's/GENE./gene_id="/'g cds.bed
 sed -i 's/~~/";transcript_id=/'g cds.bed
 sed -i 's/[.]["]/"/'g cds.bed
 # Removing protein id by expansion
-sed -i 's/[.]p[0-9];ORF/;ORF/'g cds.bed
-sed -i 's/[.]p[0-9][0-9];ORF/;ORF/'g cds.bed
-sed -i 's/[.]p[0-9][0-9][0-9];ORF/;ORF/'g cds.bed
+sed -i 's/[.]p[0-9];ORF_type/;ORF/'g cds.bed
+sed -i 's/[.]p[0-9][0-9];ORF_type/;ORF/'g cds.bed
+sed -i 's/[.]p[0-9][0-9][0-9];ORF_type/;ORF/'g cds.bed
 cat cds.fa | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.fa
 cat cds.bed | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${4} sed -f sed.script > prot.fixed.fa
