@@ -366,7 +366,7 @@ cat cds.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > cds.fa
 cat cds.fixed.bed | parallel --pipe -j ${5} sed -f sed.script2 > cds.bed
 cat prot.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > prot.fa
 rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
-rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
+rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf transcriptome.A transcriptome.B namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
