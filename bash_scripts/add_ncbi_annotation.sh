@@ -374,7 +374,7 @@ grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
 grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
-rm coding-genes.gtf lncRNAs.gtf other-genes.gtf
+rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script sed.script2 sed.script3 transcriptome.hits
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
