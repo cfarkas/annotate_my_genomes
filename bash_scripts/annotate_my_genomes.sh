@@ -270,7 +270,6 @@ awk '{print $1}' coding_transcripts > coding_transcripts.tab
 rm coding_lis* coding_transcripts lncRNA_transcripts
 grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
 grep --invert-match -F -f coding_transcripts.tab merged.fixed.coding.gtf > other-genes.gtf
-#sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 rm coding_transcripts.tab
 echo "All done"
@@ -377,7 +376,6 @@ echo ""
 printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa cds.bed coding_transcripts.gtf logfile Stats.txt coding.hits ./output_files_UCSC/
-cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_UCSC/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
