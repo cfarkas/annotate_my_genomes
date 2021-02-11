@@ -10,8 +10,7 @@ dependencies:             # everything under this, installed by conda
 - gmap
 - bedtools
 - emboss
-- clustalo
-- agat 
+- clustalo 
 - feelnc
 - samtools
 - minimap2
