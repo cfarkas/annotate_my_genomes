@@ -272,7 +272,6 @@ grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
 grep --invert-match -F -f coding_transcripts.tab merged.fixed.coding.gtf > other-genes.gtf
 #sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
-gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm coding_transcripts.tab
 echo "All done"
 echo ""
@@ -317,6 +316,8 @@ sed -i 's/[.][0-9][0-9][0-9]~~/~~/'g coding_transcripts.gtf
 sed -i 's/~~/"; match_id=/'g coding_transcripts.gtf
 cat coding_transcripts.gtf | parallel --pipe -j ${4} sed -f sed.script3 > coding_transcripts.fixed.gtf
 cat coding_transcripts.fixed.gtf | parallel --pipe -j ${4} sed -f sed.script > coding_transcripts.gtf
+sed -i 's/_match=/_match "/'g coding_transcripts.gtf
+sed -i 's/gene_name.*//' coding_transcripts.gtf
 ### Working with cds.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
 sed -i 's/GENE./gene_id="/'g cds.fa
@@ -363,6 +364,7 @@ sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 rm coding-genes.gtf lncRNAs.gtf other-genes.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
+echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
 ###############################
