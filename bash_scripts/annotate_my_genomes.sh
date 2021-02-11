@@ -356,7 +356,7 @@ rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 grep "StringTie" final_annotated.gtf > genes.gtf
-gerp "lncRNA" final_annotated.gtf > lncRNA.gtf
+grep "lncRNA" final_annotated.gtf > lncRNA.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
 grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
