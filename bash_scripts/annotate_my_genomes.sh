@@ -270,7 +270,7 @@ awk '{print $1}' coding_transcripts > coding_transcripts.tab
 rm coding_lis* coding_transcripts lncRNA_transcripts
 grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
 grep --invert-match -F -f coding_transcripts.tab merged.fixed.coding.gtf > other-genes.gtf
-sed -i 's/StringTie/coding/' coding-genes.gtf
+#sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm coding_transcripts.tab
@@ -355,6 +355,14 @@ cat prot.fixed.fa | parallel --pipe -j ${4} sed -f sed.script2 > prot.fa
 rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
+grep "StringTie" final_annotated.gtf > genes.gtf
+gerp "lncRNA" final_annotated.gtf > lncRNA.gtf
+grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
+grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
+sed -i 's/StringTie/coding/' coding-genes.gtf
+cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
+rm coding-genes.gtf lncRNAs.gtf other-genes.gtf
+gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
 ###############################
