@@ -283,9 +283,7 @@ awk '{print $1}' coding_transcripts > coding_transcripts.tab
 rm coding_lis* coding_transcripts lncRNA_transcripts
 grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
 grep --invert-match -F -f coding_transcripts.tab merged.fixed.coding.gtf > other-genes.gtf
-sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
-gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm coding_transcripts.tab
 echo "All done"
 echo ""
@@ -330,6 +328,8 @@ sed -i 's/[.][0-9][0-9][0-9]~~/~~/'g coding_transcripts.gtf
 sed -i 's/~~/"; match_id=/'g coding_transcripts.gtf
 cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script3 > coding_transcripts.fixed.gtf
 cat coding_transcripts.fixed.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.gtf
+sed -i 's/_match=/_match "/'g coding_transcripts.gtf
+sed -i 's/gene_name.*//' coding_transcripts.gtf
 ### Working with cds.fa
 sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
 sed -i 's/GENE./gene_id="/'g cds.fa
@@ -366,8 +366,18 @@ cat cds.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > cds.fa
 cat cds.fixed.bed | parallel --pipe -j ${5} sed -f sed.script2 > cds.bed
 cat prot.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > prot.fa
 rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
-rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
+echo ""
+grep "StringTie" final_annotated.gtf > genes.gtf
+grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
+grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
+grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
+sed -i 's/StringTie/coding/' coding-genes.gtf
+cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
+rm coding-genes.gtf lncRNAs.gtf other-genes.gtf
+gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
+echo ""
+printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
 ###############################
 # Configuring Summary Results #
@@ -379,7 +389,6 @@ echo ""
 printf "${PURPLE}::: Moving results to output_files_NCBI folder :::${CYAN}\n"
 mkdir output_files_NCBI
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa cds.bed Stats.txt coding_transcripts.gtf coding.hits logfile ./output_files_NCBI/
-cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/output_files_NCBI/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
