@@ -413,7 +413,7 @@ echo "candidate_lncRNA_classes.txt contained detailed long non-coding classifica
 echo ""
 echo "Associated FASTA file to this GTF (IsoSeq_transcripts.fa) is located in ./output_files_IsoSeq"
 echo ""
-echo "TransDecoder GTF file to parse IsoSeq_transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_IsoSeq"
+echo "TransDecoder GTF file suitable to parse IsoSeq_transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_IsoSeq"
 echo ""
 echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_IsoSeq"
 echo ""
