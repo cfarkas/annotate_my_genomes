@@ -350,11 +350,11 @@ sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g prot.fa
 sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g prot.fa
 cat cds.fa | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.fa
 cat prot.fa | parallel --pipe -j ${5} sed -f sed.script > prot.fixed.fa
-rm cds.fa cds.bed prot.fa
+rm cds.fa prot.fa
 # adding swissprot matches
 cat cds.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > cds.fa
 cat prot.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > prot.fa
-rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
+rm cds.fixed.fa prot.fixed.fa
 rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf transcriptome.A transcriptome.B namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 grep "StringTie" final_annotated.gtf > genes.gtf
