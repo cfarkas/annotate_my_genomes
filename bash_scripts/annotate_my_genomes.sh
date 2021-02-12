@@ -335,24 +335,13 @@ sed -i 's/[.]["]/"/'g prot.fa
 sed -i 's/[.]p[0-9]  ORF/ ORF/'g prot.fa
 sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g prot.fa
 sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g prot.fa
-### Working with cds.bed
-sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.bed > cds.bed
-sed -i 's/GENE./gene_id="/'g cds.bed
-sed -i 's/~~/";transcript_id=/'g cds.bed
-sed -i 's/[.]["]/"/'g cds.bed
-# Removing protein id by expansion
-sed -i 's/[.]p[0-9];ORF_type/;ORF/'g cds.bed
-sed -i 's/[.]p[0-9][0-9];ORF_type/;ORF/'g cds.bed
-sed -i 's/[.]p[0-9][0-9][0-9];ORF_type/;ORF/'g cds.bed
 cat cds.fa | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.fa
-cat cds.bed | parallel --pipe -j ${4} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${4} sed -f sed.script > prot.fixed.fa
-rm cds.fa cds.bed prot.fa
+rm cds.fa prot.fa
 # adding swissprot matches
 cat cds.fixed.fa | parallel --pipe -j ${4} sed -f sed.script2 > cds.fa
-cat cds.fixed.bed | parallel --pipe -j ${4} sed -f sed.script2 > cds.bed
 cat prot.fixed.fa | parallel --pipe -j ${4} sed -f sed.script2 > prot.fa
-rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
+rm cds.fixed.fa prot.fixed.fa
 rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf transcriptome.A transcriptome.B namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 grep "StringTie" final_annotated.gtf > genes.gtf
@@ -375,7 +364,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa cds.bed coding_transcripts.gtf logfile Stats.txt coding.hits ./output_files_UCSC/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt coding.hits ./output_files_UCSC/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -391,7 +380,7 @@ echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./ou
 echo ""
 echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files_UCSC"
 echo ""
-echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files_UCSC"
+echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files_UCSC"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
