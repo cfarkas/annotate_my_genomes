@@ -369,24 +369,13 @@ sed -i 's/[.]["]/"/'g prot.fa
 sed -i 's/[.]p[0-9]  ORF/ ORF/'g prot.fa
 sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g prot.fa
 sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g prot.fa
-### Working with cds.bed
-sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.bed > cds.bed
-sed -i 's/GENE./gene_id="/'g cds.bed
-sed -i 's/~~/";transcript_id=/'g cds.bed
-sed -i 's/[.]["]/"/'g cds.bed
-# Removing protein id by expansion
-sed -i 's/[.]p[0-9];ORF_type/;ORF/'g cds.bed
-sed -i 's/[.]p[0-9][0-9];ORF_type/;ORF/'g cds.bed
-sed -i 's/[.]p[0-9][0-9][0-9];ORF_type/;ORF/'g cds.bed
 cat cds.fa | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.fa
-cat cds.bed | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.bed
 cat prot.fa | parallel --pipe -j ${5} sed -f sed.script > prot.fixed.fa
-rm cds.fa cds.bed prot.fa
+rm cds.fa prot.fa
 # adding swissprot matches
 cat cds.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > cds.fa
-cat cds.fixed.bed | parallel --pipe -j ${5} sed -f sed.script2 > cds.bed
 cat prot.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > prot.fa
-rm cds.fixed.fa cds.fixed.bed prot.fixed.fa
+rm cds.fixed.fa prot.fixed.fa
 rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf transcriptome.A transcriptome.B namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 echo ""
 grep "StringTie" final_annotated.gtf > genes.gtf
@@ -409,7 +398,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_IsoSeq
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff IsoSeq_transcripts.fa cds.fa prot.fa cds.bed Stats.txt coding_transcripts.gtf coding.hits logfile ./output_files_IsoSeq/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff IsoSeq_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf coding.hits logfile ./output_files_IsoSeq/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -424,7 +413,7 @@ echo "candidate_lncRNA_classes.txt contained detailed long non-coding classifica
 echo ""
 echo "Associated FASTA file to this GTF (IsoSeq_transcripts.fa) is located in ./output_files_IsoSeq"
 echo ""
-echo "TransDecoder GTF file suitable for transcript count quantification (coding_transcripts.gtf) contains all coding transcripts resolved by TransDecoder and is located in ./output_files_IsoSeq"
+echo "TransDecoder GTF file to parse IsoSeq_transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_IsoSeq"
 echo ""
 echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_IsoSeq"
 echo ""
