@@ -415,7 +415,7 @@ echo "Associated FASTA file to this GTF (IsoSeq_transcripts.fa) is located in ./
 echo ""
 echo "TransDecoder GTF file suitable to parse IsoSeq_transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_IsoSeq"
 echo ""
-echo "Associated Transcript coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_IsoSeq"
+echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_IsoSeq"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
