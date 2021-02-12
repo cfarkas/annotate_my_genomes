@@ -372,15 +372,15 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${C
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_UCSC . GAWN protein annotation is named transcriptome.hits"
 echo ""
-echo "GTF file final_annotated.gtf (standard GTF) is located in ./output_files_UCSC.".
+echo "GTF file named final_annotated.gtf (and correspondent gff file) are located in ./output_files_UCSC, containing novel genes and lncRNA classification (second field in GTF file)".
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
-echo "Associated FASTA file to this GTF, named transcripts.fa is located in ./output_files_UCSC"
+echo "Associated FASTA file to this GTF, (transcripts.fa) is located in ./output_files_UCSC"
 echo ""
-echo "AUGUSTUS GTF file suitable for transcript count quantification is named coding_transcripts.gtf. This GTF file contains all coding transcripts resolved by AUGUSTUS and is located in ./output_files_UCSC"
+echo "TransDecoder GTF file suitable to parse transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_UCSC"
 echo ""
-echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) with coding_transcripts.gtf are located in ./output_files_UCSC"
+echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_UCSC"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
