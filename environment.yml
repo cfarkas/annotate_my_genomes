@@ -15,3 +15,4 @@ dependencies:             # everything under this, installed by conda
 - samtools
 - minimap2
 - transdecoder
+- seqkit
