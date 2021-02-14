@@ -368,6 +368,22 @@ gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
+### Novel coding genes and correspondent transcripts
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' coding_transcripts.gtf > final_annotated.tab
+sed -i 's/transcript_id //g' final_annotated.tab
+sed -i 's/;/\t/g' final_annotated.tab
+sed -i 's/gene_id//g' final_annotated.tab
+sed -i 's/"//g' final_annotated.tab
+awk '!a[$0]++' final_annotated.tab > transcripts_and_genes.tab && rm final_annotated.tab
+awk '{print $2"\t"$1}' transcripts_and_genes.tab > coding-genes-and-transcripts.tab && rm transcripts_and_genes.tab
+awk '$1 ~ /STRG./' coding-genes-and-transcripts.tab > novel-coding-genes.matches
+awk '{print $2}' novel-coding-genes.matches > novel-coding-transcripts.matches
+seqkit fx2tab cds.fa > cds.tab
+seqkit fx2tab prot.fa > prot.tab
+grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
+grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
+seqkit tab2fx novel-coding-cds.tab > novel-coding-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-coding-prot.fa
+rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 ###############################
 # Configuring Summary Results #
 ###############################
@@ -377,7 +393,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_NCBI folder :::${CYAN}\n"
 mkdir output_files_NCBI
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf coding.hits logfile ./output_files_NCBI/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf coding.hits logfile novel-coding-cds.fa novel-coding-prot.fa ./output_files_NCBI/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -395,6 +411,8 @@ echo ""
 echo "TransDecoder GTF file suitable to parse NCBI_transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_NCBI"
 echo ""
 echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_NCBI"
+echo ""
+echo "Novel predicted coding sequences (novel-coding-cds.fa) and correspondent protein sequences (novel-coding-prot.fa) are located in ./output_files_NCBI"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
