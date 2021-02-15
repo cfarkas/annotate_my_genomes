@@ -433,7 +433,7 @@ echo "TransDecoder GTF file suitable to parse IsoSeq_transcripts.fa (coding_tran
 echo ""
 echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_IsoSeq"
 echo ""
-echo "Novel predicted coding sequences (novel-coding-cds.fa) and correspondent protein sequences (novel-coding-prot.fa) are located in ./output_files_IsoSeq"
+echo "Novel predicted coding sequences (novel-cds.fa) and correspondent protein sequences (novel-prot.fa) are located in ./output_files_IsoSeq"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
