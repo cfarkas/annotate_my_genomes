@@ -403,7 +403,7 @@ seqkit fx2tab cds.fa > cds.tab
 seqkit fx2tab prot.fa > prot.tab
 grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
-seqkit tab2fx novel-coding-cds.tab > novel-coding-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-coding-prot.fa
+seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 #########################################
 # Moving results to output_files_IsoSeq #
@@ -414,7 +414,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
 mkdir output_files_IsoSeq
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff IsoSeq_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf coding.hits logfile novel-coding-prot.fa novel-coding-cds.fa ./output_files_IsoSeq/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff IsoSeq_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf coding.hits logfile novel-prot.fa novel-cds.fa ./output_files_IsoSeq/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
