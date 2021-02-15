@@ -16,3 +16,4 @@ dependencies:             # everything under this, installed by conda
 - minimap2
 - transdecoder
 - seqkit
+- rnaquast
