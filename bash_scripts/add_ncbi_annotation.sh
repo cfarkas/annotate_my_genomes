@@ -399,6 +399,7 @@ grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
+# obtaining gff file
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 ###############################
