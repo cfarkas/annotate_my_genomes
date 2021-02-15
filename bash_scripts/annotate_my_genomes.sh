@@ -369,7 +369,7 @@ seqkit fx2tab cds.fa > cds.tab
 seqkit fx2tab prot.fa > prot.tab
 grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
-seqkit tab2fx novel-coding-cds.tab > novel-coding-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-coding-prot.fa
+seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 ###############################
 # Configuring Summary Results #
@@ -380,7 +380,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt coding.hits novel-coding-cds.fa novel-coding-prot.fa ./output_files_UCSC/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt coding.hits novel-cds.fa novel-prot.fa ./output_files_UCSC/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -398,7 +398,7 @@ echo "TransDecoder GTF file suitable to parse transcripts.fa (coding_transcripts
 echo ""
 echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_UCSC"
 echo ""
-echo "Novel predicted coding sequences (novel-coding-cds.fa) and correspondent protein sequences (novel-coding-prot.fa) are located in ./output_files_UCSC"
+echo "Novel predicted coding sequences (novel-cds.fa) and correspondent protein sequences (novel-prot.fa) are located in ./output_files_UCSC"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
