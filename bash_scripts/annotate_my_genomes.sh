@@ -351,7 +351,6 @@ grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script sed.script2 sed.script3 transcriptome.hits
-gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
 echo ""
@@ -371,6 +370,14 @@ grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
+# sorting GTF files
+git clone https://github.com/cfarkas/gff3sort.git
+perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
+perl ./gff3sort/gff3sort.pl coding_transcripts.gtf > coding_transcripts.sorted.gtf
+rm final_annotated.gtf coding_transcripts.gtf
+mv final_annotated.sorted.gtf final_annotated.gtf
+mv coding_transcripts.sorted.gtf coding_transcripts.gtf
+gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 ###############################
 # Configuring Summary Results #
 ###############################
