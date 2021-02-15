@@ -391,6 +391,7 @@ rm final_annotated.gtf coding_transcripts.gtf
 mv final_annotated.sorted.gtf final_annotated.gtf
 mv coding_transcripts.sorted.gtf coding_transcripts.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
+rm -r -f gff3sort
 ###############################
 # Configuring Summary Results #
 ###############################
