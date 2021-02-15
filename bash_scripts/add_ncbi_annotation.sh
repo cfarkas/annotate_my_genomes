@@ -160,6 +160,11 @@ awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
 cat ${1} | parallel --pipe -j ${5} sed -f sed.script > final_annotated.gtf
 rm -f fileA fileB *tmap.1 *tmap.2
+# sorting GTF file
+git clone https://github.com/cfarkas/gff3sort.git
+perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
+rm final_annotated.gtf
+mv final_annotated.sorted.gtf final_annotated.gtf
 printf "${PURPLE}::: Done. Gene_id field was replaced in the StringTie.gtf file and final_annotated.gtf was generated with these changes\n"
 echo ""
 printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs folder ...\n"
@@ -285,6 +290,10 @@ grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
 grep --invert-match -F -f coding_transcripts.tab merged.fixed.coding.gtf > other-genes.gtf
 cat coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 rm coding_transcripts.tab
+# sorting GTF file
+perl ./gff3sort/gff3sort.pl coding-genes.gtf > coding-genes.sorted.gtf
+rm coding-genes.gtf
+mv coding-genes.sorted.gtf coding-genes.gtf
 echo "All done"
 echo ""
 ##########################################
@@ -363,6 +372,13 @@ grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
 grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
+# sorting GTF file
+perl ./gff3sort/gff3sort.pl coding_transcripts.gtf > coding_transcripts.sorted.gtf
+rm coding_transcripts.gtf
+mv coding_transcripts.sorted.gtf coding_transcripts.gtf
+perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
+rm final_annotated.gtf
+mv final_annotated.sorted.gtf final_annotated.gtf
 rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script sed.script2 sed.script3 transcriptome.hits
 echo ""
 printf "${PURPLE}::: All Done. Setting Results...\n"
@@ -383,13 +399,6 @@ grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
-# sorting GTF files
-git clone https://github.com/cfarkas/gff3sort.git
-perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
-perl ./gff3sort/gff3sort.pl coding_transcripts.gtf > coding_transcripts.sorted.gtf
-rm final_annotated.gtf coding_transcripts.gtf
-mv final_annotated.sorted.gtf final_annotated.gtf
-mv coding_transcripts.sorted.gtf coding_transcripts.gtf
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 ###############################
