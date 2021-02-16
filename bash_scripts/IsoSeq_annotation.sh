@@ -343,7 +343,7 @@ sed 's/Name=.*$//' coding-transcripts.fa.transdecoder.gff3 > coding-transcripts.
 sed -i 's/ID=GENE[.]/ID=/'g coding-transcripts.fa.test.gff3
 sed -i 's/Parent=GENE[.]/Parent=/'g coding-transcripts.fa.test.gff3
 sed -i 's/~~/;protein_id=/'g coding-transcripts.fa.test.gff3
-gffread coding-transcripts.fa.test.gff3 -T -P -g NCBI_transcripts.fa --adj-stop -o coding_transcripts.gtf
+gffread coding-transcripts.fa.test.gff3 -T -P -g NCBI_transcripts.fa -o coding_transcripts.gtf
 rm coding-transcripts.fa.test.gff3
 # removing transcript id by expansion
 sed -i 's/[.][0-9]"/"/'g coding_transcripts.gtf
