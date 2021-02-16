@@ -340,7 +340,7 @@ sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 # sorting GTF file
 echo ""
-echo "sorting final_annotated.gtf"
+echo ":::sorting final_annotated.gtf"
 echo ""
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
 echo "done"
@@ -368,7 +368,7 @@ seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 # obtaining gff file
 echo ""
-echo "obtaining gff file"
+echo ":::obtaining gff file"
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
