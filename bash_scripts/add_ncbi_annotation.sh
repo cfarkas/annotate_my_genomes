@@ -322,7 +322,7 @@ sed 's/Name=.*$//' coding-transcripts.fa.transdecoder.gff3 > coding-transcripts.
 sed -i 's/ID=GENE[.]/ID=/'g coding-transcripts.fa.test.gff3
 sed -i 's/Parent=GENE[.]/Parent=/'g coding-transcripts.fa.test.gff3
 sed -i 's/~~/;protein_id=/'g coding-transcripts.fa.test.gff3
-gffread coding-transcripts.fa.test.gff3 -T -P -g NCBI_transcripts.fa -o coding_transcripts.gtf
+gffread coding-transcripts.fa.test.gff3 -T -P -g transcripts.fa -o coding_transcripts.gtf
 rm coding-transcripts.fa.test.gff3
 # removing transcript id by expansion
 sed -i 's/[.][0-9]"/"/'g coding_transcripts.gtf
@@ -334,17 +334,17 @@ sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
-cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.fixed.gtf
+cat coding_transcripts.gtf | parallel --pipe -j ${4} sed -f sed.script > coding_transcripts.fixed.gtf
 rm coding_transcripts.gtf
 mv coding_transcripts.fixed.gtf coding_transcripts.gtf
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
 echo ""
-echo "obtaining cds.fa and prot.fa from coding_transcripts.gtf"
+echo ":::obtaining cds.fa and prot.fa from coding_transcripts.gtf"
 echo ""
 gffread -x cds.fa -g NCBI_transcripts.fa coding_transcripts.gtf
 gffread -y prot.fa -g NCBI_transcripts.fa coding_transcripts.gtf
 echo "done"
-rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
+rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
@@ -353,7 +353,7 @@ sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 # sorting GTF file
 echo ""
-echo "sorting final_annotated.gtf"
+echo ":::sorting final_annotated.gtf"
 echo ""
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
 echo "done"
@@ -381,11 +381,12 @@ seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 # obtaining gff file
 echo ""
-echo "obtaining gff file"
+echo ":::obtaining gff file"
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
 echo ""
+rm merged.fixed.coding.gtf namelist namelist_unique_sorted
 ###############################
 # Configuring Summary Results #
 ###############################
