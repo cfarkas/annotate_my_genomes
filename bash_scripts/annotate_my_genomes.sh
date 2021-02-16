@@ -205,7 +205,7 @@ printf "${YELLOW}::: 6. Extracting transcriptome hits :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
-cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
+cp /${dir1}/gawn/04_annotation/transcriptome.swissprot /${dir1}/
 printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
 ############################################
@@ -326,7 +326,7 @@ rm coding_transcripts.gtf
 mv coding_transcripts.fixed.gtf coding_transcripts.gtf
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
 echo ""
-echo ":::obtaining cds.fa and prot.fa from coding_transcripts.gtf"
+echo "::: Obtaining cds.fa and prot.fa from coding_transcripts.gtf"
 echo ""
 gffread -x cds.fa -g transcripts.fa coding_transcripts.gtf
 gffread -y prot.fa -g transcripts.fa coding_transcripts.gtf
@@ -335,12 +335,15 @@ rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.g
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
-grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
+grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf 
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
+grep -w -F -f coding.hits transcriptome.swissprot > coding.annotation
+rm transcriptome.swissprot
+mv coding.annotation transcriptome.swissprot
 # sorting GTF file
 echo ""
-echo ":::sorting final_annotated.gtf"
+echo "::: Sorting final_annotated.gtf"
 echo ""
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
 echo "done"
@@ -349,7 +352,7 @@ mv final_annotated.sorted.gtf final_annotated.gtf
 rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script transcriptome.hits
 ### Novel coding genes and correspondent proteins
 echo ""
-printf "${PURPLE}::: Obtaining novel coding transcripts (cds) and correspondent proteins...\n"
+echo "::: Obtaining novel coding transcripts (cds) and correspondent proteins"
 echo ""
 perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' coding_transcripts.gtf > final_annotated.tab
 sed -i 's/transcript_id //g' final_annotated.tab
@@ -368,7 +371,8 @@ seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 # obtaining gff file
 echo ""
-echo ":::obtaining gff file"
+echo "::: Obtaining gff file"
+echo ""
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
@@ -383,7 +387,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt coding.hits novel-cds.fa novel-prot.fa ./output_files_UCSC/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files_UCSC/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
