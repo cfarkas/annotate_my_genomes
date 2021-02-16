@@ -323,7 +323,7 @@ echo ""
 cd /${dir1}/
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Predicting coding regions from transcripts with coding potential using TransDecoder :::\n"
+printf "${YELLOW}::: 13. Predicting coding regions from transcripts with coding potential using TransDecoder :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 echo ""
@@ -336,57 +336,36 @@ echo ""
 printf "${PURPLE}::: Done. coding-transcripts.fa.transdecoder.gff3 file is present in current directory...${CYAN}\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
+printf "${YELLOW}::: 14. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-### Generating sed.script2 and sed.script3
-awk '{print $1}' transcriptome.hits > transcriptome.A
-awk '{print $2}' transcriptome.hits > transcriptome.B
-paste -d : transcriptome.A transcriptome.B | sed 's/\([^:]*\):\([^:]*\)/s%transcript_id=\1%swissprot_match=\2%/' > sed.script2
-paste -d : transcriptome.A transcriptome.B | sed 's/\([^:]*\):\([^:]*\)/s%match_id=\1%swissprot_match=\2%/' > sed.script3
-### Generating GTF file
-gffread coding-transcripts.fa.transdecoder.gff3 -T -o coding_transcripts.gtf
-sed -i 's/GENE.//'g coding_transcripts.gtf
+echo ""
+sed 's/Name=.*$//' coding-transcripts.fa.transdecoder.gff3 > coding-transcripts.fa.test.gff3
+sed -i 's/ID=GENE[.]/ID=/'g coding-transcripts.fa.test.gff3
+sed -i 's/Parent=GENE[.]/Parent=/'g coding-transcripts.fa.test.gff3
+sed -i 's/~~/;protein_id=/'g coding-transcripts.fa.test.gff3
+gffread coding-transcripts.fa.test.gff3 -T -P -g NCBI_transcripts.fa --adj-stop -o coding_transcripts.gtf
+rm coding-transcripts.fa.test.gff3
+# removing transcript id by expansion
+sed -i 's/[.][0-9]"/"/'g coding_transcripts.gtf
+sed -i 's/[.][0-9][0-9]"/"/'g coding_transcripts.gtf
+sed -i 's/[.][0-9][0-9][0-9]"/"/'g coding_transcripts.gtf
 # removing protein id by expansion
 sed -i 's/[.]p[0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
-# removing transcript id by expansion
-sed -i 's/[.][0-9]~~/~~/'g coding_transcripts.gtf
-sed -i 's/[.][0-9][0-9]~~/~~/'g coding_transcripts.gtf
-sed -i 's/[.][0-9][0-9][0-9]~~/~~/'g coding_transcripts.gtf
-# replacing symbols
-sed -i 's/~~/"; match_id=/'g coding_transcripts.gtf
-cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script3 > coding_transcripts.fixed.gtf
-cat coding_transcripts.fixed.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.gtf
-sed -i 's/_match=/_match "/'g coding_transcripts.gtf
-sed -i 's/gene_name.*//' coding_transcripts.gtf
-### Working with cds.fa
-sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.cds > cds.fa
-sed -i 's/GENE./gene_id="/'g cds.fa
-sed -i 's/~~/" transcript_id=/'g cds.fa
-sed -i 's/[.]["]/"/'g cds.fa
-# Removing protein id by expansion
-sed -i 's/[.]p[0-9]  ORF/ ORF/'g cds.fa
-sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g cds.fa
-sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g cds.fa
-### Working with prot.fa
-sed 's/.[0-9]~/~/'g coding-transcripts.fa.transdecoder.pep > prot.fa
-sed -i 's/GENE./gene_id="/'g prot.fa
-sed -i 's/~~/" transcript_id=/'g prot.fa
-sed -i 's/[.]["]/"/'g prot.fa
-# Removing protein id by expansion
-sed -i 's/[.]p[0-9]  ORF/ ORF/'g prot.fa
-sed -i 's/[.]p[0-9][0-9]  ORF/ ORF/'g prot.fa
-sed -i 's/[.]p[0-9][0-9][0-9]  ORF/ ORF/'g prot.fa
-cat cds.fa | parallel --pipe -j ${5} sed -f sed.script > cds.fixed.fa
-cat prot.fa | parallel --pipe -j ${5} sed -f sed.script > prot.fixed.fa
-rm cds.fa prot.fa
-# adding swissprot matches
-cat cds.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > cds.fa
-cat prot.fixed.fa | parallel --pipe -j ${5} sed -f sed.script2 > prot.fa
-rm cds.fixed.fa prot.fixed.fa
-rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf transcriptome.A transcriptome.B namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
+sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
+sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
+cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.fixed.gtf
+rm coding_transcripts.gtf
+mv coding_transcripts.fixed.gtf coding_transcripts.gtf
+# obtaining cds.fa and prot.fa from coding_transcripts.gtf
 echo ""
+echo "obtaining cds.fa and prot.fa from coding_transcripts.gtf"
+echo ""
+gffread -x cds.fa -g IsoSeq_transcripts.fa coding_transcripts.gtf
+gffread -y prot.fa -g IsoSeq_transcripts.fa coding_transcripts.gtf
+echo "done"
+rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
@@ -394,17 +373,18 @@ grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 # sorting GTF file
-perl ./gff3sort/gff3sort.pl coding_transcripts.gtf > coding_transcripts.sorted.gtf
-rm coding_transcripts.gtf
-mv coding_transcripts.sorted.gtf coding_transcripts.gtf
+echo ""
+echo "sorting final_annotated.gtf"
+echo ""
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
+echo "done"
 rm final_annotated.gtf
 mv final_annotated.sorted.gtf final_annotated.gtf
-rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script sed.script2 sed.script3 transcriptome.hits
+rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script transcriptome.hits
+### Novel coding genes and correspondent proteins
 echo ""
-printf "${PURPLE}::: All Done. Setting Results...\n"
+printf "${PURPLE}::: Obtaining novel coding transcripts (cds) and correspondent proteins...\n"
 echo ""
-### Novel coding genes and correspondent transcripts
 perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' coding_transcripts.gtf > final_annotated.tab
 sed -i 's/transcript_id //g' final_annotated.tab
 sed -i 's/;/\t/g' final_annotated.tab
@@ -421,13 +401,17 @@ grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
 # obtaining gff file
+echo ""
+echo "obtaining gff file"
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
+echo "done"
+echo ""
 #########################################
 # Moving results to output_files_IsoSeq #
 #########################################
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Moving results to output_files_IsoSeq :::\n"
+printf "${YELLOW}::: 15. Moving results to output_files_IsoSeq :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 printf "${PURPLE}::: Moving results to output_files folder :::${CYAN}\n"
