@@ -338,9 +338,13 @@ grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
 grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf 
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
+echo ""
+echo "::: Parsing transcriptome hits"
+echo ""
 grep -w -F -f coding.hits transcriptome.swissprot > coding.annotation
 rm transcriptome.swissprot
 mv coding.annotation transcriptome.swissprot
+echo "done"
 # sorting GTF file
 echo ""
 echo "::: Sorting final_annotated.gtf"
@@ -369,15 +373,15 @@ grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
-# obtaining gff file
+# obtaining final gff file
 echo ""
-echo "::: Obtaining gff file"
+echo "::: Obtaining final gff file"
 echo ""
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
 echo ""
-rm merged.fixed.coding.gtf namelist namelist_unique_sorted
+rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
 ###############################
 # Configuring Summary Results #
 ###############################
