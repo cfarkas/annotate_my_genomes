@@ -326,12 +326,12 @@ rm coding_transcripts.gtf
 mv coding_transcripts.fixed.gtf coding_transcripts.gtf
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
 echo ""
-echo "obtaining cds.fa and prot.fa from coding_transcripts.gtf"
+echo ":::obtaining cds.fa and prot.fa from coding_transcripts.gtf"
 echo ""
 gffread -x cds.fa -g transcripts.fa coding_transcripts.gtf
 gffread -y prot.fa -g transcripts.fa coding_transcripts.gtf
 echo "done"
-rm merged.fixed.coding.gtf coding_transcripts.fixed.gtf namelist namelist_unique_sorted coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
+rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
