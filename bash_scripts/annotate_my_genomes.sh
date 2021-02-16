@@ -373,6 +373,7 @@ gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
 echo ""
+rm merged.fixed.coding.gtf namelist namelist_unique_sorted
 ###############################
 # Configuring Summary Results #
 ###############################
