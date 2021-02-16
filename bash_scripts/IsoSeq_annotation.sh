@@ -239,6 +239,7 @@ printf "${YELLOW}::: 9. Extracting transcriptome hits :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 cd /${dir1}/
+cp /${dir1}/gawn/04_annotation/transcriptome.swissprot /${dir1}/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
 printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
