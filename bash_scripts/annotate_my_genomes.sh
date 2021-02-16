@@ -321,7 +321,7 @@ sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
-cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.fixed.gtf
+cat coding_transcripts.gtf | parallel --pipe -j ${4} sed -f sed.script > coding_transcripts.fixed.gtf
 rm coding_transcripts.gtf
 mv coding_transcripts.fixed.gtf coding_transcripts.gtf
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
