@@ -334,12 +334,12 @@ sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
-cat coding_transcripts.gtf | parallel --pipe -j ${4} sed -f sed.script > coding_transcripts.fixed.gtf
+cat coding_transcripts.gtf | parallel --pipe -j ${5} sed -f sed.script > coding_transcripts.fixed.gtf
 rm coding_transcripts.gtf
 mv coding_transcripts.fixed.gtf coding_transcripts.gtf
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
 echo ""
-echo ":::obtaining cds.fa and prot.fa from coding_transcripts.gtf"
+echo "::: Obtaining cds.fa and prot.fa from coding_transcripts.gtf"
 echo ""
 gffread -x cds.fa -g NCBI_transcripts.fa coding_transcripts.gtf
 gffread -y prot.fa -g NCBI_transcripts.fa coding_transcripts.gtf
@@ -348,12 +348,19 @@ rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.g
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
-grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
+grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf 
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
+echo ""
+echo "::: Parsing transcriptome hits"
+echo ""
+grep -w -F -f coding.hits transcriptome.swissprot > coding.annotation
+rm transcriptome.swissprot
+mv coding.annotation transcriptome.swissprot
+echo "done"
 # sorting GTF file
 echo ""
-echo ":::sorting final_annotated.gtf"
+echo "::: Sorting final_annotated.gtf"
 echo ""
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
 echo "done"
@@ -362,7 +369,7 @@ mv final_annotated.sorted.gtf final_annotated.gtf
 rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script transcriptome.hits
 ### Novel coding genes and correspondent proteins
 echo ""
-printf "${PURPLE}::: Obtaining novel coding transcripts (cds) and correspondent proteins...\n"
+echo "::: Obtaining novel coding transcripts (cds) and correspondent proteins"
 echo ""
 perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' coding_transcripts.gtf > final_annotated.tab
 sed -i 's/transcript_id //g' final_annotated.tab
@@ -379,14 +386,15 @@ grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
 rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
-# obtaining gff file
+# obtaining final gff file
 echo ""
-echo ":::obtaining gff file"
+echo "::: Obtaining final gff file"
+echo ""
 gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
 echo ""
-rm merged.fixed.coding.gtf namelist namelist_unique_sorted
+rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
 ###############################
 # Configuring Summary Results #
 ###############################
@@ -396,7 +404,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n
 echo ""
 printf "${PURPLE}::: Moving results to output_files_NCBI folder :::${CYAN}\n"
 mkdir output_files_NCBI
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf coding.hits logfile novel-cds.fa novel-prot.fa ./output_files_NCBI/
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf transcriptome.swissprot logfile novel-cds.fa novel-prot.fa ./output_files_NCBI/
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
