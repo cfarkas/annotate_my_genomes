@@ -102,7 +102,7 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 echo "Cleaning directory..."
-rm -r -f augustus.* FEELnc gawn 
+rm -r -f FEELnc gawn gff3sort gffcompare_outputs_NCBI 
 echo ""
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with NCBI annotation :::\n"
