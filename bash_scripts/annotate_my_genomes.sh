@@ -92,6 +92,8 @@ YELLOW='\033[1;33m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
+echo "Cleaning directory..."
+rm -r -f FEELnc gawn gff3sort gffcompare_outputs_UCSC 
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with UCSC GTF :::\n"
