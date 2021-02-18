@@ -3,7 +3,7 @@
 ### :microscope: :hatching_chick: :hatched_chick: 
 Transcriptome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
-https://user-images.githubusercontent.com/7016350/108399339-9cf6d580-71df-11eb-97ad-cf0366fddd02.jpg
+![image](https://user-images.githubusercontent.com/7016350/108399339-9cf6d580-71df-11eb-97ad-cf0366fddd02.jpg)
 
 
 ## Pipeline Outline
