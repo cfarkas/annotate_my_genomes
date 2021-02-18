@@ -2,8 +2,7 @@
 
 Transcriptome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
 
-![image](https://user-images.githubusercontent.com/7016350/108399339-9cf6d580-71df-11eb-97ad-cf0366fddd02.jpg)
-
+![Pipeline_Scheme](https://user-images.githubusercontent.com/7016350/108400576-f90e2980-71e0-11eb-8aac-ff89da62a0bd.jpg)
 
 ## Pipeline Outline
   annotate_my_genomes is a pipeline that aims to annotate genome-guided transcriptome assemblies from StringTie, coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, known/novel coding sequences in nucleotides and correspondent proteins will be resolved.  
