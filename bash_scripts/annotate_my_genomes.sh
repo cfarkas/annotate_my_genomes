@@ -131,7 +131,7 @@ echo ""
 ########################################
 awk '{print $4"\t"$1}' UCSC_compare.${1}.tmap > UCSC_compare.${1}.tmap.1
 tail -n +2 UCSC_compare.${1}.tmap.1 > UCSC_compare.${1}.tmap.2
-awk '!/-/' UCSC_compare.${1}.tmap.2 > namelist
+awk '$2 != "-"' UCSC_compare.${1}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
