@@ -101,30 +101,9 @@ As example, the pipeline will work as follows (chicken assembly, inside test fol
 ```
 final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
-## Identifying homologs in novel proteins from transcriptome
+### Identifying homologs in novel proteins from transcriptome
 
-Users can download up-to-date proteome of the species of interest employing donwload_proteome_uniprot.pl script, providing the correspondent taxid to the species under study. Then, by using novel-coding-prot.fa (generated in the pipeline), the novel predicted proteins can be blasted against the reference proteome to find paralogs/missed genes. As example for chicken genome:
-```
-## Donwload gallus gallus proteome (taxid 9031)
-perl /path/to/annotate_my_genomes/additional_scripts/download_proteome_uniprot.pl 9031
-
-## making blast database
-makeblastdb -in 9031.fasta -dbtype 'prot' -out 9031
-
-## Blasting novel protein sequences (using 15 threads, max targets= 1, output format=xml)
-blastp -db 9031 -max_hsps 1 -max_target_seqs 1 -out blast_results -query novel-prot.fa -num_threads 15 -outfmt 5
-
-## Parsing blast results (min_identity 90, min_alignment_length 100). Thanks to: https://github.com/sandyjmacdonald. 
-# requires BioPython installed: pip3 install biopython 
-python /path/to/annotate_my_genomes/additional_scripts/blast_parser.py -i blast_results -e 1e-20 -p 90 -a 100 > parsed_results.txt
-
-## Removing queries with no hits
-awk -F'\t' '$2!=""' parsed_results.txt > parsed_results.tab && rm parsed_results.txt
-
-### Removing queries without associated gene id
-grep "GN=" parsed_results.tab > homolog_candidates.tabular
-```
-homolog_candidates.tabular will contain matched proteins to the provided reference (if not missed genes in the reference annotation). Proteins with identity closed to 100% and within the same chromosome are good paralog candidates.
+see this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
 ### More Scenarios?
 
