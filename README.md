@@ -103,7 +103,7 @@ final_annotated.gtf (located in output_files_NCBI) will contained the merged NCB
 
 ### Identifying homologs in novel proteins from transcriptome
 
-see this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
+- See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
 ### More Scenarios?
 
