@@ -58,7 +58,7 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 #     $ conda deactivate
 ```
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
-- binaries can be copied to /usr/local/bin/. Inside annotate_my_genomes:  ```sudo cp ./bin/* /usr/local/bin/```
+- Optionally, binaries can be copied to /usr/local/bin/. Inside annotate_my_genomes folder, do:  ```sudo cp ./bin/* /usr/local/bin/```
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
 
 ### Option 2: Without using conda, program by program:
