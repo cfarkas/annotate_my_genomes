@@ -44,6 +44,10 @@ conda env update --file environment.yml                        # install require
 conda activate annotate_my_genomes                             # load environment
 bash makefile.sh                                               # make  & install
 ```
+Optionally (requires sudo privileges)
+```
+sudo cp ./bin/* /usr/local/bin/
+```
 Also install (not through conda):
 - ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#6-installing-up-to-date-ncbi-blast-version-v271
 
@@ -58,7 +62,6 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 #     $ conda deactivate
 ```
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
-- Optionally, binaries can be copied to /usr/local/bin/. Inside annotate_my_genomes folder, do:  ```sudo cp ./bin/* /usr/local/bin/```
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
 
 ### Option 2: Without using conda, program by program:
