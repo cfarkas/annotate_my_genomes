@@ -80,11 +80,11 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 # Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
 ./genome-download galGal6
 
-# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads as example
+# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads:
 ./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -t 20
 
-# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads as example
-./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -t 20
+# Include NCBI annptations on stringtie_chr33.gtf (provided file) with 20 threads:
+./annotate-my-genomes -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf galGal6.gtf -g galGal6.fa -t 20
 ```
 
 ## Simplest usage
