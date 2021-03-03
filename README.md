@@ -106,6 +106,11 @@ Users can add annotations from NCBI by using the three outputs from ./genome-dow
 ```
 - final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
+As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
+```
+./genome-download mm10
+./add-ncbi-annotation -a mouse.gtf -n mm10_ncbiRefSeq.gtf -r mm10.gtf -g mm10.fa -t 30
+```
 ### Identifying homologs in novel proteins from transcriptome
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
