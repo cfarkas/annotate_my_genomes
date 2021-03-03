@@ -104,7 +104,7 @@ Users can add annotations from NCBI by using the three outputs from ./genome-dow
 ./genome-download galGal6
 ./add-ncbi-annotation -a StringTie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 30
 ```
-- final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+- final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates).
 
 As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
 ```
