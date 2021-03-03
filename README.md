@@ -82,28 +82,29 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 
 # Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads as example
 ./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -t 20
+
+# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads as example
+./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -t 20
 ```
 
 ## Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
-
-- As example, to annotate an user-provided mouse GTF file (named "target.gtf" as example) in genome_1 folder, using 30 threads for cpu processing:
+- As example, to annotate a chicken GTF file (i.e: "StringTie.gtf") in genome_1 folder, using 30 threads for cpu processing:
 ```
-./genome-download mm10
-./annotate-my-genomes -a target.gtf -r mm10.gtf -g mm10.fa -t 30
+./genome-download galGal6
+./annotate-my-genomes -a target.gtf -r galGal6.gtf -g galGal6.fa -t 30
 ```
+- final_annotated.gtf (located in output_files_UCSC) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+- StringTie.gtf can be produced as follows: 
 
 ## Adding NCBI annotations to increase annotation of transcripts
-Users can add annotations from NCBI by using the three outputs from ./genome-download program by using ./add-ncbi-annotation. 
-As example, the pipeline will work as follows (chicken assembly, inside test folder):
+Users can add annotations from NCBI by using the three outputs from ./genome-download program and input into ./add-ncbi-annotation. 
+- Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
-# Downloading galGal6 genome and correspondent UCSC/NCBI GTF annotations
 ./genome-download galGal6
-
-# Running the pipeline on StringTie.gtf, using NCBI GTF (galGal6_ncbiRefSeq.gtf), UCSC GTF (galGal6.gtf), genome (galGal6.fa) and 30 threads for processing:
 ./add-ncbi-annotation -a StringTie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 30
 ```
-final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+- final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 
 ### Identifying homologs in novel proteins from transcriptome
 
