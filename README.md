@@ -95,7 +95,7 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 ./annotate-my-genomes -a target.gtf -r galGal6.gtf -g galGal6.fa -t 30
 ```
 - final_annotated.gtf (located in output_files_UCSC) will contained the merged NCBI-updated annotation (in UCSC coordinates)
-- To produce StringTie.gtf, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
+- To produce StringTie.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
 ## Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program and input into ./add-ncbi-annotation. 
