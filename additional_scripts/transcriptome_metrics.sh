@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 set -e
@@ -8,7 +7,7 @@ This script will obtain metrics from the annotated StringTie transcripts (final_
 Arguments:
     -h  show this help text
     -f  Name of the StringTie annotated GTF from the pipeline
-    -g  Reference genome (in fasta format)
+    -g  Reference genome (in fasta format)"
 options=':hf:g:'
 while getopts $options option; do
   case "$option" in
