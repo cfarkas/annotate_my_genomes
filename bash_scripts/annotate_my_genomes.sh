@@ -5,84 +5,31 @@ set -e
 {
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-stringtie_gtf=${1}
-reference_genome_gtf=${2}
-reference_genome_fasta=${3}
-threads=${4}
+usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-t <threads>]
+This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts.
+Arguments:
+    -h  show this help text
+    -a  StringTie GTF
+    -r  UCSC gene annotation (in GTF format)
+    -g  Reference genome (in fasta format)
+    -t  Number of threads for processing (integer)"
+options=':ha:r:g:t:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    a) a=$OPTARG;;
+    r) r=$OPTARG;;
+    g) g=$OPTARG;;
+    t) t=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
-  echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
-  echo ""
-  echo "[stringtie_gtf]: StringTie GTF file"
-  echo ""
-  echo "[reference_genome_gtf]: UCSC reference GTF file."
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  echo "[threads]: Number of threads for parallel text processing (Integer)"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
-  echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
-  echo ""
-  echo "[stringtie_gtf]: StringTie GTF file"
-  echo ""
-  echo "[reference_genome_gtf]: UCSC reference GTF file."
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  echo "[threads]: Number of threads for parallel text processing (Integer)"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
-  echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
-  echo ""
-  echo "[stringtie_gtf]: StringTie GTF file"
-  echo ""
-  echo "[reference_genome_gtf]: UCSC reference GTF file."
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  echo "[threads]: Number of threads for parallel text processing (Integer)"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
-  echo ""
-  echo "This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts"
-  echo ""
-  echo "[stringtie_gtf]: StringTie GTF file"
-  echo ""
-  echo "[reference_genome_gtf]: UCSC reference GTF file."
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  echo "[threads]: Number of threads for parallel text processing (Integer)"
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"; exit 1; }
-
-if [ $# -ne 4 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [stringtie_gtf] [reference_genome_gtf] [reference_genome_fasta] [threads]"
-  exit 3
+# mandatory arguments
+if [ ! "$a" ] || [ ! "$r" ] || [ ! "$g" ] || [ ! "$t" ]; then
+  echo "arguments -a, -r, -g and -t must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
 begin=`date +%s`
@@ -99,7 +46,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with UCSC GTF :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffcompare -R -r ${2} -s ${3} -o UCSC_compare ${1}
+gffcompare -R -r ${r} -s ${g} -o UCSC_compare ${a}
 printf "${PURPLE}Done\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -109,16 +56,16 @@ echo ""
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${a}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${a}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${a}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat UCSC_compare.${1}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${a}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
@@ -129,9 +76,9 @@ echo ""
 ########################################
 # Merging novel transcripts with ref. 
 ########################################
-awk '{print $4"\t"$1}' UCSC_compare.${1}.tmap > UCSC_compare.${1}.tmap.1
-tail -n +2 UCSC_compare.${1}.tmap.1 > UCSC_compare.${1}.tmap.2
-awk '$2 != "-"' UCSC_compare.${1}.tmap.2 > namelist
+awk '{print $4"\t"$1}' UCSC_compare.${a}.tmap > UCSC_compare.${a}.tmap.1
+tail -n +2 UCSC_compare.${a}.tmap.1 > UCSC_compare.${a}.tmap.2
+awk '$2 != "-"' UCSC_compare.${a}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
@@ -149,7 +96,7 @@ rm A A.1 A.2 B B.1 B.2
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
 paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
-cat ${1} | parallel --pipe -j ${4} sed -f sed.script > final_annotated.gtf
+cat ${a} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
 rm -f fileA fileB *tmap.1 *tmap.2
 # sorting GTF file
 git clone https://github.com/cfarkas/gff3sort.git
@@ -167,7 +114,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n
 printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread -w transcripts.fa -g ${3} final_annotated.gtf
+gffread -w transcripts.fa -g ${g} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
@@ -186,7 +133,7 @@ dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
 cd /${dir1}/
-cp ${3} /${dir1}/gawn/03_data/genome.fasta
+cp ${g} /${dir1}/gawn/03_data/genome.fasta
 cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
 cp gawn_config.sh /${dir2}/gawn_config.sh
@@ -195,7 +142,6 @@ printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
 echo ""
 cd /${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
-echo ""
 echo ""
 printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/04_annotation/ :::${CYAN}\n"
 echo ""
@@ -221,9 +167,9 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ### Cloning FEELnc in current directory
 git clone https://github.com/cfarkas/FEELnc.git
 echo ""
-cp ${3} ${2} final_annotated.gtf /${dir1}/FEELnc/
+cp ${g} ${r} final_annotated.gtf /${dir1}/FEELnc/
 cd FEELnc
-grep "NM_" ${2} > NM_coding.gtf
+grep "NM_" ${r} > NM_coding.gtf
 export FEELNCPATH=${PWD}
 export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
 export PATH=$PATH:${FEELNCPATH}/scripts/
@@ -252,7 +198,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${3} --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g} --mode=shuffle
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a NM_coding.gtf > candidate_lncRNA_classes.txt
 echo ""
@@ -296,7 +242,7 @@ printf "${YELLOW}::: 10. Predicting coding regions from transcripts with coding 
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 echo ""
-gffread -w coding-transcripts.fa -g ${3} coding-genes.gtf
+gffread -w coding-transcripts.fa -g ${g} coding-genes.gtf
 TransDecoder.LongOrfs -m 60 -t coding-transcripts.fa
 TransDecoder.Predict -t coding-transcripts.fa --single_best_only
 awk '{print $1}' coding-transcripts.fa.transdecoder.bed > coding.sequences
@@ -324,7 +270,7 @@ sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
-cat coding_transcripts.gtf | parallel --pipe -j ${4} sed -f sed.script > coding_transcripts.fixed.gtf
+cat coding_transcripts.gtf | parallel --pipe -j ${t} sed -f sed.script > coding_transcripts.fixed.gtf
 rm coding_transcripts.gtf
 mv coding_transcripts.fixed.gtf coding_transcripts.gtf
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
