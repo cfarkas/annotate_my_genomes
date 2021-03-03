@@ -3,66 +3,27 @@
 
 set -e
 
-final_annotated_gtf=${1}
-reference_genome_fasta=${2}
+usage="$(basename "$0") [-h] [-f <final_annotated.gtf>] [-g <reference_genome.fasta>]
+This script will obtain metrics from the annotated StringTie transcripts (final_annotated.gtf) and output them into -transcriptome_metrics- sudirectory.
+Arguments:
+    -h  show this help text
+    -f  Name of the StringTie annotated GTF from the pipeline
+    -g  Reference genome (in fasta format)
+options=':hf:g:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    f) f=$OPTARG;;
+    g) g=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [reference_genome_fasta]"
-  echo ""
-  echo "This script will obtain metrics from the annotated StringTie transcripts (final_annotated.gtf) and output them into -transcriptome_metrics- sudirectory."
-  echo ""
-  echo "[final_annotated_gtf]: final_annotated.gtf file from the pipeline"
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [reference_genome_fasta]"
-  echo ""
-  echo "This script will obtain metrics from the annotated StringTie transcripts (final_annotated.gtf) and output them into -transcriptome_metrics- sudirectory."
-  echo ""
-  echo "[final_annotated_gtf]: final_annotated.gtf file from the pipeline"
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [reference_genome_fasta]"
-  echo ""
-  echo "This script will obtain metrics from the annotated StringTie transcripts (final_annotated.gtf) and output them into -transcriptome_metrics- sudirectory."
-  echo ""
-  echo "[final_annotated_gtf]: final_annotated.gtf file from the pipeline"
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated.gtf] [reference_genome_fasta]"
-  echo ""
-  echo "This script will obtain metrics from the annotated StringTie transcripts (final_annotated.gtf) and output them into -transcriptome_metrics- sudirectory."
-  echo ""
-  echo "[final_annotated_gtf]: final_annotated.gtf file from the pipeline"
-  echo ""
-  echo "[reference_genome_fasta]: Current UCSC assembly genome in fasta format."
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [final_annotated.gtf] [reference_genome_fasta]"; exit 1; }
-
-if [ $# -ne 2 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [final_annotated.gtf] [reference_genome_fasta]"
-  exit 3
+# mandatory arguments
+if [ ! "$f" ] || [ ! "$g" ]; then
+  echo "arguments -f and -g must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
 begin=`date +%s`
@@ -79,7 +40,7 @@ echo "done"
 echo ""
 echo "===> Working on transcriptome metrics"
 echo ""
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' ${1} > final_annotated.tab
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' ${f} > final_annotated.tab
 sed -i 's/transcript_id //g' final_annotated.tab
 sed -i 's/;/\t/g' final_annotated.tab
 sed -i 's/gene_id//g' final_annotated.tab
@@ -103,12 +64,12 @@ grep "lncRNA" novel-genes.gtf > novel-genes-lncRNA.gtf
 grep "StringTie" novel-genes.gtf > novel-genes-other.gtf  # other = no lncRNA and no protein-coding
 echo "::: We will use gffread to obtain reconciled and novel transcripts in the parsed GTF file"
 echo ""
-gffread -w known-transcripts-coding.fa -g ${2} known-genes-coding.gtf
-gffread -w known-transcripts-lncRNA.fa -g ${2} known-genes-lncRNA.gtf
-gffread -w known-transcripts-other.fa -g ${2} known-genes-other.gtf
-gffread -w novel-transcripts-coding.fa -g ${2} novel-genes-coding.gtf
-gffread -w novel-transcripts-lncRNA.fa -g ${2} novel-genes-lncRNA.gtf
-gffread -w novel-transcripts-other.fa -g ${2} novel-genes-other.gtf
+gffread -w known-transcripts-coding.fa -g ${g} known-genes-coding.gtf
+gffread -w known-transcripts-lncRNA.fa -g ${g} known-genes-lncRNA.gtf
+gffread -w known-transcripts-other.fa -g ${g} known-genes-other.gtf
+gffread -w novel-transcripts-coding.fa -g ${g} novel-genes-coding.gtf
+gffread -w novel-transcripts-lncRNA.fa -g ${g} novel-genes-lncRNA.gtf
+gffread -w novel-transcripts-other.fa -g ${g} novel-genes-other.gtf
 exec 3<> transcriptome_metrics.txt
 echo "Number of reconciled coding transcripts:" >> transcriptome_metrics.txt
 grep ">" known-transcripts-coding.fa -c >> transcriptome_metrics.txt
