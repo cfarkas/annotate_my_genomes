@@ -84,7 +84,7 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 ./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -t 20
 
 # Include NCBI annptations on stringtie_chr33.gtf (provided file) with 20 threads:
-./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf galGal6.gtf -g galGal6.fa -t 20
+./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 20
 ```
 
 ## Simplest usage
