@@ -3,93 +3,48 @@
 set -e
 
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-final_annotated=${1}
-reference_genome=${2}
-gene_name=${3}
+usage="$(basename "$0") [-h] [-f <final_annotated.gtf>] [-g <reference_genome.fasta>] [-i <gene_name>]
+This program will obtain and align all transcripts coming from a given gene, in order to obtain a consensus.
+Arguments:
+    -h  show this help text
+    -f  Name of the StringTie annotated GTF from the pipeline
+    -g  Reference genome (in fasta format)
+    -i  Gene Symbol"
+options=':hf:g:i:'
+while getopts $options option; do
+  case "$option" in
+    h) echo "$usage"; exit;;
+    f) f=$OPTARG;;
+    g) g=$OPTARG;;
+    i) i=$OPTARG;;
+    :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+   \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
+  esac
+done
 
-if [ "$1" == "-h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
-  echo ""
-  echo "This program will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
-  echo ""
-  echo "[final_annotated]: Name of the StringTie annotated GTF from the pipeline"
-  echo ""
-  echo "[reference_genome]: UCSC genome Assembly (fasta format)"
-  echo ""
-  echo "[gene_name]: gene_name to process"
-  echo ""
-  exit 0
+# mandatory arguments
+if [ ! "$f" ] || [ ! "$g" ] || [ ! "$i" ]; then
+  echo "arguments -f, -g and -i must be provided"
+  echo "$usage" >&2; exit 1
 fi
 
-if [ "$1" == "-help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
-  echo ""
-  echo "This program will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
-  echo ""
-  echo "[final_annotated]: Name of the StringTie annotated GTF from the pipeline"
-  echo ""
-  echo "[reference_genome]: UCSC genome Assembly (fasta format)"
-  echo ""
-  echo "[gene_name]: gene_name to process"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--h" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
-  echo ""
-  echo "This program will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
-  echo ""
-  echo "[final_annotated]: Name of the StringTie annotated GTF from the pipeline"
-  echo ""
-  echo "[reference_genome]: UCSC genome Assembly (fasta format)"
-  echo ""
-  echo "[gene_name]: gene_name to process"
-  echo ""
-  exit 0
-fi
-
-if [ "$1" == "--help" ]; then
-  echo ""
-  echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
-  echo ""
-  echo "This program will obtain and align all transcripts coming from a given gene, in order to obtain a consensus"
-  echo ""
-  echo "[final_annotated]: Name of the StringTie annotated GTF from the pipeline"
-  echo ""
-  echo "[reference_genome]: UCSC genome Assembly (fasta format)"
-  echo ""
-  echo "[gene_name]: gene_name to process"
-  echo ""
-  exit 0
-fi
-
-[ $# -eq 0 ] && { echo "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"; exit 1; }
-
-if [ $# -ne 3 ]; then
-  echo 1>&2 "Usage: ./`basename $0` [final_annotated] [reference_genome] [gene_name]"
-  exit 3
-fi
 echo "Working in $dir"
 echo ""
 echo "Obtaining GTF for the given gene_name using final_annotated.gtf file"
-grep "\<${3}\>" ${1} > ${3}.gtf
+grep "\<${i}\>" ${f} > ${i}.gtf
 echo "Done."
 echo ""
 echo "Obtaining gene-associated transcripts in fasta format"
-gffread -w ${3}.fa -g ${2} ${3}.gtf
+gffread -w ${i}.fa -g ${g} ${i}.gtf
 echo "Done."
 echo ""
 echo "Aligning transcript sequences with Clustal Omega"
-clustalo -i ${3}.fa -o ${3}.aln
+clustalo -i ${i}.fa -o ${i}.aln
 echo "Done"
 echo ""
 echo "Obtaining consensus sequence from alignment with EMBOSS consensus"
-em_cons -sequence ${3}.aln -outseq ${3}.cons
+em_cons -sequence ${i}.aln -outseq ${i}.cons
 echo ""
-echo "All done. ${3}.cons file contain suitable sequence to be validated for qPCR."
+echo "All done. ${i}.cons file contain suitable sequence to be validated for qPCR."
 echo ""
-echo "${3}.fa contain transcript sequences in fasta format associated with ${3} gene"
+echo "${i}.fa contain transcript sequences in fasta format associated with ${i} gene"
