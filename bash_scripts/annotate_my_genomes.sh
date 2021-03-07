@@ -95,7 +95,10 @@ rm A A.1 A.2 B B.1 B.2
 ###############################
 awk '{print $1}' namelist > fileA
 awk '{print $2}' namelist > fileB
-paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+#paste -d : fileA fileB | sed 's/\([^:]*\):\([^:]*\)/s%\1%\2%/' > sed.script
+paste -d % fileA fileB > sed.script
+sed -i -e 's/^/s%/' sed.script
+sed -i -e 's/$/%/' sed.script
 cat ${a} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
 rm -f fileA fileB *tmap.1 *tmap.2
 # sorting GTF file
