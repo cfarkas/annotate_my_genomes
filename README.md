@@ -89,20 +89,20 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 
 ## Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
-- As example, to annotate a chicken GTF file (i.e: "StringTie.gtf") in genome_1 folder, using 30 threads for cpu processing:
+- As example, to annotate a chicken GTF file (i.e: "target.gtf") in genome_1 folder, using 30 threads for cpu processing:
 ```
 ./genome-download galGal6
 ./annotate-my-genomes -a target.gtf -r galGal6.gtf -g galGal6.fa -t 30
 ```
 - final_annotated.gtf (located in output_files_UCSC) will contained the merged NCBI-updated annotation (in UCSC coordinates)
-- To produce StringTie.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
+- To produce target.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
 ## Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program and input into ./add-ncbi-annotation. 
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
 ./genome-download galGal6
-./add-ncbi-annotation -a StringTie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 30
+./add-ncbi-annotation -a target.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 30
 ```
 - final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates).
 
