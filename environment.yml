@@ -2,6 +2,7 @@ name: annotate_my_genomes # name of environment
 channels:
 - bioconda
 - anaconda
+- conda-forge
 dependencies:             # everything under this, installed by conda
 - parallel
 - cufflinks
@@ -18,3 +19,4 @@ dependencies:             # everything under this, installed by conda
 - transdecoder
 - seqkit
 - gawk
+- sed
