@@ -40,7 +40,6 @@ will output:
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
-conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
 conda env update --file environment.yml                        # install required programs
 conda activate annotate_my_genomes                             # load environment
 bash makefile.sh                                               # make  & install
