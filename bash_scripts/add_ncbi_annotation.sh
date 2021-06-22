@@ -136,27 +136,27 @@ new_gtf['TPM'] =  new_gtf['TPM'].astype(str) + ';'                              
 
 ### Reformat GTF: removing empty fields
 null_dictionary = {"nan": ".", "FPKM+++;": "", "TPM+++;": "", "exon_number+++;": "", "0":"."}
-new_gtf2 = new_gtf.replace({"frame": null_dictionary})
-new_gtf3 = new_gtf2.replace({"strand": null_dictionary})
-new_gtf4 = new_gtf3.replace({"FPKM": null_dictionary})
-new_gtf5 = new_gtf4.replace({"TPM": null_dictionary})
-new_gtf6 = new_gtf5.replace({"exon_number": null_dictionary})
+new_gtf = new_gtf.replace({"frame": null_dictionary})
+new_gtf = new_gtf.replace({"strand": null_dictionary})
+new_gtf = new_gtf.replace({"FPKM": null_dictionary})
+new_gtf = new_gtf.replace({"TPM": null_dictionary})
+new_gtf = new_gtf.replace({"exon_number": null_dictionary})
 
 ### Concatenating fields
 
 transcript_id = new_gtf["transcript_id"].copy()
-new_gtf6["gene_id"]= new_gtf6["gene_id"].str.cat(transcript_id, sep =" ")
-cov = new_gtf6["cov"].copy()
-new_gtf6["gene_id"]= new_gtf6["gene_id"].str.cat(cov, sep =" ")
-FPKM = new_gtf6["FPKM"].copy()
-new_gtf6["gene_id"]= new_gtf6["gene_id"].str.cat(FPKM, sep =" ")
-TPM = new_gtf6["TPM"].copy()
-new_gtf6["gene_id"]= new_gtf6["gene_id"].str.cat(TPM, sep =" ")
-exon_number = new_gtf6["exon_number"].copy()
-new_gtf6["gene_id"]= new_gtf6["gene_id"].str.cat(exon_number, sep="")
+new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(transcript_id, sep =" ")
+cov = new_gtf["cov"].copy()
+new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(cov, sep =" ")
+FPKM = new_gtf["FPKM"].copy()
+new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(FPKM, sep =" ")
+TPM = new_gtf["TPM"].copy()
+new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(TPM, sep =" ")
+exon_number = new_gtf["exon_number"].copy()
+new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(exon_number, sep="")
 
 ### Subsetting GTF
-intermediate_gtf = new_gtf6[["seqname", "source", "feature", "start", "end", "score", "strand", "frame", "gene_id"]]
+intermediate_gtf = new_gtf[["seqname", "source", "feature", "start", "end", "score", "strand", "frame", "gene_id"]]
 
 ### Saving intermediate GTF file
 intermediate_gtf.to_csv(r'intermediate_gtf.gtf', header=None, index=None, sep='\t', mode='a')
