@@ -20,7 +20,3 @@ dependencies:             # everything under this, installed by conda
 - seqkit
 - gawk
 - sed
-- pip
-- pip:
-  - gtfparse
-  - pandas
