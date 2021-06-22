@@ -90,96 +90,16 @@ sed 's/^/"/' B > B.1
 sed 's/$/"/' B.1 > B.2
 paste -d'\t' A.2 B.2 > namelist
 rm A A.1 A.2 B B.1 B.2
-############################################
-# Getting gene names replaced using python #
-############################################
-python << END
-#!/usr/bin/env python
-# coding: utf-8
-
-# https://pypi.org/project/gtfparse/
-# pip install gtfparse
-# https://stackoverflow.com/questions/20250771/remap-values-in-pandas-column-with-a-dict
-# https://stackoverflow.com/questions/2189098/embedding-short-python-scripts-inside-a-bash-script
-
-### Import python libraries
-import pandas as pd
-from gtfparse import read_gtf
-
-### Import data and construct dictionary
-# GTF
-df1 = read_gtf('gtf_for_python.gtf')
-# gene_id matching list (namelist)
-df2 = pd.read_csv("namelist_unique_sorted", delimiter="\t", names=["StringTie", "GeneID_match"])
-df2.dropna(inplace = True)
-dictionary1 = dict(zip(df2["StringTie"], df2["GeneID_match"]))
-
-### replace STRG. gene IDs in input GTF with dictionary
-print("replacing STRG. gene IDs with dictionary")
-print("")
-new_gtf = df1.replace({"gene_id": dictionary1})
-
-### Reformat GTF: adding fields
-print("Reformatting GTF: adding fields")
-print("")
-new_gtf['gene_id'] = 'gene_id+++' + new_gtf['gene_id'].astype(str)                     # gene_id prefix
-new_gtf['gene_id'] =  new_gtf['gene_id'].astype(str) + ';'                             # gene_id suffix
-new_gtf['transcript_id'] = 'transcript_id+++' + new_gtf['transcript_id'].astype(str)   # transcript_id prefix
-new_gtf['transcript_id'] =  new_gtf['transcript_id'].astype(str) + ';'                 # transcript_id suffix
-new_gtf['cov'] = 'cov+++' + new_gtf['cov'].astype(str)                                 # cov prefix
-new_gtf['cov'] =  new_gtf['cov'].astype(str) + ';'                                     # cov suffix
-new_gtf['exon_number'] = 'exon_number+++' + new_gtf['exon_number'].astype(str)         # exon_number prefix
-new_gtf['exon_number'] =  new_gtf['exon_number'].astype(str) + ';'                     # exon_number suffix
-new_gtf['FPKM'] = 'FPKM+++' + new_gtf['FPKM'].astype(str)                              # FPKM prefix
-new_gtf['FPKM'] =  new_gtf['FPKM'].astype(str) + ';'                                   # FPKM suffix
-new_gtf['TPM'] = 'TPM+++' + new_gtf['TPM'].astype(str)                                 # TPM prefix
-new_gtf['TPM'] =  new_gtf['TPM'].astype(str) + ';'                                     # TPM suffix
-
-### Reformat GTF: removing empty fields
-print("Reformatting GTF: removing empty fields")
-print("")
-null_dictionary = {"nan": ".", "FPKM+++;": "", "TPM+++;": "", "exon_number+++;": "", "0":"."}
-new_gtf = new_gtf.replace({"frame": null_dictionary})
-new_gtf = new_gtf.replace({"strand": null_dictionary})
-new_gtf = new_gtf.replace({"FPKM": null_dictionary})
-new_gtf = new_gtf.replace({"TPM": null_dictionary})
-new_gtf = new_gtf.replace({"exon_number": null_dictionary})
-
-### Concatenating fields
-print("Concatenating fields")
-print("")
-transcript_id = new_gtf["transcript_id"].copy()
-new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(transcript_id, sep =" ")
-cov = new_gtf["cov"].copy()
-new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(cov, sep =" ")
-FPKM = new_gtf["FPKM"].copy()
-new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(FPKM, sep =" ")
-TPM = new_gtf["TPM"].copy()
-new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(TPM, sep =" ")
-exon_number = new_gtf["exon_number"].copy()
-new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(exon_number, sep="")
-
-### Subsetting GTF
-print("Subsetting GTF")
-print("")
-intermediate_gtf = new_gtf[["seqname", "source", "feature", "start", "end", "score", "strand", "frame", "gene_id"]]
-
-### Saving intermediate GTF file
-print("Saving intermediate GTF file")
-print("")
-intermediate_gtf.to_csv(r'intermediate_gtf.gtf', header=None, index=None, sep='\t', mode='a')
-print("")
-print("GTF parsing was done, intermediate_gtf.gtf file is present in the working directory")
-print("")
-END
-######################################
-# END of python, continue with shell #
-######################################
-rm gtf_for_python.gtf
-sed -i 's/+++/ "/g' intermediate_gtf.gtf
-sed -i 's/;/";/g' intermediate_gtf.gtf
-sed 's/  exon_number/ exon_number/g' intermediate_gtf.gtf > final_annotated.gtf
-rm intermediate_gtf.gtf
+###############################
+# Getting gene names replaced #
+###############################
+awk '{print $1}' namelist > fileA
+awk '{print $2}' namelist > fileB
+paste -d % fileA fileB > sed.script
+sed -i -e 's/^/s%/' sed.script
+sed -i -e 's/$/%/' sed.script
+cat ${a} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
+rm -f fileA fileB *tmap.1 *tmap.2
 # sorting GTF file
 git clone https://github.com/cfarkas/gff3sort.git
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
