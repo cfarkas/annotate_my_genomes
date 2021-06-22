@@ -115,9 +115,13 @@ df2.dropna(inplace = True)
 dictionary1 = dict(zip(df2["StringTie"], df2["GeneID_match"]))
 
 ### replace STRG. gene IDs in input GTF with dictionary
+print("replacing STRG. gene IDs with dictionary")
+print("")
 new_gtf = df1.replace({"gene_id": dictionary1})
 
 ### Reformat GTF: adding fields
+print("Reformatting GTF: adding fields")
+print("")
 new_gtf['gene_id'] = 'gene_id+++' + new_gtf['gene_id'].astype(str)                     # gene_id prefix
 new_gtf['gene_id'] =  new_gtf['gene_id'].astype(str) + ';'                             # gene_id suffix
 new_gtf['transcript_id'] = 'transcript_id+++' + new_gtf['transcript_id'].astype(str)   # transcript_id prefix
@@ -132,6 +136,8 @@ new_gtf['TPM'] = 'TPM+++' + new_gtf['TPM'].astype(str)                          
 new_gtf['TPM'] =  new_gtf['TPM'].astype(str) + ';'                                     # TPM suffix
 
 ### Reformat GTF: removing empty fields
+print("Reformatting GTF: removing empty fields")
+print("")
 null_dictionary = {"nan": ".", "FPKM+++;": "", "TPM+++;": "", "exon_number+++;": "", "0":"."}
 new_gtf = new_gtf.replace({"frame": null_dictionary})
 new_gtf = new_gtf.replace({"strand": null_dictionary})
@@ -140,7 +146,8 @@ new_gtf = new_gtf.replace({"TPM": null_dictionary})
 new_gtf = new_gtf.replace({"exon_number": null_dictionary})
 
 ### Concatenating fields
-
+print("Concatenating fields")
+print("")
 transcript_id = new_gtf["transcript_id"].copy()
 new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(transcript_id, sep =" ")
 cov = new_gtf["cov"].copy()
@@ -153,9 +160,13 @@ exon_number = new_gtf["exon_number"].copy()
 new_gtf["gene_id"]= new_gtf["gene_id"].str.cat(exon_number, sep="")
 
 ### Subsetting GTF
+print("Subsetting GTF")
+print("")
 intermediate_gtf = new_gtf[["seqname", "source", "feature", "start", "end", "score", "strand", "frame", "gene_id"]]
 
 ### Saving intermediate GTF file
+print("Saving intermediate GTF file")
+print("")
 intermediate_gtf.to_csv(r'intermediate_gtf.gtf', header=None, index=None, sep='\t', mode='a')
 print("")
 print("GTF parsing was done, intermediate_gtf.gtf file is present in the working directory")
