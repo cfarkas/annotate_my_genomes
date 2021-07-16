@@ -11,7 +11,7 @@ This pipeline requieres to run:
 
 1) StringTie assembled transcripts (in GTF format)
 
-2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository plus genome prefix as follows: 
+2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository and inputtimg genome prefix as follows: 
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. 
 ```
@@ -90,10 +90,10 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 
 ## Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
-- As example, to annotate a chicken GTF file (i.e: "target.gtf") in genome_1 folder, using 30 threads for cpu processing:
+- As example, to annotate a chicken GTF file (i.e: "target.gtf") in genome_1 folder, using 20 threads for cpu processing:
 ```
 ./genome-download galGal6
-./annotate-my-genomes -a target.gtf -r galGal6.gtf -g galGal6.fa -t 30
+./annotate-my-genomes -a target.gtf -r galGal6.gtf -g galGal6.fa -t 20
 ```
 - final_annotated.gtf (located in output_files_UCSC) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 - To produce target.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
@@ -103,14 +103,14 @@ Users can add annotations from NCBI by using the three outputs from ./genome-dow
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
 ./genome-download galGal6
-./add-ncbi-annotation -a target.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 30
+./add-ncbi-annotation -a target.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 20
 ```
 - final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates).
 
 As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
 ```
 ./genome-download mm10
-./add-ncbi-annotation -a mouse.gtf -n mm10_ncbiRefSeq.gtf -r mm10.gtf -g mm10.fa -t 30
+./add-ncbi-annotation -a mouse.gtf -n mm10_ncbiRefSeq.gtf -r mm10.gtf -g mm10.fa -t 20
 ```
 ### Identifying homologs in novel proteins from transcriptome
 
