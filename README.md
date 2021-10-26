@@ -67,7 +67,7 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 
 ### Option 2: Without using conda, program by program:
 
-- see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes.wiki.git
+- see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
 ## Quickstart (Running the test)
 
