@@ -41,7 +41,6 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-
 conda create --name annotate_my_genomes python=3.6.13          # create environment
 conda activate annotate_my_genomes                             # load environment
 
