@@ -45,22 +45,23 @@ conda create --name annotate_my_genomes python=3.6.13          # create environm
 conda activate annotate_my_genomes                             # load environment
 
 # Install packages
-conda install -c conda-forge parallel 
-conda install -c bioconda cufflinks
-conda install -c bioconda stringtie
-conda install -c bioconda gffcompare
-conda install -c bioconda gffread
-conda install -c bioconda gmap
-conda install -c bioconda bedtools
-conda install -c bioconda emboss
-conda install -c bioconda clustalo
-conda install -c bioconda samtools
-conda install -c bioconda minimap2
-conda install -c bioconda transdecoder
-conda install -c bioconda seqkit
-conda install -c anaconda gawk
-conda install -c conda-forge sed
-conda install -c bioconda/label/cf201901 feelnc
+conda install -c conda-forge -y parallel 
+conda install -c bioconda -y cufflinks
+conda install -c bioconda -y stringtie
+conda install -c bioconda -y gffcompare
+conda install -c bioconda -y gffread
+conda install -c bioconda -y gmap
+conda install -c bioconda -y bedtools
+conda install -c bioconda -y emboss
+conda install -c bioconda -y clustalo
+conda install -c bioconda -y samtools
+conda install -c bioconda -y minimap2
+conda install -c bioconda -y transdecoder
+conda install -c bioconda -y seqkit
+conda install -c conda-forge -y coreutils
+conda install -c anaconda -y gawk
+conda install -c conda-forge -y sed
+conda install -c bioconda/label/cf201901 -y feelnc
 
 bash makefile.sh                                               # make  & install
 ```
