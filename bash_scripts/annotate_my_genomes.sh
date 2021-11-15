@@ -42,16 +42,20 @@ NC='\033[0m' # No Color
 echo "Cleaning directory..."
 rm -r -f FEELnc gawn gff3sort gffcompare_outputs_UCSC 
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with UCSC GTF :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 gffcompare -R -r ${r} -s ${g} -o UCSC_compare ${a}
 printf "${PURPLE}Done\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 2. Writting novel discoveries to Stats.txt :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 # Stats
 exec 3<> Stats.txt
@@ -69,9 +73,11 @@ cat UCSC_compare.${a}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | w
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 3. Replacing gene_id field in final_annotated.gtf file with UCSC gene_id's :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 ########################################
 # Merging novel transcripts with ref. 
@@ -112,17 +118,21 @@ echo ""
 mkdir gffcompare_outputs_UCSC
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_UCSC
 echo ""
+
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 gffread -w transcripts.fa -g ${g} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
@@ -150,9 +160,11 @@ echo ""
 #################################
 # Extracting transcriptome hits #
 #################################
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 6. Extracting transcriptome hits :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 cd /${dir1}/
 cp /${dir1}/gawn/04_annotation/transcriptome.swissprot /${dir1}/
@@ -163,54 +175,32 @@ echo ""
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
+
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-### Cloning FEELnc in current directory
-git clone https://github.com/cfarkas/FEELnc.git
-echo ""
-cp ${g} ${r} final_annotated.gtf /${dir1}/FEELnc/
-cd FEELnc
+
 grep "NM_" ${r} > NM_coding.gtf
-export FEELNCPATH=${PWD}
-export PERL5LIB=$PERL5LIB:${FEELNCPATH}/lib/ #order is important to avoid &Bio::DB::IndexedBase::_strip_crnl error with bioperl >=v1.7
-export PATH=$PATH:${FEELNCPATH}/scripts/
-export PATH=$PATH:${FEELNCPATH}/utils/
 echo ""
-### Testing FEELnc first
-echo ""
-printf "${PURPLE}::: Testing if FEELnc works ...\n"
-echo ""
-cd test/
-# Filter
-FEELnc_filter.pl -i transcript_chr38.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-# Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a annotation_chr38.gtf -b transcript_biotype=protein_coding -g genome_chr38.fa --mode=shuffle
-# Classifier
-FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a annotation_chr38.gtf > candidate_lncRNA_classes.txt
-echo ""
-printf "${PURPLE}::: FEELnc Test done. Continue with final_annotated.gtf file :::\n"
-echo ""
-cd ..
-echo ""
-### Running FEELnc
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 8. Running FEELnc on final_annotated.gtf file :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${PURPLE}::: 1/3) Filtering transcripts :::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
+rm ${g}.index
+printf "${PURPLE}::: 2/3) Evaluating coding potential :::${CYAN}\n"
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g} --mode=shuffle
+printf "${PURPLE}::: 3/3) Classifiyng lncRNA transcripts :::${CYAN}\n"
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a NM_coding.gtf > candidate_lncRNA_classes.txt
 echo ""
-printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt:::\n"
+printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt :::\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 9. Parsing GAWN and FEELnc outputs :::\n"
+printf "${YELLOW}::: 8. Parsing GAWN and FEELnc outputs :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
-cp candidate_lncRNA_classes.txt /${dir1}/
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
 tail -n +2 lncRNA_genes > lncRNA_transcripts
@@ -239,9 +229,11 @@ echo ""
 ##########################################
 cd /${dir1}/
 echo ""
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 10. Predicting coding regions from transcripts with coding potential using TransDecoder :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 9. Predicting coding regions from transcripts with coding potential using TransDecoder :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 echo ""
 gffread -w coding-transcripts.fa -g ${g} coding-genes.gtf
@@ -252,9 +244,11 @@ grep "STRG." coding.sequences > coding.hits && rm coding.sequences
 echo ""
 printf "${PURPLE}::: Done. coding-transcripts.fa.transdecoder.gff3 file is present in current directory...${CYAN}\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
+printf "${YELLOW}::: 10. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 sed 's/Name=.*$//' coding-transcripts.fa.transdecoder.gff3 > coding-transcripts.fa.test.gff3
 sed -i 's/ID=GENE[.]/ID=/'g coding-transcripts.fa.test.gff3
@@ -336,9 +330,11 @@ rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
 ###############################
 # Configuring Summary Results #
 ###############################
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 12. Moving results to output_files_UCSC folder :::\n"
+printf "${YELLOW}::: 11. Moving results to output_files_UCSC folder :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
 mkdir output_files_UCSC
