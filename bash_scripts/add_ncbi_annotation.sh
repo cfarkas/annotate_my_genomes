@@ -44,16 +44,20 @@ NC='\033[0m' # No Color
 echo "Cleaning directory..."
 rm -r -f FEELnc gawn gff3sort gffcompare_outputs_NCBI 
 echo ""
+
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with NCBI annotation :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
+
 gffcompare -R -r ${n} -s ${g} -o UCSC_compare ${a}
 printf "${PURPLE}Done\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 2. Writting novel discoveries to Stats.txt :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 # Stats
 exec 3<> Stats.txt
@@ -71,9 +75,11 @@ cat UCSC_compare.${a}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | w
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 3. Replacing gene_id field in final_annotated.gtf file with NCBI gene_id's :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 ########################################
 # Merging novel transcripts with ref. 
@@ -116,17 +122,21 @@ mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_NCBI
 echo ""
 printf "${PURPLE}::: Continue with protein-coding annotation\n" 
 echo ""
+
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 gffread -w NCBI_transcripts.fa -g ${g} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. NCBI_transcripts.fa are located in current directory\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 5. Performing gene annotation by using GAWN pipeline :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
@@ -155,9 +165,11 @@ echo ""
 #################################
 # Extracting transcriptome hits #
 #################################
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 6. Extracting transcriptome hits :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 cd /${dir1}/
 cp /${dir1}/gawn/04_annotation/transcriptome.swissprot /${dir1}/
@@ -169,9 +181,11 @@ echo ""
 # FEELnc long noncoding RNA identification #
 ############################################
 cd /${dir1}/
+
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 grep "NM_" ${r} > NM_coding.gtf
 echo ""
 printf "${PURPLE}::: 1/3) Filtering transcripts :::${CYAN}\n"
@@ -187,9 +201,11 @@ FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a NM_
 echo ""
 printf "${PURPLE}::: FEELnc calculations were done. The output is called candidate_lncRNA_classes.txt :::\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 8. Parsing GAWN and FEELnc outputs :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 cd /${dir1}/
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
@@ -219,9 +235,11 @@ echo ""
 ##########################################
 cd /${dir1}/
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 9. Predicting coding regions from transcripts with coding potential using TransDecoder :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 echo ""
 gffread -w coding-transcripts.fa -g ${g} coding-genes.gtf
@@ -232,9 +250,11 @@ grep "STRG." coding.sequences > coding.hits && rm coding.sequences
 echo ""
 printf "${PURPLE}::: Done. coding-transcripts.fa.transdecoder.gff3 file is present in current directory...${CYAN}\n"
 echo ""
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 10. Converting gff3 to GTF format and formatting coding sequences and proteins :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 sed 's/Name=.*$//' coding-transcripts.fa.transdecoder.gff3 > coding-transcripts.fa.test.gff3
 sed -i 's/ID=GENE[.]/ID=/'g coding-transcripts.fa.test.gff3
@@ -316,9 +336,11 @@ rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
 ###############################
 # Configuring Summary Results #
 ###############################
+
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 11. Moving results to output_files_NCBI folder :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+
 echo ""
 printf "${PURPLE}::: Moving results to output_files_NCBI folder :::${CYAN}\n"
 mkdir output_files_NCBI
