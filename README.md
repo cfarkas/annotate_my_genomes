@@ -90,6 +90,11 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
+### Uninstall
+```
+conda remove --name annotate_my_genomes --all
+```
+
 ## Quickstart (Running the test)
 
 1) Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). 
