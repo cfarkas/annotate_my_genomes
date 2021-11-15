@@ -62,6 +62,7 @@ conda install -c conda-forge -y coreutils
 conda install -c anaconda -y gawk
 conda install -c conda-forge -y sed
 conda install -c bioconda/label/cf201901 -y feelnc
+conda install -c bioconda -y perl-local-lib
 
 bash makefile.sh                                               # make  & install
 ```
