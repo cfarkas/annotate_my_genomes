@@ -185,7 +185,7 @@ echo ""
 printf "${PURPLE}::: 1/3) Filtering transcripts :::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-rm ${g}.index
+rm -r -f ${g}.index
 printf "${PURPLE}::: 2/3) Evaluating coding potential :::${CYAN}\n"
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g} --mode=shuffle
