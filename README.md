@@ -90,7 +90,7 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
-### Uninstall
+## Uninstall
 ```
 conda remove --name annotate_my_genomes --all
 ```
