@@ -86,7 +86,19 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
 
-### Option 2: Without using conda, program by program:
+### Option 2: Deploying the conda environment in your machine (produced with conda-pack)
+
+```
+git clone https://github.com/cfarkas/annotate_my_genomes.git                   # clone repository
+cd annotate_my_genomes                                                         # enter repository
+mkdir annotate_my_genomes                                                      # create folder and download environment
+wget -O annotate_my_genomes.tar.gz https://usegalaxy.org/datasets/bbd44e69cb8906b538a75fa1764eb328/display?to_ext=binary 
+tar -xf annotate_my_genomes.tar.gz -C annotate_my_genomes/                     # Unpack environment
+bash makefile.sh                                                               # make  & install
+sudo cp ./bin/* /usr/local/bin/                                                # optional: copy binaries to /usr/local/bin/ using sudo privileges
+```
+
+### Option 3: Without using conda, program by program:
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
