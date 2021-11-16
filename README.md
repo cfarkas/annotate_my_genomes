@@ -86,7 +86,8 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
 
-### Option 2: Deploy the conda environment in your machine (produced with conda-pack: https://conda.github.io/conda-pack/)
+### Option 2: Deploy the conda environment in your machine (produced with conda-pack)
+#### see documentation of conda-pack here: https://conda.github.io/conda-pack/
 
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git                   # clone repository
