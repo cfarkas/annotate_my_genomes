@@ -91,8 +91,11 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git                   # clone repository
 cd annotate_my_genomes                                                         # enter repository
-mkdir annotate_my_genomes                                                      # create folder and download environment
+mkdir annotate_my_genomes                                                      # create folder
+
+# download environment
 wget -O annotate_my_genomes.tar.gz https://usegalaxy.org/datasets/bbd44e69cb8906b538a75fa1764eb328/display?to_ext=binary 
+
 tar -xf annotate_my_genomes.tar.gz -C annotate_my_genomes/                     # Unpack environment
 bash makefile.sh                                                               # make  & install
 sudo cp ./bin/* /usr/local/bin/                                                # optional: copy binaries to /usr/local/bin/ using sudo privileges
