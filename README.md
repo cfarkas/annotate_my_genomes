@@ -85,6 +85,10 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 ```
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
+- Uninstall as follows: 
+```
+conda remove --name annotate_my_genomes --all
+```
 
 ### Option 2: Deploy the conda environment in your machine (produced with conda-pack)
 #### See documentation of conda-pack here: https://conda.github.io/conda-pack/
@@ -112,11 +116,6 @@ source annotate_my_genomes2/bin/deactivate
 ### Option 3: Without using conda, program by program:
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
-
-## Uninstall
-```
-conda remove --name annotate_my_genomes --all
-```
 
 ## Quickstart (Running the test)
 
