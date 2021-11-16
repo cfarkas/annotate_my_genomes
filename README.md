@@ -103,6 +103,11 @@ sudo cp ./bin/* /usr/local/bin/                                                #
 ```
 and install ncbi-blast+ version >= 2.7: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
 
+Deactivate the environment as follows:
+```
+source annotate_my_genomes2/bin/deactivate
+```
+
 ### Option 3: Without using conda, program by program:
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
