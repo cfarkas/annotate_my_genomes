@@ -100,6 +100,7 @@ tar -xf annotate_my_genomes.tar.gz -C annotate_my_genomes/                     #
 bash makefile.sh                                                               # make  & install
 sudo cp ./bin/* /usr/local/bin/                                                # optional: copy binaries to /usr/local/bin/ using sudo privileges
 ```
+and install ncbi-blast+ version >= 2.7: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
 
 ### Option 3: Without using conda, program by program:
 
