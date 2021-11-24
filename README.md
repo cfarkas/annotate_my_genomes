@@ -90,30 +90,7 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 conda remove --name annotate_my_genomes --all
 ```
 
-### Option 2: Deploy the conda environment in your machine (produced with conda-pack)
-#### See documentation of conda-pack here: https://conda.github.io/conda-pack/
-
-```
-git clone https://github.com/cfarkas/annotate_my_genomes.git                   # clone repository
-cd annotate_my_genomes                                                         # enter repository
-mkdir annotate_my_genomes                                                      # create folder
-
-# download environment (~ 2.2 GB file)
-wget -O annotate_my_genomes.tar.gz https://usegalaxy.org/datasets/bbd44e69cb8906b538a75fa1764eb328/display?to_ext=binary 
-
-tar -xf annotate_my_genomes.tar.gz -C annotate_my_genomes/                     # Unpack environment
-source annotate_my_genomes/bin/activate                                        # activate environment
-bash makefile.sh                                                               # make  & install
-sudo cp ./bin/* /usr/local/bin/                                                # optional: copy binaries to /usr/local/bin/ using sudo privileges
-```
-- And install ncbi-blast+ version >= 2.7: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
-
-- Deactivate the environment as follows:
-```
-source annotate_my_genomes2/bin/deactivate
-```
-
-### Option 3: Without using conda, program by program:
+### Option 2: Without using conda, program by program:
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
