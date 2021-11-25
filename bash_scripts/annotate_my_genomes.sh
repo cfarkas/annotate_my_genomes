@@ -4,7 +4,7 @@ set -e
 
 {
 
-usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>]
+usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>] [-o <output>]
 This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts.
 Arguments:
     -h  show this help text
