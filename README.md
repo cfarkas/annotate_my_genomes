@@ -90,7 +90,7 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 ```
 conda remove --name annotate_my_genomes --all
 ```
-- Inside the repository there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus:
+- Inside the repository, there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus for blast processing:
 ```
 NCPUS=10
 ```
