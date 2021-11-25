@@ -4,32 +4,45 @@ set -e
 
 {
 
-dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-t <threads>]
+usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>]
 This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts.
 Arguments:
     -h  show this help text
     -a  StringTie GTF
     -r  UCSC gene annotation (in GTF format)
     -g  Reference genome (in fasta format)
-    -t  Number of threads for processing (integer)"
-options=':ha:r:g:t:'
+    -c  GAWN config file (path to gawn_config.sh in annotate_my_genomes folder)
+    -t  Number of threads for processing (integer)
+    -o  output folder (must exist)"
+options=':ha:r:g:c:t:o:'
 while getopts $options option; do
   case "$option" in
     h) echo "$usage"; exit;;
     a) a=$OPTARG;;
     r) r=$OPTARG;;
     g) g=$OPTARG;;
+    c) c=$OPTARG;;
     t) t=$OPTARG;;
+    o) o=$OPTARG;;
     :) printf "missing argument for -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
    \?) printf "illegal option: -%s\n" "$OPTARG" >&2; echo "$usage" >&2; exit 1;;
   esac
 done
 
 # mandatory arguments
-if [ ! "$a" ] || [ ! "$r" ] || [ ! "$g" ] || [ ! "$t" ]; then
-  echo "arguments -a, -r, -g and -t must be provided"
+if [ ! "$a" ] || [ ! "$r" ] || [ ! "$g" ] || [ ! "$c" ] || [ ! "$t" ] || [ ! "$o" ]; then
+  echo "arguments -a, -r, -g, -c, -t and -o must be provided"
   echo "$usage" >&2; exit 1
+fi
+
+if [ ! -d "$o" ]; then
+  echo "Output directory: $o not found. Please create the output directory first, before running the pipeline."
+  exit 9999 # die with error code 9999
+fi
+
+if [ "$o" = ./ ]; then
+  echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
+  exit 9999 # die with error code 9999
 fi
 
 begin=`date +%s`
@@ -39,37 +52,83 @@ YELLOW='\033[1;33m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
-echo "Cleaning directory..."
-rm -r -f FEELnc gawn gff3sort gffcompare_outputs_UCSC 
+
+rm -r -f logfile_annotate_my_genomes
+
+printf "${YELLOW}::: Defining Variables :::\n"
+echo ""
+echo "Defining variables:"
+echo""
+FILE1="$a"
+basename "$FILE1"
+stringtie_input="$(basename -- $FILE1)"
+echo "The stringtie file used as input is the following: $stringtie_input"
+echo ""
+FILE2="$r"
+basename "$FILE2"
+reference_gtf="$(basename -- $FILE2)"
+echo "The reference GTF used as input is the following: $reference_gtf"
+echo ""
+FILE3="$g"
+basename "$FILE3"
+reference_genome="$(basename -- $FILE3)"
+echo "The reference genome used as input is the following: $reference_genome"
+echo ""
+FILE4="$c"
+basename "$FILE4"
+gawn_config="$(basename -- $FILE4)"
+echo "The gawn_config file used as input is the following: $gawn_config"
+echo ""
+FILE5="$t"
+basename "$FILE5"
+threads="$(basename -- $FILE5)"
+echo "The number of threads for calculation are the following: $threads"
+echo ""
+
+printf "${YELLOW}:::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 0. Defining directories :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::${CYAN}\n"
+echo ""
+
+dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+sec=$(date "+%Y%m%d_%H%M%S")
+mkdir annotate_my_genomes_$sec
+cp ${a} ./annotate_my_genomes_$sec
+cd annotate_my_genomes_$sec
+dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+echo "Done"
+printf "${YELLOW}::: Done :::\n"
 echo ""
 
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with UCSC GTF :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-
 echo ""
-gffcompare -R -r ${r} -s ${g} -o UCSC_compare ${a}
-printf "${PURPLE}Done\n"
+
+gffcompare -R -r ${r} -s ${g} -o UCSC_compare ${stringtie_input}
+#cp ./annotate_my_genomes_$sec/UCSC_compare.${stringtie_input}.tmap ./
+echo "Done."
+printf "${PURPLE}::: Done :::\n"
 echo ""
 
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 2. Writting novel discoveries to Stats.txt :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
-
 echo ""
+
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat UCSC_compare.${a}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${stringtie_input}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat UCSC_compare.${a}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${stringtie_input}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat UCSC_compare.${a}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${stringtie_input}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat UCSC_compare.${a}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat UCSC_compare.${stringtie_input}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
@@ -79,12 +138,12 @@ printf "${YELLOW}::: 3. Replacing gene_id field in final_annotated.gtf file with
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-########################################
-# Merging novel transcripts with ref. 
-########################################
-awk '{print $4"\t"$1}' UCSC_compare.${a}.tmap > UCSC_compare.${a}.tmap.1
-tail -n +2 UCSC_compare.${a}.tmap.1 > UCSC_compare.${a}.tmap.2
-awk '$2 != "-"' UCSC_compare.${a}.tmap.2 > namelist
+#######################################
+# Merging novel transcripts with ref. #
+#######################################
+awk '{print $4"\t"$1}' UCSC_compare.${stringtie_input}.tmap > UCSC_compare.${stringtie_input}.tmap.1
+tail -n +2 UCSC_compare.${stringtie_input}.tmap.1 > UCSC_compare.${stringtie_input}.tmap.2
+awk '$2 != "-"' UCSC_compare.${stringtie_input}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
@@ -136,6 +195,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${C
 ################################################################
 # Configuring Gawn Inputs, config file and running GAWN pipeline
 ################################################################
+
 echo ""
 printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n"
 echo ""
@@ -148,7 +208,7 @@ cd /${dir1}/
 cp ${g} /${dir1}/gawn/03_data/genome.fasta
 cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
-cp gawn_config.sh /${dir2}/gawn_config.sh
+cp ${c} /${dir2}/gawn_config.sh
 echo ""
 printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
 echo ""
@@ -157,6 +217,7 @@ cd /${dir1}/gawn/
 echo ""
 printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/04_annotation/ :::${CYAN}\n"
 echo ""
+
 #################################
 # Extracting transcriptome hits #
 #################################
@@ -171,9 +232,11 @@ cp /${dir1}/gawn/04_annotation/transcriptome.swissprot /${dir1}/
 cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
 printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
+
 ############################################
 # FEELnc long noncoding RNA identification #
 ############################################
+
 cd /${dir1}/
 
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -280,7 +343,7 @@ rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.g
 grep "StringTie" final_annotated.gtf > genes.gtf
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
-grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf 
+grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
 sed -i 's/StringTie/coding/' coding-genes.gtf
 cat coding-genes.gtf lncRNAs.gtf other-genes.gtf > final_annotated.gtf
 echo ""
@@ -327,36 +390,48 @@ rm -r -f gff3sort
 echo "done"
 echo ""
 rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
+
 ###############################
 # Configuring Summary Results #
 ###############################
 
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 11. Moving results to output_files_UCSC folder :::\n"
-printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 11. Moving results to the specified directory :::\n"
+printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-printf "${PURPLE}::: Moving results to output_files_UCSC folder :::${CYAN}\n"
-mkdir output_files_UCSC
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf logfile Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files_UCSC/
+printf "${PURPLE}::: Moving results to the specified directory :::${CYAN}\n"
+mkdir output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files
+rm -r -f *feelncfilter.log genes.gtf pipeliner* NM_coding.gtf candidate_lncRNA.gtf* coding-transcripts.fa.transdecoder_dir.__* transcripts.fa.fai
+mkdir transdecoder
+mv coding-transcripts.fa.transdecoder.* ./transdecoder
+mv UCSC_compare.annotated.gtf ./gffcompare_outputs_UCSC
+cd ${dir0}
+mv annotate_my_genomes_$sec ${o}
+echo "Done"
+echo ""
+printf "${YELLOW}::: Done:::\n"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "Transcript discoveries are summarized in Stats.txt file located in ./output_files_UCSC . GAWN protein annotation is named transcriptome.hits"
+echo "The following files are available in ${o}/annotate_my_genomes_$sec/output_files : "
 echo ""
-echo "GTF file named final_annotated.gtf (and correspondent gff file) are located in ./output_files_UCSC, containing novel genes and lncRNA classification (second field in GTF file)".
+echo "Transcript discoveries are summarized in Stats.txt file. GAWN protein annotation is named transcriptome.hits"
+echo ""
+echo "GTF file named final_annotated.gtf (and correspondent gff file) contain novel genes and lncRNA classification (second field in GTF file)"
 echo ""
 echo "candidate_lncRNA_classes.txt contained detailed long non-coding classification of transcripts".
 echo ""
-echo "Associated FASTA file to this GTF, (transcripts.fa) is located in ./output_files_UCSC"
+echo "Associated FASTA file to this GTF correspond to transcripts.fa file"
 echo ""
-echo "TransDecoder GTF file suitable to parse transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder and is located in ./output_files_UCSC"
+echo "TransDecoder GTF file suitable to parse transcripts.fa (coding_transcripts.gtf), contains all coding transcripts resolved by TransDecoder"
 echo ""
-echo "Predicted coding sequences (cds.fa) and correspondent protein sequences (prot.fa) are located in ./output_files_UCSC"
+echo "Predicted coding sequences and correspondent protein sequences were named cds.fa and prot.fa, respectively"
 echo ""
-echo "Novel predicted coding sequences (novel-cds.fa) and correspondent protein sequences (novel-prot.fa) are located in ./output_files_UCSC"
+echo "Novel predicted coding sequences and correspondent protein sequences were named novel-cds.fa and novel-prot.fa, respectively"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
@@ -365,5 +440,5 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
-} | tee logfile
+} | tee logfile_annotate_my_genomes
 #
