@@ -44,6 +44,8 @@ cp ./bin/add-ncbi-annotation ./test/
 cp ./bin/add-ncbi-annotation ./genome_1/
 cp ./bin/get-transcripts ./get_transcripts/
 cp ./bin/genome-download ./get_transcripts/
+echo "::: All done. Binaries are located in ./bin/ folder. :::" 
 echo ""
-echo "All done. Binaries are located in ./bin/ ./genome_1/ and ./test/ folders"
+echo "::: With sudo privileges, users can do : sudo cp ./bin/* /usr/local/bin/ :::"
+echo ""
 #
