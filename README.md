@@ -132,7 +132,7 @@ mkdir output1
 - To produce target.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
 ## Adding NCBI annotations to increase annotation of transcripts
-Users can add annotations from NCBI by using the three outputs from ./genome-download program and input into ./add-ncbi-annotation. 
+Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
 mkdir output2
