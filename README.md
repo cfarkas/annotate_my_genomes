@@ -19,9 +19,10 @@ Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As e
 
 Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
-./annotate-my-genomes -a stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -t 20
+mkdir output1
+./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c gawn_config.sh -t 20 -o /path/to/output1
 ```
-will output:
+will output inside output1 folder:
 ```
 - final_annotated.gtf: an annotated GTF file in the "gene_id" field, containing novel genes and lncRNA classification (second field in GTF file). 
 - transcripts.fa : associated transcripts from final_annotated.gtf 
@@ -30,7 +31,7 @@ will output:
 - coding_transcripts.gtf: GTF file containing cds sequences.
 - novel coding sequences (novel-cds.fa) and correspondent novel protein sequences (novel-prot.fa).
 ```
-* Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts  
+* Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts
 
 ## Installation:  
 
@@ -89,6 +90,11 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 ```
 conda remove --name annotate_my_genomes --all
 ```
+- Inside the repository there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus:
+```
+NCPUS=10
+```
+To a value according to the computational capacity of your machine. 
 
 ### Option 2: Without using conda, program by program:
 
@@ -96,9 +102,8 @@ conda remove --name annotate_my_genomes --all
 
 ## Quickstart (Running the test)
 
-1) Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file) and the number of threads for text processing (20 for this example). 
-
-2) Optionally, edit and increase the number of cpus in /test/gawn_config.sh: NCPUS=10
+- Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. 
+- Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file), gawn_config.sh file (check NCPUS for blast, default = 10), number of threads for text processing (20 for this example) and the output folder. 
 
 Enter /annotate_my_genomes/test/ directory and execute the following:
 
@@ -107,35 +112,40 @@ Enter /annotate_my_genomes/test/ directory and execute the following:
 ./genome-download galGal6        
 
 # Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads:
-./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -t 20
+mkdir output1
+./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output1
 
 # Include NCBI annptations on stringtie_chr33.gtf (provided file) with 20 threads:
-./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 20
+mkdir output2
+./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output2
 ```
 
 ## Simplest usage
-(Optional) Edit NCPUS value in gawn_config.sh file in "genome_1" folder. Default is 10
-- As example, to annotate a chicken GTF file (i.e: "target.gtf") in genome_1 folder, using 20 threads for cpu processing:
+(Optional) Edit NCPUS value in gawn_config.sh file inside the repository. Default is 10
+- As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
 ```
+mkdir output1
 ./genome-download galGal6          
-./annotate-my-genomes -a target.gtf -r galGal6.gtf -g galGal6.fa -t 20
+./annotate-my-genomes -a /path/to/target.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
 ```
-- final_annotated.gtf (located in output_files_UCSC) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+- final_annotated.gtf (located in output1/output_files/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 - To produce target.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
 ## Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program and input into ./add-ncbi-annotation. 
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
+mkdir output2
 ./genome-download galGal6         
-./add-ncbi-annotation -a target.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -t 20
+./add-ncbi-annotation -a /path/to/target.gtf -n /path/to/galGal6_ncbiRefSeq.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output2
 ```
-- final_annotated.gtf (located in output_files_NCBI) will contained the merged NCBI-updated annotation (in UCSC coordinates).
+- final_annotated.gtf (located in output2/output_files/) will contained the merged NCBI-updated annotation (in UCSC coordinates).
 
 As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
 ```
+mkdir output3
 ./genome-download mm10            
-./add-ncbi-annotation -a mouse.gtf -n mm10_ncbiRefSeq.gtf -r mm10.gtf -g mm10.fa -t 20
+./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
 ```
 ### Identifying homologs in novel proteins from transcriptome
 
