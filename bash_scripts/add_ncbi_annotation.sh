@@ -320,12 +320,12 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
-grep "NM_" ${r} > NM_coding.gtf
+grep "NM_" ${r_DIR}/${reference_gtf} > NM_coding.gtf
 echo ""
 printf "${PURPLE}::: 1/3) Filtering transcripts :::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-rm -r -f ${g}.index
+rm -r -f ${g_DIR}/${reference_genome}.index
 printf "${PURPLE}::: 2/3) Evaluating coding potential :::${CYAN}\n"
 # Coding_Potential
 FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g_DIR}/${reference_genome} --mode=shuffle
