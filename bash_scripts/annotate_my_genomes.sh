@@ -4,7 +4,7 @@ set -e
 
 {
 
-usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>] [-o <output>]
+usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>]
 This pipeline will Overlap StringTie transcripts (GTF format) with current UCSC annotation and will annotate novel transcripts.
 Arguments:
     -h  show this help text
@@ -31,19 +31,79 @@ done
 
 # mandatory arguments
 if [ ! "$a" ] || [ ! "$r" ] || [ ! "$g" ] || [ ! "$c" ] || [ ! "$t" ] || [ ! "$o" ]; then
+  echo ""
   echo "arguments -a, -r, -g, -c, -t and -o must be provided"
+  echo ""
   echo "$usage" >&2; exit 1
 fi
 
+# Conditions : output folder
 if [ ! -d "$o" ]; then
+  echo ""
   echo "Output directory: $o not found. Please create the output directory first, before running the pipeline."
+  echo ""
   exit 9999 # die with error code 9999
 fi
 
 if [ "$o" = ./ ]; then
+  echo ""
   echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
+  echo ""
   exit 9999 # die with error code 9999
 fi
+
+# Conditions : Input existance
+
+if [ ! -e "$a" ]; then
+    echo ""
+    echo "$a does not exist. Check your -a input"
+    echo ""
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$r" ]; then
+    echo ""
+    echo "$r does not exist. Check your -r input"
+    echo ""
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$g" ]; then
+    echo ""
+    echo "$g does not exist. Check your -g input"
+    echo ""
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$c" ]; then
+    echo ""
+    echo "$c does not exist. Check your -c input"
+    echo ""
+    exit 9999 # die with error code 9999
+fi
+
+# Conditions : Getting absolute path of inputs
+echo ""
+a_DIR="$( cd "$( dirname "$a" )" && pwd )"
+echo ""
+echo "::: The absolute path of -a is $a_DIR"
+echo ""
+r_DIR="$( cd "$( dirname "$r" )" && pwd )"
+echo ""
+echo "::: The absolute path of -r is $r_DIR"
+echo ""
+g_DIR="$( cd "$( dirname "$g" )" && pwd )"
+echo ""
+echo "::: The absolute path of -g is $g_DIR"
+echo ""
+c_DIR="$( cd "$( dirname "$c" )" && pwd )"
+echo ""
+echo "::: The absolute path of -c is $c_DIR"
+echo ""
+o_DIR="$( cd "$( dirname "$o" )" && pwd )"
+echo ""
+echo "::: The absolute path of -o is $o_DIR"
+echo ""
 
 begin=`date +%s`
 #    .---------- constant part!
@@ -52,8 +112,6 @@ YELLOW='\033[1;33m'
 PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
-
-rm -r -f logfile_annotate_my_genomes
 
 printf "${YELLOW}::: Defining Variables :::\n"
 echo ""
@@ -84,6 +142,11 @@ basename "$FILE5"
 threads="$(basename -- $FILE5)"
 echo "The number of threads for calculation are the following: $threads"
 echo ""
+FILE6="$o"
+basename "$FILE6"
+output_folder="$(basename -- $FILE6)"
+echo "The output folder is the following: $output_folder"
+echo ""
 
 printf "${YELLOW}:::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 0. Defining directories :::\n"
@@ -93,7 +156,7 @@ echo ""
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 sec=$(date "+%Y%m%d_%H%M%S")
 mkdir annotate_my_genomes_$sec
-cp ${a} ./annotate_my_genomes_$sec
+cp ${a_DIR}/${stringtie_input} ./annotate_my_genomes_$sec
 cd annotate_my_genomes_$sec
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
@@ -105,8 +168,7 @@ printf "${YELLOW}::: 1. Overlapping StringTie transcripts with UCSC GTF :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 
-gffcompare -R -r ${r} -s ${g} -o UCSC_compare ${stringtie_input}
-#cp ./annotate_my_genomes_$sec/UCSC_compare.${stringtie_input}.tmap ./
+gffcompare -R -r ${r_DIR}/${reference_gtf} -s ${g_DIR}/${reference_genome} -o UCSC_compare ${stringtie_input}
 echo "Done."
 printf "${PURPLE}::: Done :::\n"
 echo ""
@@ -163,7 +225,7 @@ awk '{print $2}' namelist > fileB
 paste -d % fileA fileB > sed.script
 sed -i -e 's/^/s%/' sed.script
 sed -i -e 's/$/%/' sed.script
-cat ${a} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
+cat ${a_DIR}/${stringtie_input} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
 rm -f fileA fileB *tmap.1 *tmap.2
 # sorting GTF file
 git clone https://github.com/cfarkas/gff3sort.git
@@ -183,7 +245,7 @@ printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-gffread -w transcripts.fa -g ${g} final_annotated.gtf
+gffread -w transcripts.fa -g ${g_DIR}/${reference_genome} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. transcripts.fa are located in current directory\n"
 echo ""
@@ -205,10 +267,10 @@ dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
 cd /${dir1}/
-cp ${g} /${dir1}/gawn/03_data/genome.fasta
+cp ${g_DIR}/${reference_genome} /${dir1}/gawn/03_data/genome.fasta
 cp transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
-cp ${c} /${dir2}/gawn_config.sh
+cp ${c_DIR}/${gawn_config} /${dir2}/gawn_config.sh
 echo ""
 printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
 echo ""
@@ -243,15 +305,15 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
-grep "NM_" ${r} > NM_coding.gtf
+grep "NM_" ${r_DIR}/${reference_gtf} > NM_coding.gtf
 echo ""
 printf "${PURPLE}::: 1/3) Filtering transcripts :::${CYAN}\n"
 # Filter
 FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding > candidate_lncRNA.gtf
-rm -r -f ${g}.index
+rm -r -f ${g_DIR}/${reference_genome}.index
 printf "${PURPLE}::: 2/3) Evaluating coding potential :::${CYAN}\n"
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g} --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g_DIR}/${reference_genome} --mode=shuffle
 printf "${PURPLE}::: 3/3) Classifiyng lncRNA transcripts :::${CYAN}\n"
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a NM_coding.gtf > candidate_lncRNA_classes.txt
@@ -299,7 +361,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 echo ""
 echo ""
-gffread -w coding-transcripts.fa -g ${g} coding-genes.gtf
+gffread -w coding-transcripts.fa -g ${g_DIR}/${reference_genome} coding-genes.gtf
 TransDecoder.LongOrfs -m 60 -t coding-transcripts.fa
 TransDecoder.Predict -t coding-transcripts.fa --single_best_only
 awk '{print $1}' coding-transcripts.fa.transdecoder.bed > coding.sequences
@@ -408,7 +470,7 @@ mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv UCSC_compare.annotated.gtf ./gffcompare_outputs_UCSC
 cd ${dir0}
-mv annotate_my_genomes_$sec ${o}
+mv annotate_my_genomes_$sec ${o_DIR}/${output_folder}
 echo "Done"
 echo ""
 printf "${YELLOW}::: Done:::\n"
