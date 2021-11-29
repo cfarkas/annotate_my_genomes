@@ -4,7 +4,6 @@ set -e
 
 {
 
-dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-n <NCBI_reference.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>] [-o <output>]
 This pipeline will Overlap StringTie transcripts (GTF format) with current NCBI annotation and will annotate novel transcripts.
 Arguments:
@@ -47,6 +46,71 @@ if [ "$o" = ./ ]; then
   echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
   exit 9999 # die with error code 9999
 fi
+# Conditions : output folder
+if [ ! -d "$o" ]; then
+  echo "Output directory: $o not found. Please create the output directory first, before running the pipeline."
+  exit 9999 # die with error code 9999
+fi
+
+if [ "$o" = ./ ]; then
+  echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
+  exit 9999 # die with error code 9999
+fi
+
+# Conditions : Input existance if [ ! "$a" ] || [ ! "$n" ] || [ ! "$r" ] || [ ! "$g" ] || [ ! "$c" ] || [ ! "$t" ] || [ ! "$o" ]; then
+
+if [ ! -e "$a" ]; then
+    echo "$a does not exist. Check your -a input"
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$n" ]; then
+    echo "$n does not exist. Check your -n input"
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$r" ]; then
+    echo "$r does not exist. Check your -r input"
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$g" ]; then
+    echo "$g does not exist. Check your -g input"
+    exit 9999 # die with error code 9999
+fi
+
+if [ ! -e "$c" ]; then
+    echo "$c does not exist. Check your -c input"
+    exit 9999 # die with error code 9999
+fi
+
+# Conditions : Getting absolute path of inputs
+echo ""
+a_DIR="$( cd "$( dirname "$a" )" && pwd )"
+echo ""
+echo "::: The absolute path of -a is $a_DIR"
+echo ""
+n_DIR="$( cd "$( dirname "$n" )" && pwd )"
+echo ""
+echo "::: The absolute path of -n is $n_DIR"
+echo ""
+r_DIR="$( cd "$( dirname "$r" )" && pwd )"
+echo ""
+echo "::: The absolute path of -r is $r_DIR"
+echo ""
+g_DIR="$( cd "$( dirname "$g" )" && pwd )"
+echo ""
+echo "::: The absolute path of -g is $g_DIR"
+echo ""
+c_DIR="$( cd "$( dirname "$c" )" && pwd )"
+echo ""
+echo "::: The absolute path of -c is $c_DIR"
+echo ""
+o_DIR="$( cd "$( dirname "$o" )" && pwd )"
+echo ""
+echo "::: The absolute path of -o is $o_DIR"
+echo ""
+
 
 begin=`date +%s`
 #    .---------- constant part!
@@ -56,7 +120,6 @@ PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-rm -r -f logfile_annotate_my_genomes
 
 printf "${YELLOW}::: Defining Variables :::\n"
 echo ""
@@ -92,7 +155,11 @@ basename "$FILE6"
 threads="$(basename -- $FILE6)"
 echo "The number of threads for calculation are the following: $threads"
 echo ""
-
+FILE7="$o"
+basename "$FILE7"
+output_folder="$(basename -- $FILE7)"
+echo "The output folder is the following: $output_folder"
+echo ""
 
 printf "${YELLOW}:::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 0. Defining directories :::\n"
@@ -102,7 +169,7 @@ echo ""
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 sec=$(date "+%Y%m%d_%H%M%S")
 mkdir add_ncbi_annotation_$sec
-cp ${a} ./add_ncbi_annotation_$sec
+cp $a_DIR/${stringtie_input} ./add_ncbi_annotation_$sec
 cd add_ncbi_annotation_$sec
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
@@ -114,7 +181,7 @@ printf "${YELLOW}::: 1. Overlapping StringTie transcripts with NCBI annotation :
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 
-gffcompare -R -r ${n} -s ${g} -o NCBI_compare ${a}
+gffcompare -R -r ${n_DIR}/${ncbi_reference_gtf} -s ${g_DIR}/${reference_genome} -o NCBI_compare ${stringtie_input}
 echo "Done."
 printf "${PURPLE}::: Done :::\n"
 echo ""
@@ -127,16 +194,16 @@ echo ""
 # Stats
 exec 3<> Stats.txt
 echo "Number of assembled genes:" >> Stats.txt
-cat NCBI_compare.${a}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.${stringtie_input}.tmap | sed "1d" | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel genes:" >> Stats.txt
-cat NCBI_compare.${a}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.${stringtie_input}.tmap | awk '$3=="u"{print $0}' | cut -f4 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of novel transcripts:" >> Stats.txt
-cat NCBI_compare.${a}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.${stringtie_input}.tmap | awk '$3=="u"{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 echo "" >> Stats.txt
 echo "Number of transcripts matching annotation:" >> Stats.txt
-cat NCBI_compare.${a}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
+cat NCBI_compare.${stringtie_input}.tmap | awk '$3=="="{print $0}' | cut -f5 | sort | uniq | wc -l >> Stats.txt
 exec 3>&-
 printf "${PURPLE}Done\n"
 echo ""
@@ -149,9 +216,9 @@ echo ""
 #######################################
 # Merging novel transcripts with ref. #
 #######################################
-awk '{print $4"\t"$1}' NCBI_compare.${a}.tmap > NCBI_compare.${a}.tmap.1
-tail -n +2 NCBI_compare.${a}.tmap.1 > NCBI_compare.${a}.tmap.2
-awk '$2 != "-"' NCBI_compare.${a}.tmap.2 > namelist
+awk '{print $4"\t"$1}' NCBI_compare.${stringtie_input}.tmap > NCBI_compare.${stringtie_input}.tmap.1
+tail -n +2 NCBI_compare.${stringtie_input}.tmap.1 > NCBI_compare.${stringtie_input}.tmap.2
+awk '$2 != "-"' NCBI_compare.${stringtie_input}.tmap.2 > namelist
 awk '!a[$0]++' namelist > namelist_unique
 tac namelist_unique > namelist_unique_sorted
 rm namelist namelist_unique
@@ -171,7 +238,7 @@ awk '{print $2}' namelist > fileB
 paste -d % fileA fileB > sed.script
 sed -i -e 's/^/s%/' sed.script
 sed -i -e 's/$/%/' sed.script
-cat ${a} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
+cat ${a_DIR}/${stringtie_input} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
 rm -f fileA fileB *tmap.1 *tmap.2
 # sorting GTF file
 git clone https://github.com/cfarkas/gff3sort.git
@@ -193,7 +260,7 @@ printf "${YELLOW}::: 4. Obtaining Transcripts in FASTA format with gffread :::\n
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-gffread -w NCBI_transcripts.fa -g ${g} final_annotated.gtf
+gffread -w NCBI_transcripts.fa -g ${g_DIR}/${reference_genome} final_annotated.gtf
 echo ""
 printf "${PURPLE}::: Done. NCBI_transcripts.fa are located in current directory\n"
 echo ""
@@ -215,10 +282,10 @@ dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
 cd /${dir1}/
-cp ${g} /${dir1}/gawn/03_data/genome.fasta
+cp ${g_DIR}/${reference_genome} /${dir1}/gawn/03_data/genome.fasta
 cp NCBI_transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
 rm /${dir2}/gawn_config.sh
-cp ${c} /${dir2}/gawn_config.sh
+cp ${c_DIR}/${gawn_config} /${dir2}/gawn_config.sh
 echo ""
 printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
 echo ""
@@ -261,7 +328,7 @@ FEELnc_filter.pl -i final_annotated.gtf -a NM_coding.gtf -b transcript_biotype=p
 rm -r -f ${g}.index
 printf "${PURPLE}::: 2/3) Evaluating coding potential :::${CYAN}\n"
 # Coding_Potential
-FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g} --mode=shuffle
+FEELnc_codpot.pl -i candidate_lncRNA.gtf -a NM_coding.gtf -b transcript_biotype=protein_coding -g ${g_DIR}/${reference_genome} --mode=shuffle
 printf "${PURPLE}::: 3/3) Classifiyng lncRNA transcripts :::${CYAN}\n"
 # Classifier
 FEELnc_classifier.pl -i feelnc_codpot_out/candidate_lncRNA.gtf.lncRNA.gtf -a NM_coding.gtf > candidate_lncRNA_classes.txt
@@ -308,7 +375,7 @@ printf "${YELLOW}::: 9. Predicting coding regions from transcripts with coding p
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-gffread -w coding-transcripts.fa -g ${g} coding-genes.gtf
+gffread -w coding-transcripts.fa -g ${g_DIR}/${reference_genome} coding-genes.gtf
 TransDecoder.LongOrfs -m 60 -t coding-transcripts.fa
 TransDecoder.Predict -t coding-transcripts.fa --single_best_only
 awk '{print $1}' coding-transcripts.fa.transdecoder.bed > coding.sequences
@@ -417,7 +484,7 @@ mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv NCBI_compare.annotated.gtf ./gffcompare_outputs_NCBI
 cd ${dir0}
-mv add_ncbi_annotation_$sec ${o}
+mv add_ncbi_annotation_$sec ${o_DIR}/${output_folder}
 echo "Done"
 echo ""
 printf "${YELLOW}::: Done:::\n"
@@ -449,5 +516,5 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
-} | tee logfile
+} | tee logfile_add_ncbi_annotation
 #
