@@ -20,7 +20,7 @@ Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As e
 Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
 mkdir output1
-./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c gawn_config.sh -t 20 -o /path/to/output1
+./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
 ```
 will output inside output1 folder:
 ```
