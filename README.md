@@ -161,7 +161,7 @@ By using isoform-identification pipeline, as follows:
 isoform-identification -m /path/to/NCBI_compare.stringtie_chr33.gtf.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
 ```
 In this example:
-- NCBI_compare.stringtie.gtf.tmap correspond to the transcript map output (tmap) from the pipeline 
+- NCBI_compare.stringtie.gtf.tmap correspond to the transcript map output (tmap) 
 - NCBI_transcripts.fa correspond to the transcripts sequences in fasta format 
 - galGal6 correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
 
