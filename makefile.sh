@@ -33,7 +33,8 @@ echo "make done. Continue with install"
 ./shc/src/shc -f ./bash_scripts/genome_download.sh -o ./genome-download
 ./shc/src/shc -f ./bash_scripts/genome_download_macOSX.sh -o ./genome-download-macOSX
 ./shc/src/shc -f ./bash_scripts/add_ncbi_annotation.sh -o ./add-ncbi-annotation
-mv annotate-my-genomes get-transcripts genome-download genome-download-macOSX add-ncbi-annotation ./bin/
+./shc/src/shc -f ./bash_scripts/isoform_identification.sh -o ./isoform-identification
+mv annotate-my-genomes get-transcripts genome-download genome-download-macOSX add-ncbi-annotation isoform-identification ./bin/
 cp ./bin/annotate-my-genomes ./test/
 cp ./bin/annotate-my-genomes ./genome_1/
 cp ./bin/genome-download ./test/
@@ -42,6 +43,8 @@ cp ./bin/genome-download-macOSX ./test/
 cp ./bin/genome-download-macOSX ./genome_1/
 cp ./bin/add-ncbi-annotation ./test/
 cp ./bin/add-ncbi-annotation ./genome_1/
+cp ./bin/isoform-identification ./test/
+cp ./bin/isoform-identification ./genome_1/
 cp ./bin/get-transcripts ./get_transcripts/
 cp ./bin/genome-download ./get_transcripts/
 echo "::: All done. Binaries are located in ./bin/ folder. :::" 
