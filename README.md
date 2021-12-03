@@ -148,6 +148,15 @@ mkdir output3
 ./genome-download mm10            
 ./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
 ```
+## Post processing add-ncbi-annotation outputs
+
+Users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline, as indicated below. As example:
+
+```
+isoform-identification -m /path/to/NCBI_compare.stringtie.gtf.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
+```
+where NCBI_compare.stringtie.gtf.tmap correspond to the transcript map (from gffcompare), NCBI_transcripts.fa correspond to the transcripts sequences in fasta format and -g correspond to the NCBI genome name (in this example, Gallus gallus 6, galGal6). The first two inputs are present in the output_files subdirectory, after running add-ncbi-annotation. 
+
 ### Identifying homologs in novel proteins from transcriptome
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
