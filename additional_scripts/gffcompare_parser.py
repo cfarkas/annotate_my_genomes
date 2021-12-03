@@ -47,7 +47,7 @@ df3.head(10)
 df_novel_transcripts.head(10)
 
 colnames=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
-dfA1 = pd.read_csv('ncbiRefSeqLink.txt', sep = '\t', low_memory=False, names=colnames, header=None)
+dfA1 = pd.read_csv(ncbiRefSeqLink.txt, sep = '\t', low_memory=False, names=colnames, header=None)
 dfA1.head(10)
 
 dfA2 = dfA1[['0', '1', '2', '3', '5', '14', '16']]
@@ -57,14 +57,17 @@ dfA2 = dfA2.rename(columns={'0': 'ref_id', '1': 'Annotation Status', '2' : 'NCBI
 dfA2.sample(10)
 
 colnames = ['qry_id', 'cds_seq', 'none']
-cds = pd.read_csv('transcripts_Isoform.tab', sep = '\t', names=colnames)
+cds = pd.read_csv(transcripts_Isoform.tab, sep = '\t', names=colnames)
 cds.head(10)
 cds2 = cds[["qry_id", "cds_seq"]]
 cds2.sample(10)
 
 result1 = pd.merge(df3, dfA2, on='ref_id', how='inner')
+result1.sample(10)
 result2 = pd.merge(result1, cds2, on='qry_id', how='inner')
+result2.sample(10)
 result3 = pd.merge(df_novel_transcripts, cds2, on='qry_id', how='inner')
+result3.sample(10)
 print("Number of Joined Transcripts (reference):", result2.shape[0])
 print("")
 print("Number of Joined Transcripts (novel):", result3.shape[0])
