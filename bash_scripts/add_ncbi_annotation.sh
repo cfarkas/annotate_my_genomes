@@ -483,6 +483,7 @@ rm -r -f *feelncfilter.log genes.gtf pipeliner* NM_coding.gtf candidate_lncRNA.g
 mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv NCBI_compare.annotated.gtf ./gffcompare_outputs_NCBI
+cp ${dir1}/gffcompare_outputs_NCBI/NCBI_compare.${stringtie_input}.tmap ./output_files/
 cd ${dir0}
 mv add_ncbi_annotation_$sec ${o_DIR}/${output_folder}
 echo "Done"
