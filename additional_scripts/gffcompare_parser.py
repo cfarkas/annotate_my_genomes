@@ -47,7 +47,7 @@ df3.head(10)
 df_novel_transcripts.head(10)
 
 colnames=['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
-dfA1 = pd.read_csv(ncbiRefSeqLink.txt, sep = '\t', low_memory=False, names=colnames, header=None)
+dfA1 = pd.read_csv('./ncbiRefSeqLink.txt', sep = '\t', low_memory=False, names=colnames, header=None)
 dfA1.head(10)
 
 dfA2 = dfA1[['0', '1', '2', '3', '5', '14', '16']]
@@ -57,7 +57,7 @@ dfA2 = dfA2.rename(columns={'0': 'ref_id', '1': 'Annotation Status', '2' : 'NCBI
 dfA2.sample(10)
 
 colnames = ['qry_id', 'cds_seq', 'none']
-cds = pd.read_csv(transcripts_Isoform.tab, sep = '\t', names=colnames)
+cds = pd.read_csv('./transcripts_Isoform.tab', sep = '\t', names=colnames)
 cds.head(10)
 cds2 = cds[["qry_id", "cds_seq"]]
 cds2.sample(10)
