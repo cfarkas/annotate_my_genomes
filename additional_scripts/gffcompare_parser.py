@@ -63,11 +63,8 @@ cds2 = cds[["qry_id", "cds_seq"]]
 cds2.sample(10)
 
 result1 = pd.merge(df3, dfA2, on='ref_id', how='inner')
-result1.sample(10)
 result2 = pd.merge(result1, cds2, on='qry_id', how='inner')
-result2.sample(10)
 result3 = pd.merge(df_novel_transcripts, cds2, on='qry_id', how='inner')
-result3.sample(10)
 print("Number of Joined Transcripts (reference):", result2.shape[0])
 print("")
 print("Number of Joined Transcripts (novel):", result3.shape[0])
