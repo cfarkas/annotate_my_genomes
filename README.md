@@ -15,7 +15,12 @@ This pipeline requieres to run:
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. Use genome-download-macOSX instead in macOSX 
 ```
-Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example using prefix mm10, users will download UCSC mouse genome assembly (mm10.fa), UCSC gtf (mm10.gtf) and NCBI GTF (mm10_ncbiRefSeq.gtf).
+Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example using prefix mm10, users will download:
+```
+- UCSC mouse genome assembly (mm10.fa)
+- UCSC gtf (mm10.gtf)
+- NCBI GTF (mm10_ncbiRefSeq.gtf).
+```
 
 Running the basic pipeline as follows (as example for mouse, using 20 threads):
 ```
