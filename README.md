@@ -15,14 +15,18 @@ This pipeline requieres to run:
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. Use genome-download-macOSX instead in macOSX 
 ```
-Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example using prefix mm10, users will download:
+Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example for mm10 genome (mouse):
 ```
-- UCSC mouse genome assembly (mm10.fa)
-- UCSC gtf (mm10.gtf)
-- NCBI GTF (mm10_ncbiRefSeq.gtf).
+./genome-download mm10
+
+Will output: 
+
+- UCSC mouse genome assembly  : mm10.fa
+- UCSC annotation gtf         : mm10.gtf
+- NCBI annotation gtf         : mm10_ncbiRefSeq.gtf
 ```
 
-Running the basic pipeline as follows (as example for mouse, using 20 threads):
+Now, the basic pipeline can be runned as follows (as example for mouse, using 20 threads):
 ```
 mkdir output1
 ./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
