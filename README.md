@@ -11,27 +11,20 @@ This pipeline requieres to run:
 
 1) StringTie assembled transcripts (in GTF format)
 
-2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository and inputtimg genome prefix as follows: 
+2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository and inputting genome prefix as follows: 
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. Use genome-download-macOSX instead in macOSX 
-```
-Check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway. As example for mm10 genome (mouse):
-```
-./genome-download mm10
 
-Will output: 
-
-- UCSC mouse genome assembly  : mm10.fa
-- UCSC annotation gtf         : mm10.gtf
-- NCBI annotation gtf         : mm10_ncbiRefSeq.gtf
+./genome-download mm10 will output mm10.fa, mm10.gtf and mm10_ncbiRefSeq.gtf files
 ```
+For genomes, check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.
 
-Now, the basic pipeline can be runned as follows, using a mouse transcriptome (i.e. : stringtie.gtf), gawn_config.sh (inside repository after install) and 20 threads:
+Finally, the basic pipeline can be runned using a mouse transcriptome as example (stringtie.gtf) and 20 threads, as follows:
 ```
 mkdir output1
 ./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
 ```
-and will output inside output1 folder:
+will output inside output1 folder:
 ```
 - final_annotated.gtf: an annotated GTF file in the "gene_id" field, containing novel genes and lncRNA classification (second field in GTF file). 
 - transcripts.fa : associated transcripts from final_annotated.gtf 
