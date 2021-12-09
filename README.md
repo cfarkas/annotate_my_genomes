@@ -14,11 +14,9 @@ This pipeline requieres to run:
 2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository and inputting genome prefix as follows: 
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. Use genome-download-macOSX instead in macOSX 
-
-# In example:
-./genome-download mm10 
-# will output: mm10.fa, mm10.gtf and mm10_ncbiRefSeq.gtf files
 ```
+```./genome-download mm10 ``` will output: mm10.fa, mm10.gtf and mm10_ncbiRefSeq.gtf files
+
 For genomes, check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.
 
 Finally, the basic pipeline can be runned using a mouse transcriptome as example (stringtie.gtf) and 20 threads, as follows:
