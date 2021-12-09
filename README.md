@@ -19,12 +19,12 @@ This pipeline requieres to run:
 
 - For genomes, check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.
 
-Finally, the basic pipeline can be runned using a mouse transcriptome as example (stringtie.gtf) and 20 threads, as follows:
+3) Finally, the basic pipeline can be runned using a mouse transcriptome as example (stringtie.gtf) and 20 threads, as follows:
 ```
 mkdir output1
 ./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
 ```
-will output inside output1 folder:
+The latter will output inside output1 folder:
 ```
 - final_annotated.gtf: an annotated GTF file in the "gene_id" field, containing novel genes and lncRNA classification (second field in GTF file). 
 - transcripts.fa : associated transcripts from final_annotated.gtf 
