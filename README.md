@@ -180,6 +180,44 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
+## Nextflow
+- Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework in different platforms. 
+- Nextflow can be installed as depicted here (https://www.nextflow.io/) or by bioconda channel simply as:
+
+```
+conda install -c bioconda nextflow
+```
+- The complete pipeline can be runned as follows:
+
+1) Install annotate_my_genomes:
+```
+git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
+cd annotate_my_genomes                                         # enter repository
+bash makefile.sh                                               # make & install
+sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts
+```
+2) Enter into nextflow_scripts subdirectory and run the pipeline using the following --flags :
+```
+cd nextflow_scripts/
+```
+2.1) genome-download (i.e : galGal6 genome, ouputting in current directory)
+```
+nextflow run genome-download.nf --genome galGal6 --outdir ./
+```
+2.1) annotate-my-genomes
+```
+nextflow run nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config_file /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --environment /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+```
+2.2) add-ncbi-annotation
+```
+nextflow run nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config_file /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --environment /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+```
+2.3) isoform-identification (i.e.: outputting in current directory)
+```
+nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap --NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 --environment /path/to/annotate_my_genomes/environment.yml --outdir ./
+```
+To run nextflow parameters in each case, full paths to files are mandatory
+
 ### More Scenarios?
 
 - For downstream analysis and examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
