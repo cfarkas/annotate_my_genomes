@@ -181,8 +181,10 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
 ## Nextflow
+
 - Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
-- Nextflow can be installed as depicted here (https://www.nextflow.io/) or by bioconda channel simply as:
+
+- Nextflow can be installed as depicted here (https://www.nextflow.io/) or by anaconda simply as:
 
 ```
 conda install -c bioconda nextflow
