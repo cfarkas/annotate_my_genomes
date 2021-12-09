@@ -26,12 +26,12 @@ Will output:
 - NCBI annotation gtf         : mm10_ncbiRefSeq.gtf
 ```
 
-Now, the basic pipeline can be runned as follows (as example for a mouse transcriptome (i.e. : stringtie.gtf), using 20 threads):
+Now, the basic pipeline can be runned as follows, using a mouse transcriptome (i.e. : stringtie.gtf), gawn_config.sh (inside repository after install) and 20 threads:
 ```
 mkdir output1
 ./annotate-my-genomes -a /path/to/stringtie.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
 ```
-will output inside output1 folder:
+and will output inside output1 folder:
 ```
 - final_annotated.gtf: an annotated GTF file in the "gene_id" field, containing novel genes and lncRNA classification (second field in GTF file). 
 - transcripts.fa : associated transcripts from final_annotated.gtf 
