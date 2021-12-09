@@ -83,6 +83,9 @@ fi
 # Inputs for python
 cp ${m_DIR}/${tmap_input} ./stringtie_for_script.tmap
 seqkit fx2tab ${t_DIR}/${transcripts_input} > transcripts_Isoform.tab
+# Formatting transcripts_Isoform.tab if gene= is present in file
+sed -i 's/gene=/\t/'g transcripts_Isoform.tab
+awk '{print $1"\t"$NF}' transcripts_Isoform.tab > transcripts_Isoform2.tab
 
 # Execute gffcompare_parser.py
 python << END
@@ -132,7 +135,7 @@ print(dfA2.sample(10))
 print("")
 
 colnames = ['qry_id', 'cds_seq', 'none']
-cds = pd.read_csv('transcripts_Isoform.tab', sep = '\t', names=colnames)
+cds = pd.read_csv('transcripts_Isoform2.tab', sep = '\t', names=colnames)
 cds2 = cds[["qry_id", "cds_seq"]]
 print("transcripts file:")
 print(cds2.sample(10))
@@ -154,6 +157,6 @@ print(bcolors.OKGREEN + "::: Done. Ref_Transcript_Annotation.csv and Novel_Trans
 print("")
 END
 
-rm -r -f transcripts_Isoform.tab stringtie_for_script.tmap ncbiRefSeqLink.txt
+rm -r -f transcripts_Isoform.tab transcripts_Isoform2.tab stringtie_for_script.tmap ncbiRefSeqLink.txt
 echo "::: All done. :::"
 }
