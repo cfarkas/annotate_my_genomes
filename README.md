@@ -199,7 +199,7 @@ cd annotate_my_genomes                                         # enter repositor
 bash makefile.sh                                               # make & install
 sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts
 ```
-2) Enter into nextflow_scripts subdirectory and run the pipeline using --[flags] as follows:
+2) Enter into nextflow_scripts subdirectory and run the pipeline using --flags parameters as follows:
 ```
 cd nextflow_scripts/
 ```
