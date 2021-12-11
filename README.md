@@ -189,13 +189,14 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 
 - Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
 
+### Requirements: 
+
 - Nextflow can be installed as depicted here (https://www.nextflow.io/) or by anaconda simply as:
 
 ```
 conda install -c bioconda nextflow
 ```
-### prerequisite program :
-ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+- ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
 
 ### Installation and Complete pipeline:
 
