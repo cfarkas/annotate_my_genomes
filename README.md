@@ -99,7 +99,11 @@ NCPUS=10
 ```
 To a value according to the computational capacity of your machine. 
 
-### Option 2: Without using conda, program by program:
+### Option 2: Using Nextflow: 
+
+- https://github.com/cfarkas/annotate_my_genomes#nextflow
+
+### Option 3: Without using conda, program by program:
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
