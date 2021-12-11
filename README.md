@@ -194,6 +194,9 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 ```
 conda install -c bioconda nextflow
 ```
+- Also install:
+ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+
 - The complete pipeline can be runned as follows:
 
 1) Install annotate_my_genomes (skipping conda install):
