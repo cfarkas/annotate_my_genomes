@@ -9,7 +9,7 @@ Transcriptome annotation pipeline using long sequencing reads from non-model (an
 
 This pipeline requieres to run:
 
-1) StringTie assembled transcripts (in GTF format)
+1) StringTie assembled transcripts (in GTF format). Check here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
 2) USCS/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked, fasta format from UCSC). All these requirements can be downloaded once by using the genome-download program provided in this repository and inputting genome prefix as follows: 
 ```
@@ -126,6 +126,7 @@ mkdir output2
 ## Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file inside the repository. Default is 10
 - As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
+
 ```
 mkdir output1
 ./genome-download galGal6          
@@ -191,14 +192,14 @@ conda install -c bioconda nextflow
 ```
 - The complete pipeline can be runned as follows:
 
-1) Install annotate_my_genomes:
+1) Install annotate_my_genomes (skipping conda install):
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
 bash makefile.sh                                               # make & install
 sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts
 ```
-2) Enter into nextflow_scripts subdirectory and run the pipeline using the following --flags :
+2) Enter into nextflow_scripts subdirectory and run the pipeline using --[flags] as follows:
 ```
 cd nextflow_scripts/
 ```
