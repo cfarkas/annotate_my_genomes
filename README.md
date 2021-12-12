@@ -213,7 +213,7 @@ cd nextflow_scripts/
 ```
 2.1) genome-download (i.e : galGal6 genome, ouputting in current directory)
 ```
-nextflow run genome-download.nf --genome galGal6 --outdir ./
+nextflow run genome-download.nf --genome galGal6 --environment /path/to/annotate_my_genomes/environment.yml --outdir ./
 ```
 2.1) annotate-my-genomes
 ```
