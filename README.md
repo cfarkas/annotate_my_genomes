@@ -217,11 +217,11 @@ nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_ge
 ```
 2.1) annotate-my-genomes
 ```
-nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config_file /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
 ```
 2.2) add-ncbi-annotation
 ```
-nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config_file /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
 ```
 2.3) isoform-identification (i.e.: outputting in current directory)
 ```
