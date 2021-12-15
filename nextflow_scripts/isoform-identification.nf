@@ -31,6 +31,7 @@ process isoform_identification {
   shell:
   '''
   isoform-identification -m "!{params.NCBI_tmap}" -t "!{params.NCBI_transcripts}" -g "!{params.genome_name}"
+  cp *csv "!{params.outdir}"
   '''
 }
 
