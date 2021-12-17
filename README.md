@@ -191,7 +191,7 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 
 ### Requirements: 
 
-- Nextflow can be installed as depicted here (https://www.nextflow.io/) or by anaconda simply as:
+- Nextflow can be installed as depicted here (https://www.nextflow.io/) or via anaconda:
 
 ```
 conda install -c bioconda nextflow
