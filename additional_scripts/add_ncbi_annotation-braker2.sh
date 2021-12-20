@@ -4,11 +4,11 @@ set -e
 
 {
 
-usage="$(basename "$0") [-h] [-a <stringtie.gtf>] [-n <NCBI_reference.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>] [-o <output>]
-This pipeline will Overlap StringTie transcripts (GTF format) with current NCBI annotation and will annotate novel transcripts.
+usage="$(basename "$0") [-h] [-a <braker.gtf>] [-n <NCBI_reference.gtf>] [-r <reference_genome.gtf>] [-g <reference_genome.fasta>] [-c <gawn_config>] [-t <threads>] [-o <output>]
+This pipeline will Overlap braker transcripts (braker.gtf) with current NCBI annotation and will annotate novel transcripts.
 Arguments:
     -h  show this help text
-    -a  StringTie GTF
+    -a  braker GTF
     -n  NCBI gene annotation (in GTF format)
     -r  UCSC gene annotation (in GTF format)
     -g  Reference genome (in fasta format)
@@ -128,7 +128,7 @@ echo""
 FILE1="$a"
 basename "$FILE1"
 stringtie_input="$(basename -- $FILE1)"
-echo "The stringtie file used as input is the following: $stringtie_input"
+echo "The braker.gtf file used as input is the following: $stringtie_input"
 echo ""
 FILE2="$n"
 basename "$FILE2"
