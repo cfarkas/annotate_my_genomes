@@ -183,8 +183,9 @@ echo ""
 # https://www.biostars.org/p/45791/
 gffread -E -F --merge ${stringtie_input} -o final_annotated.gff
 gffread final_annotated.gff -T -o final_annotated.gtf
+grep "gene_id" final_annotated.gtf > final_annotated.fix.gtf
 rm -r -f ${stringtie_input}
-mv final_annotated.gtf ${stringtie_input}
+mv final_annotated.fix.gtf ${stringtie_input}
 rm final_annotated.gff
 #
 gffcompare -R -r ${n_DIR}/${ncbi_reference_gtf} -s ${g_DIR}/${reference_genome} -o NCBI_compare ${stringtie_input}
