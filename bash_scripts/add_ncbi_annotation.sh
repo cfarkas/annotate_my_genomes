@@ -281,15 +281,15 @@ cd gawn/02_infos/
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 echo ""
-cd /${dir1}/
-cp ${g_DIR}/${reference_genome} /${dir1}/gawn/03_data/genome.fasta
-cp NCBI_transcripts.fa /${dir1}/gawn/03_data/transcriptome.fasta
-rm /${dir2}/gawn_config.sh
-cp ${c_DIR}/${gawn_config} /${dir2}/gawn_config.sh
+cd ${dir1}
+cp ${g_DIR}/${reference_genome} ${dir1}/gawn/03_data/genome.fasta
+cp NCBI_transcripts.fa ${dir1}/gawn/03_data/transcriptome.fasta
+rm ${dir2}/gawn_config.sh
+cp ${c_DIR}/${gawn_config} ${dir2}/gawn_config.sh
 echo ""
 printf "${PURPLE}::: Starting GAWN transcript annotation${CYAN}\n"
 echo ""
-cd /${dir1}/gawn/
+cd ${dir1}/gawn/
 ./gawn 02_infos/gawn_config.sh
 echo ""
 printf "${PURPLE}::: Done. The novel transcripts were annotated in ./gawn/04_annotation/ :::${CYAN}\n"
@@ -304,9 +304,9 @@ printf "${YELLOW}::: 6. Extracting transcriptome hits :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-cd /${dir1}/
-cp /${dir1}/gawn/04_annotation/transcriptome.swissprot /${dir1}/
-cp /${dir1}/gawn/04_annotation/transcriptome.hits /${dir1}/
+cd ${dir1}/
+cp ${dir1}/gawn/04_annotation/transcriptome.swissprot ${dir1}
+cp ${dir1}/gawn/04_annotation/transcriptome.hits ${dir1}
 printf "${PURPLE}::: Done. transcriptome hits were succesfully extracted :::${CYAN}\n"
 echo ""
 
@@ -314,7 +314,7 @@ echo ""
 # FEELnc long noncoding RNA identification #
 ############################################
 
-cd /${dir1}/
+cd ${dir1}
 
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::: 7. Classifying protein-coding and long non-coding transcripts with FEELnc :::\n"
@@ -341,7 +341,7 @@ printf "${YELLOW}::: 8. Parsing GAWN and FEELnc outputs :::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
-cd /${dir1}/
+cd ${dir1}
 awk '{print $3}' candidate_lncRNA_classes.txt > lncRNA_genes
 tail -n +2 lncRNA_genes > lncRNA_transcripts
 rm lncRNA_genes
@@ -367,7 +367,7 @@ echo ""
 ##########################################
 # Gene Prediction Step with TransDecoder #
 ##########################################
-cd /${dir1}/
+cd ${dir1}
 echo ""
 
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
