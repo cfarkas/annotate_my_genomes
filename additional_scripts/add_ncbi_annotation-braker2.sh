@@ -180,9 +180,13 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 printf "${YELLOW}::: 1. Overlapping StringTie transcripts with NCBI annotation :::\n"
 printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-gffread ${stringtie_input} -T -o braker_filtered.gtf
+# https://www.biostars.org/p/45791/
+gffread -E -F --merge ${stringtie_input} -o final_annotated.gff
+gffread final_annotated.gff -T -o final_annotated.gtf
 rm -r -f ${stringtie_input}
-mv braker_filtered.gtf ${stringtie_input}
+mv final_annotated.gtf ${stringtie_input}
+rm final_annotated.gff
+#
 gffcompare -R -r ${n_DIR}/${ncbi_reference_gtf} -s ${g_DIR}/${reference_genome} -o NCBI_compare ${stringtie_input}
 echo "Done."
 printf "${PURPLE}::: Done :::\n"
@@ -419,7 +423,12 @@ gffread -x cds.fa -g NCBI_transcripts.fa coding_transcripts.gtf
 gffread -y prot.fa -g NCBI_transcripts.fa coding_transcripts.gtf
 echo "done"
 rm coding-transcripts.fa coding-genes.gtf merged.fixed.lncRNAs.gtf other-genes.gtf
-grep "StringTie" final_annotated.gtf > genes.gtf
+
+# parsing braker.gtf genes that are not lncRNAs
+grep "AUGUSTUS" final_annotated.gtf > genes1.gtf
+grep "GeneMark.hmm3" final_annotated.gtf > genes2.gtf
+cat genes1.gtf genes2.gtf > genes.gtf && rm genes1.gtf genes2.gtf
+#
 grep "lncRNA" final_annotated.gtf > lncRNAs.gtf
 grep -w -F -f coding.hits genes.gtf > coding-genes.gtf
 grep --invert-match -F -f coding.hits genes.gtf > other-genes.gtf
