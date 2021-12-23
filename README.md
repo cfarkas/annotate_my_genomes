@@ -4,7 +4,7 @@ Transcriptome annotation pipeline using long sequencing reads from non-model (an
 
 ![image](https://user-images.githubusercontent.com/7016350/108611599-a6319f00-73a5-11eb-89b7-3cfd44b00cc5.png)
 
-## Pipeline Outline
+## I) Pipeline Outline
   annotate_my_genomes is a pipeline that aims to annotate genome-guided transcriptome assemblies from StringTie, coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from refSeq/NCBI, without loosing novel isoforms and exon information. Also, known/novel coding sequences in nucleotides and correspondent proteins will be resolved.  
 
 This pipeline requieres to run:
@@ -35,7 +35,7 @@ The latter will output inside output1 folder:
 ```
 * Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts
 
-## Installation:  
+## II) Installation:  
 
 ### Option 1: Installing dependences via anaconda (recommended)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
@@ -107,7 +107,7 @@ To a value according to the computational capacity of your machine.
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
-## Quickstart (Running the test)
+## III) Quickstart (Running the test)
 
 - Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. 
 - Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file), gawn_config.sh file (check NCPUS for blast, default = 10), number of threads for text processing (20 for this example) and the output folder. 
@@ -127,7 +127,7 @@ mkdir output2
 ./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output2
 ```
 
-## Simplest usage
+## IV) Simplest usage
 (Optional) Edit NCPUS value in gawn_config.sh file inside the repository. Default is 10
 - As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
 
@@ -139,7 +139,7 @@ mkdir output1
 - final_annotated.gtf (located in output1/output_files/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 - To produce target.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
-## Adding NCBI annotations to increase annotation of transcripts
+## V) Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
@@ -155,7 +155,7 @@ mkdir output3
 ./genome-download mm10            
 ./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
 ```
-## Post processing add-ncbi-annotation outputs
+## VI) Post processing add-ncbi-annotation outputs
 
 Users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline:
 
@@ -181,11 +181,11 @@ LOC100857209	XM_015272533.2	x	STRG.16904	STRG.16904.1	3	0.099526	0.386921	Model	
 LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	LOC112530844	olfactory receptor 14A16-like	XP_025001148.1			aaatcagcgggagacaagtctcatgctttcatgatcaacaagtctcagctttattgAAGCACACGCAGGCATTTATACGATAGTTAATGAGCTACTACATATGCCAAATTGGGTTCTCTTATTGGTTAGTTCTTTACGTGAGAAAGTAACCTTCAACGCTAGATACCGTGACAGTCCCGTGATGAATGCCCGATTGTTTACCGCATACCACTCAATTTTCTTAACTGCAGCATGTTcttatcacttccttgctcctgagtGAGGGCAGCACGACCTTGCCTGGTTTAATGAGCAGGGCCCTATctccttaccagctgcatcccatCATGGCCCCTCTCCCGGAGCCAGTGCTCCGGGTCCCAAAAGCTCTCCACACTTCCCCCGTTTTCTTTTGGTACGAGCCAGGTTGTATGAATCGCATCTTGAACCACCTTTTGCTAGCATTACAGTAAACAAAGCATGATTATCAGCATACCAATCACTATCTATAAGAATACACTAGATTTATgttacacacttctacaaagcattccttgtcagtaaactaacagtaaagactacacagcacaccagtattaactacagtttcaatatcccgatgaataaaataccacagtccCCACTCTGGATCAACCACTGTACCTGACCCCCACAATTAGTGCGCTTCTGAGTCTCATAACCGccaattgctcctggcagttcccagtgtCCAAGAGACCTTtctgatgagatgttttctgcaatCTGCTAAGGGAATACCAGTCGCAGCTCAGGAGTCACGGCACTGTATATGATGTCTTGCACACCATGCGGCTATCGCTCGCCGGAGTCGCCGTTGTTGTCATCGGGTTGAGATGGGTTGTTGATGTTCGGGGCTGGCTTAgtccatttactgggaacccataatgggccagatcctgtggAAACACAGCTCTCTCCTGGaagcctcccatgatgtttacaaaattccTATTGATTCCTAATTCactcaaagtttccacaaacccTTAACACCGTACagtgatattgttcagttataaacacttgggaacagatctcacagaagcttgTCCATGTTCCCTTACACGCTTCCATgcaatcagaacacagtactagATAAACAGGTtgacactcattccctgaaaggaacacatctcactcacaccacactcactctgacatttagaacaaaaaacatAGTTTATACATAACccacaatgctgacgacgtcttttAGCTTGTATCTTAATAACACTAGTGCATTAGTCAATTAGTTGCAATtcctaccccagccggcaatctaacctgtgagctcacgtatctcggggggggggggggaagcaggcacgctccttcataccctgcgtaggacgtctcctcacgccttacgggcacccccttttctatacacatacctgaTACACcaatggatggtccttgtctgtccctgcagtgatcgggtgaggaagggagaccttccaagaaatcttggggcgcgccaaaggtgtcccctctctcaatCGATCCCGCAGCCGAACAGAGCGGATCTATTCTCGTTGCAAAATTGAGTTGtagaaatcagaccctatatccggtaaggatatagagcaggcatgcGTCTATTGATGTCTATTGAtagtgcaagggggatcactccacctaacttgcacaccgtcaggagaaattgtactatagatataggtcaaactaatacataaccaatagttgacaggaattcagatacattttcattacgtccctgaaagacacattttcatgcagtataatgagacagaagaacagagggtAGTGCTGGCGCAGTTCTCATaatttgcagttgcttgcagcttgactcacagcacctggcacagcggtctctatcacagctctgcattcctttcgcctactcccatcattgttctgtgtgagacagtgatccatagcagctgttttacttgcactgacccagggggagaaaaacatgacctcgCTGGGTCAGCCGTCCATCCACAATTTCCCTGTTCTACTATTGCCTGGCCTGTGGGTGAGTTTGGGATACCCGTACTGTGTTTTACTCCCCATGTTTGCAGAAACTCCCCAAGCCTACGACTAGTGTAGGCTGGGccattgtctgtttttattcGTAGTGATATACCCATAACTGCAAAGCAACAACTGAGATGCTTTTCTACATACAtagccttttctccaggttgagcGGTGGCCCACATAAGATGACTATATGTATCTATAGACACGTGTACATATTTCAGCTGCCCGAACTCACCCACATGCATCACATCCATCTGCCTATTTTCGTTAGCTCTAAGTCCCCTGGGGTTAACTCCTAGCCCGAGACCCATACTGCCATTATGGTGGCTGCACACTGGGCACGATCTAACAATTACCTTAGCATCCTCATATGTTATCTGATATTCCCTTCTTAGCCCCTTGGCATTCTGGTGAAACATAGAGTACGCCTCTCGGGCCAGGACATGCCGGGAGACTAAAGGTCTCTGCGCCAGTGACACCAAGCGATCAGCTCTCGCATTTCCCTCTCCCAAGTCTATCTCCCATTTATGACCTCGAACATGTATTACTGCATATGAGTGCTCCCTAATtctgattgctctctgcaactgcacgAACAGCTTGTACAGCCGCcgattctgcacttcctttatgTAGGCTTCCTCTATTTGGTGGCATACTCCAGCTACATAAAGGGAGTCGGTGACCACATTAAGGGGGCCGATTAAGTTCATCATGGCCCATACAACGGCCACCAGCTCCAATGTTTGCAATAAGTCCTTATCATCGTCTGCAATGAGGTGATGTCTCCAGGAGCCgccctgctgccaggtcactgctgctgttctagacTTCTGTCCCGCATCCGTGTAAGCCGTGATTGTGTTCTGCAAGGGCGTCTCATGCTGCTTTGGTATCCGGAGCCAACTCCATTGACCAATCCAATGTAGCGGCACGTTCGGAATCTTTTCCACTGAAACCGTACTTCCAGCTCCTAAGAGAGCATCCTGTAACTCTGGACTATGCTGCACATACCATGTCAGAGTGTCCTTCTGCATTGGCAGCTGTACACACACAGGCTCCATACCTATGATCTGCAGGGTACGTTCTCGCCCTTTcttaatcacttctgccaggagttcagttttttgaagaagtgtttttgattgctgcagtgagggacagATCCACTCTAGTACCCATACctcccccgttttctttttagattgtgCCAACGCTCCTAAAAGGTACTTTGGTCCATACCATACCATAACCTGTATGGGGAGGTCAGGGTCACGTCTCCGAACACTGCCGTGTATAATGCAGTCCATAATCTGTTGTAGTAGACGTTTGTGCTGCGTTGTCACCGTTACAGGCTGGGCCGGGTCAGTGCCCTGTAACAAAGGTCGCAACGACTCTAAGAGTTCGTTTGGGATGCCCACCACAGGGCTCAACCACTTTAAGTCCCCCAGTAACCTTTGGGCATCATGTAGAGTCTCTAGTTTAGTATCcagttgcagtttctgtggggTTACTATCGTGTTAGTCAGTGTCCATCCTAAGTACTTCCGGGGCGCGGAGAGTTGTACCTTTTCAGGGGCAAACATAAGTTCTTCCCTATTTAGGGTCTTTTCTATTTGCCaaatttgttcctgtgtgaaggcCTCTGGCTGGGCAAAAAGGATGTCCTCCATGTAATGATAAAtgaccatttgtttccattctcgCCGGAGTGGTTGTAGAGCATGATCGACATATAGTTGACATCGCGTGGGGCTATTTTTCATCCTTTGAGGTAATACTGTCCATTCAAAACGTTGATCAGGGTGTTCTCGATTCAATGCAGGCAATGTGAAGGCAAATCGTTTAGTGTCCTGAGGGTGCAGGGTAATAGTaaagaaacagtcctttaaGTCACTAATTAGTAATGGCCAATTGTAAGGTAGCATGGCAGGATTAGGCAGGGCGGGTTGAAGTGCCCCCAGTTGAGAGAGCACATTGTGGCCAATTAAGCATTGAACAGTGGGGGGTAGAGGTGCCACCGAGACAGAGGTATGGACTACTTGTTCATCAAGGTGGATTTGCAGGGGAGGTGACTTTTTCGCTAAGGATAGTCCACCTGTACCCGTCACTGTGGCTATGGCCGCTTGCAGTGGCCATTGAGGCGGCCAAATTTCTGGGCTCAATATGCTGTTGTCGGCCCCTGTATCTAATAGACCttgaagtttgatttcttcctctctgtgtttAAGTGTCACTGGTTTTTTAGGTCGATCATGCAAATTTAGTGATAGCAATGCTAAGTCCCCTGAGGAGCCAAACCCTTGCTCCCCTCGGGGAGACGATTGACACGGTGTTAAGGCTTTGGTCAATTGCTCTAGGGGTACTAACTGCGCTATCCGTTGccctttctcaatttttattggAGGAAACGGGGTGTATACCATAATCTGGATCTCACCCTGAAAGTCCGCATCTATTACCCCAGGGAGGACAAAAAGTCCGAGCATCGATGCTGAAGAACGCCCCAATAAAAGGGCCCCAACAGCGGTTCCATTTATCATTACTGGTCCCCTGATCCCTGTAGACACCCGCTCAGGTTTTGTGGTCATTAAGGTCGTGGTCACTGCGGCTGCCAAGTCCAAGCCGAGGCTTCCTGGTGTGGCTgattgcagggctgctgctggctggaaacGGCTACTTGTGTCTGTGCGTGGCCGTCGTTTCTTTCTCGCGCTGGGCTGGGGGTTTCCTGACCGGCGTCGACAGGCATTGGTATTGTGGTTGTCCATACGACATGTGTGACACCATGAACCGGTGGTTTGACACTGACGACGCATATGTCCCATGCCGCCACAGCGATAGCATTTGATGCGACCAGCAACAGGCGATCTCGGGCCTAAATTTGTTATCGCAGACGCTTGTAAGGATGCAAGAGCTGCTAGCACTTGATTGTGAGAGGCCTCAGCTTGCGCCTTTAAACTTGCCCCTAACTCCTTAATAGCCTCAATCAGAAATGCTTGGGGCCCGACTGGCACGCTTGATagcttttccagtgcctcttcAATAGTCCAATTACTCCTCAAAGTACTCAGAGTACTACGTGCTGTTGAATTACAATTTTGGAGCGCGCATTGTTTTAACATTACTCCTCTCATATACTCTGGCACCCCTGCTTTTTCAATAGCCCCGGCTACCTTATCTATGAATGCCCCAAAGTCCTCATCTCTACCTTGTCGGATCCCCATATAAAATGGCAATCCATCAGGCACCTTAATCTTGTCCATGGCCTGTCTAGCTAAATACATCGTTTCTCGACATTTATCTGGCCCTAATAATGCTTGGGCTTGTGTTCTGAAAAAAGGCCCTAGCCCTAAGAGTTCTTCGATAGTTACACCATGTAGTGGGTCTCCCGGCTGCCTAGCCTTTGAGACACTCTGATGGCACAGTTCTTGCCAATATGCattaaacaacagctgttgATGTTGTGAAGAGATCAATTTTGCTATTGCCCGACAATCGGATGGCAGCAATATCTGCGTACTCCAAATATAATCCAATATCTGCTTAGCTGGCTCGCTTTTTACCCCAAACTGACTAACTGTAGATCGTAGCTGCGATAATAATTTCCAATCTAAAGCTGTGATGGTGGCCTGCATCCCTCCCGCAGGATTAGAGGCATATATCACTGGAAACGCCATGTGCCGCACGGCCTCC
 ```
 
-### Identifying homologs in novel proteins from transcriptome
+## VII) Identifying homologs in novel proteins from transcriptome
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
-## Nextflow
+## VIII) Nextflow
 
 - Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
 
@@ -229,7 +229,7 @@ nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringt
 ```
 To run nextflow parameters in each case, full paths to files are mandatory
 
-### More Scenarios?
+## IX) More Scenarios?
 
 - For downstream analysis and examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
 
