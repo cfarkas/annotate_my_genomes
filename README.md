@@ -185,6 +185,27 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
+### Annotation of BRAKER2 gtf output
+
+- The outputs from BRAKER2 pipeline (https://github.com/Gaius-Augustus/BRAKER) : ```braker.gtf``` can be annotated using a few tools before running the pipeline.
+
+As a requirement, the AGAT toolkit (https://github.com/NBISweden/AGAT) must be installed:
+```
+conda activate annotate_my_genomes
+conda install -c bioconda agat
+```
+Suppose you annotated the Gallus gallus genome (galGal6) using braker2. The ```braker.gtf``` output can be pre-processed as follows:
+```
+agat_convert_sp_gff2gtf.pl --gff braker.gtf -o braker_fixed.gtf                        # clean and fix braker.gtf with AGAT                         
+stringtie --merge -G galGal6_ncbiRefSeq.gtf braker_fixed.gtf -o braker_merged.gtf      # merge braker.gtf with reference genome GTF (i.e.: galGal6_ncbiRefSeq.gtf)
+sed 's/ gene_name.*//'g braker_merged.gtf > braker_fixed.gtf                           # fix additional entries
+```
+Now, ``` braker_fixed.gtf``` can annotated as follows (i.e. using 30 threads for processing):
+```
+mkdir braker_annotated
+add-ncbi-annotation -a braker_fixed.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o braker_annotated/
+```
+
 ## VII) Nextflow
 
 - Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
