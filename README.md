@@ -101,7 +101,7 @@ To a value according to the computational capacity of your machine.
 
 ### Option 2: Using Nextflow: 
 
-- https://github.com/cfarkas/annotate_my_genomes#nextflow
+- https://github.com/cfarkas/annotate_my_genomes#vii-nextflow
 
 ### Option 3: Without using conda, program by program:
 
