@@ -194,13 +194,13 @@ As a requirement, the AGAT toolkit (https://github.com/NBISweden/AGAT) must be i
 conda activate annotate_my_genomes
 conda install -c bioconda agat
 ```
-Suppose you annotated the Gallus gallus genome (galGal6) using BRAKER2. The ```braker.gtf``` output can be pre-processed as follows:
+- Suppose you annotated the Gallus gallus genome (galGal6) using BRAKER2. The ```braker.gtf``` output can be pre-processed as follows:
 ```
 agat_convert_sp_gff2gtf.pl --gff braker.gtf -o braker_fixed.gtf                        # clean and fix braker.gtf with AGAT                         
 stringtie --merge -G galGal6_ncbiRefSeq.gtf braker_fixed.gtf -o braker_merged.gtf      # merge braker.gtf with reference genome GTF (i.e.: galGal6_ncbiRefSeq.gtf)
 sed 's/ gene_name.*//'g braker_merged.gtf > braker_fixed.gtf                           # fix additional entries
 ```
-Now, ``` braker_fixed.gtf``` can annotated as follows (i.e. using 30 threads for processing):
+- Now, ``` braker_fixed.gtf``` can annotated as follows (i.e. using 30 threads for processing):
 ```
 mkdir braker_annotated
 add-ncbi-annotation -a braker_fixed.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o braker_annotated/
