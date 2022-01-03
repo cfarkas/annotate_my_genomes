@@ -205,12 +205,9 @@ conda install -c bioconda nextflow
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
 bash makefile.sh                                               # make & install
-cp ./bin/* ./nextflow_scripts/                                 # required to run nextflow scripts
+sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts (requires sudo privileges)
 ```
-Superusers can change the last step as follows: 
-```
-sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts
-```
+
 2) Enter into nextflow_scripts subdirectory and run the pipeline using --flags parameters as follows:
 ```
 cd nextflow_scripts/
