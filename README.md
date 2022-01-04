@@ -128,7 +128,7 @@ mkdir output2
 ```
 
 ## IV) Simplest usage
-(Optional) Edit NCPUS value in gawn_config.sh file inside the repository. Default is 10
+(Optional) Edit NCPUS value in ```gawn_config.sh``` file inside the repository. Default is 10
 - As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
 
 ```
