@@ -187,7 +187,7 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 
 ## VIII Annotation of BRAKER2 gtf output
 
-- The outputs from BRAKER2 pipeline (https://github.com/Gaius-Augustus/BRAKER) : ```braker.gtf``` can be annotated using a few tools before running the pipeline.
+- The output ```braker.gtf``` from BRAKER2 pipeline (https://github.com/Gaius-Augustus/BRAKER) can be annotated using a few tools before running the pipeline.
 
 As a requirement, the AGAT toolkit (https://github.com/NBISweden/AGAT) must be installed:
 ```
