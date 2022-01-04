@@ -112,7 +112,7 @@ To a value according to the computational capacity of your machine.
 - Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. 
 - Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file), gawn_config.sh file (check NCPUS for blast, default = 10), number of threads for text processing (20 for this example) and the output folder. 
 
-Enter /annotate_my_genomes/test/ directory and execute the following:
+Go to ```annotate_my_genomes/test``` directory and execute the following:
 
 ```
 # Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
