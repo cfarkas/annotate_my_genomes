@@ -350,8 +350,7 @@ grep --invert-match -F -f lncRNA_transcripts final_annotated.gtf > merged.fixed.
 rm final_annotated.gtf
 sed -i 's/StringTie/lncRNA/' merged.fixed.lncRNAs.gtf
 awk '{print $1"\t"$2}' transcriptome.hits > coding_list
-awk -F'\t' '$2!=""' coding_list > coding_list.tab
-tail -n +2 "coding_list.tab" > coding_transcripts
+awk -F'\t' '$2!=""' coding_list > coding_transcripts
 awk '{print $1}' coding_transcripts > coding_transcripts.tab
 rm coding_lis* coding_transcripts lncRNA_transcripts
 grep -w -F -f coding_transcripts.tab merged.fixed.coding.gtf > coding-genes.gtf
@@ -379,7 +378,7 @@ gffread -w coding-transcripts.fa -g ${g_DIR}/${reference_genome} coding-genes.gt
 TransDecoder.LongOrfs -m 60 -t coding-transcripts.fa
 TransDecoder.Predict -t coding-transcripts.fa --single_best_only
 awk '{print $1}' coding-transcripts.fa.transdecoder.bed > coding.sequences
-grep "STRG." coding.sequences > coding.hits && rm coding.sequences
+tail -n +2 coding.sequences > coding.hits && rm coding.sequences
 echo ""
 printf "${PURPLE}::: Done. coding-transcripts.fa.transdecoder.gff3 file is present in current directory...${CYAN}\n"
 echo ""
