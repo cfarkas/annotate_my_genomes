@@ -168,11 +168,11 @@ By using isoform-identification pipeline, as follows:
 isoform-identification -m /path/to/NCBI_compare.stringtie_chr33.gtf.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
 ```
 In this example:
-- NCBI_compare.stringtie.gtf.tmap correspond to the transcript map output (tmap) 
-- NCBI_transcripts.fa correspond to the transcripts sequences in fasta format 
-- galGal6 correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
+- ```NCBI_compare.stringtie.gtf.tmap``` correspond to the transcript map output (tmap) 
+- ```NCBI_transcripts.fa``` correspond to the transcripts sequences in fasta format 
+- ```galGal6``` correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
 
-The outputs ```Ref_Transcript_Annotation.csv``` and ```Novel_Transcript_Annotation.csv``` files will contain detailed annotation of transcripts. ```Ref_Transcript_Annotation.csv``` should look like this:
+The outputs ```Ref_Transcript_Annotation.csv``` and ```Novel_Transcript_Annotation.csv``` files will contain detailed annotation of transcripts. Ref_Transcript_Annotation.csv should look like this:
 
 ```
 ref_gene_id	ref_id	class_code	qry_gene_id	qry_id	num_exons	FPKM	TPM	Annotation Status	NCBI RefSeq Gene ID	Transcript Description	NCBI RefSeq Protein ID	Alternative Gene Name	RefSeq Transcript Info	cds_seq
