@@ -199,11 +199,12 @@ conda install -c bioconda agat
 agat_convert_sp_gff2gtf.pl --gff braker.gtf -o braker_fixed.gtf                        # clean and fix braker.gtf with AGAT                         
 stringtie --merge -G galGal6_ncbiRefSeq.gtf braker_fixed.gtf -o braker_merged.gtf      # merge braker.gtf with reference genome GTF (i.e.: galGal6_ncbiRefSeq.gtf)
 sed 's/ gene_name.*//'g braker_merged.gtf > braker_fixed.gtf                           # fix additional entries
+grep "StringTie" braker_fixed.gtf > braker_stringtie.gtf                               # Exclude reference transcripts not found in braker annotation
 ```
-- Now, ``` braker_fixed.gtf``` can annotated as follows (i.e. using 30 threads for processing):
+- Now, ``` braker_stringtie.gtf``` can annotated as follows (i.e. using 30 threads for processing):
 ```
 mkdir braker_annotated
-add-ncbi-annotation -a braker_fixed.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o braker_annotated/
+add-ncbi-annotation -a braker_stringtie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o braker_annotated/
 ```
 
 ## IX) Nextflow
