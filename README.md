@@ -250,7 +250,7 @@ nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_an
 ```
 nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap --NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
 ```
-To run nextflow parameters in each case, full paths to files are mandatory
+Users must provide full paths to files when running these nextflow scripts
 
 ### More Scenarios?
 
