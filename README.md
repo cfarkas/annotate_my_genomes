@@ -33,7 +33,7 @@ The latter will output inside output1 folder:
 - coding_transcripts.gtf: GTF file containing cds sequences.
 - novel coding sequences (novel-cds.fa) and correspondent novel protein sequences (novel-prot.fa).
 ```
-* Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#adding-ncbi-annotations-to-increase-annotation-of-transcripts
+* Users can also employ mm10_ncbiRefSeq.gtf by using "add-ncbi-annotation" instead of "annotate-my-genomes". See an example here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#v-adding-ncbi-annotations-to-increase-annotation-of-transcripts
 
 ## II) Installation:  
 
