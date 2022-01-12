@@ -17,7 +17,7 @@ This pipeline requieres to run:
 ```
 - In example, ```./genome-download mm10 ``` , will output: ```mm10.fa```, ```mm10.gtf``` and ```mm10_ncbiRefSeq.gtf``` files
 
-- For genomes, check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway.
+- For genomes, check UCSC genome prefixes here: https://genome.ucsc.edu/cgi-bin/hgGateway and here: http://hgdownload.soe.ucsc.edu/downloads.html
 
 3) Finally, the basic pipeline can be runned using a mouse transcriptome as example (stringtie.gtf) and 20 threads, as follows:
 ```
