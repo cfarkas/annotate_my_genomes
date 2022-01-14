@@ -11,12 +11,11 @@ This pipeline requieres to run:
 
 1) StringTie assembled transcripts (in GTF format). Check here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
-2) At minimum, coding UCSC/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked fasta from UCSC). All these requirements can be downloaded once by using the ```genome-download``` program provided in this repository and inputting genome prefix as follows: 
+2) At minimum, coding UCSC/NCBI reference genome annotations (in GTF format) and genome assembly (non-masked fasta from UCSC). All these requirements can be downloaded once by using the ```genome-download``` program provided in this repository and inputting a genome prefix as follows: 
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. Use genome-download-macOSX instead in macOSX 
 ```
-- In example, ```./genome-download mm10 ``` , will output: ```mm10.fa```, ```mm10.gtf``` and ```mm10_ncbiRefSeq.gtf``` files 
-- ```mm10.gtf``` contains coding genes and ```mm10_ncbiRefSeq.gtf``` contains all NCBI annotations
+- In example, ```./genome-download mm10 ``` , will output: ```mm10.fa```, ```mm10.gtf``` and ```mm10_ncbiRefSeq.gtf``` files, where ```mm10.gtf``` contains coding genes and ```mm10_ncbiRefSeq.gtf``` contains all NCBI annotations
 
 - For genomes, check UCSC genome prefixes here: http://hgdownload.soe.ucsc.edu/downloads.html
 
