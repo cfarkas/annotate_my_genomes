@@ -15,7 +15,8 @@ This pipeline requieres to run:
 ```
 ./genome-download [genome]  # mm10 for mouse, hg38 for human, galGal6 for chicken, etc. Use genome-download-macOSX instead in macOSX 
 ```
-- In example, ```./genome-download mm10 ``` , will output: ```mm10.fa```, ```mm10.gtf``` and ```mm10_ncbiRefSeq.gtf``` files, where ```mm10.gtf``` contains coding genes and ```mm10_ncbiRefSeq.gtf``` contains all NCBI annotations
+- In example, ```./genome-download mm10 ``` , will output: ```mm10.fa```, ```mm10.gtf``` and ```mm10_ncbiRefSeq.gtf``` files
+- ```mm10.gtf``` contains coding genes and ```mm10_ncbiRefSeq.gtf``` contains all NCBI annotations
 
 - For genomes, check UCSC genome prefixes here: http://hgdownload.soe.ucsc.edu/downloads.html
 
