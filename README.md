@@ -186,16 +186,18 @@ LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-identifying-homologs-in-novel-proteins-from-transcriptome
 
-## VIII Annotation of BRAKER2 gtf output
+## VIII Annotation of BRAKER2 / TSEBRA gtf output
 
-- The output ```braker.gtf``` from BRAKER2 pipeline (https://github.com/Gaius-Augustus/BRAKER) can be annotated using a few tools before running the pipeline.
+- The output ```braker.gtf``` from BRAKER2 pipeline (https://github.com/Gaius-Augustus/BRAKER) or ```tsebra.gtf``` from TSEBRA pipeline (https://github.com/Gaius-Augustus/TSEBRA) can be annotated using a few tools before running the pipeline.
 
 As a requirement, the AGAT toolkit (https://github.com/NBISweden/AGAT) must be installed:
 ```
 conda activate annotate_my_genomes
 conda install -c bioconda agat
 ```
-- Suppose you annotated the Gallus gallus genome (galGal6) using BRAKER2. The ```braker.gtf``` output can be pre-processed as follows:
+- Suppose you recently annotated the Gallus gallus genome (galGal6) using BRAKER2 or TSEBRA. The ```braker.gtf / tsebra.gtf``` output can be pre-processed as follows:
+
+#### BRAKER2 run
 ```
 agat_convert_sp_gff2gtf.pl --gff braker.gtf -o braker_fixed.gtf                        # clean and fix braker.gtf with AGAT                         
 stringtie --merge -G galGal6_ncbiRefSeq.gtf braker_fixed.gtf -o braker_merged.gtf      # merge braker.gtf with reference genome GTF (i.e.: galGal6_ncbiRefSeq.gtf)
@@ -206,6 +208,19 @@ grep "StringTie" braker_fixed.gtf > braker_stringtie.gtf                        
 ```
 mkdir braker_annotated
 add-ncbi-annotation -a braker_stringtie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o braker_annotated/
+```
+
+#### TSEBRA run
+```
+agat_convert_sp_gff2gtf.pl --gff tsebra.gtf -o tsebra_fixed.gtf                        # clean and fix tsebra.gtf with AGAT                         
+stringtie --merge -G galGal6_ncbiRefSeq.gtf tsebra_fixed.gtf -o tsebra_merged.gtf      # merge tsebra.gtf with reference genome GTF (i.e.: galGal6_ncbiRefSeq.gtf)
+sed 's/ gene_name.*//'g tsebra_merged.gtf > tsebra_fixed.gtf                           # fix additional entries
+grep "StringTie" tsebra_fixed.gtf > tsebra_stringtie.gtf                               # Exclude reference transcripts not found in braker annotation
+```
+- Now, ``` tsebra_stringtie.gtf``` can annotated as follows (i.e. using 30 threads for processing):
+```
+mkdir tsebra_annotated
+add-ncbi-annotation -a tsebra_stringtie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o tsebra_annotated/
 ```
 
 ## IX) Nextflow
