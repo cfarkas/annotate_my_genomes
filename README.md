@@ -160,8 +160,8 @@ mkdir output3
 
 Users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline:
 
-- tmap output (inside output_files subdirectory)
-- NCBI_transcripts.fa (inside output_files subdirectory)
+- tmap output (inside ```output_files``` subdirectory)
+- NCBI_transcripts.fa (inside ```gffcompare_outputs_NCBI``` subdirectory)
 
 By using isoform-identification pipeline, as follows: 
 
