@@ -158,7 +158,7 @@ mkdir output3
 ```
 ## VI) Post processing add-ncbi-annotation outputs
 
-If ```stringtie.gtf``` (as a GTF example) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
+If ```stringtie.gtf``` (as an example of input GTF) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
 
 - tmap output (inside ```output_files``` subdirectory)
 - NCBI_transcripts.fa (inside ```gffcompare_outputs_NCBI``` subdirectory)
