@@ -137,8 +137,8 @@ mkdir output1
 ./genome-download galGal6          
 ./annotate-my-genomes -a /path/to/target.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
 ```
-- final_annotated.gtf (located in output1/output_files/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
-- To produce target.gtf assembly, check stringtie parameteres here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
+- ```final_annotated.gtf``` (located in output1/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+- To produce ```target.gtf``` assembly, check stringtie parameters here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
 ## V) Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
@@ -148,7 +148,7 @@ mkdir output2
 ./genome-download galGal6         
 ./add-ncbi-annotation -a /path/to/target.gtf -n /path/to/galGal6_ncbiRefSeq.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output2
 ```
-- final_annotated.gtf (located in output2/output_files/) will contained the merged NCBI-updated annotation (in UCSC coordinates).
+- ```final_annotated.gtf``` (located in output2/) will contained the merged NCBI-updated annotation (in UCSC coordinates).
 
 As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
 ```
@@ -158,7 +158,7 @@ mkdir output3
 ```
 ## VI) Post processing add-ncbi-annotation outputs
 
-Users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline:
+If ```stringtie.gtf``` (as a GTF example) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
 
 - tmap output (inside ```output_files``` subdirectory)
 - NCBI_transcripts.fa (inside ```gffcompare_outputs_NCBI``` subdirectory)
@@ -170,7 +170,7 @@ isoform-identification -m /path/to/NCBI_compare.stringtie_chr33.gtf.tmap -t /pat
 ```
 In this example:
 - ```NCBI_compare.stringtie.gtf.tmap``` correspond to the transcript map output (tmap) 
-- ```NCBI_transcripts.fa``` correspond to the transcripts sequences in fasta format 
+- ```NCBI_transcripts.fa``` correspond to the transcripts sequences from ```stringtie.gtf```, in fasta format 
 - ```galGal6``` correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
 
 The outputs ```Ref_Transcript_Annotation.csv``` and ```Novel_Transcript_Annotation.csv``` files will contain detailed annotation of transcripts. Ref_Transcript_Annotation.csv should look like this:
