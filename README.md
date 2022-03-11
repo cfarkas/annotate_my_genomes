@@ -48,9 +48,9 @@ sudo cp ./bin/* /usr/local/bin/                                # required to run
 conda env update --file environment.yml                        # install required programs
 ```
 
-- Also install (not through conda):
-1) ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
-2) SAMtools . See here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
+Also install (not through conda):
+- ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+- SAMtools . See here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
 
 After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
