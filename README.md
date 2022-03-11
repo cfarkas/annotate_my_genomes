@@ -38,9 +38,66 @@ The latter will output inside output1 folder:
 
 ## II) Installation:  
 
-## Installation:  
+### Option 1: Running the pipeline via Nextflow (recommended)
 
-### Option 1: Installing dependences via anaconda (recommended)
+- Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
+
+### Requirements: 
+
+- Nextflow can be installed as depicted here (https://www.nextflow.io/) or via anaconda as follows:
+
+```
+conda install -c bioconda nextflow
+```
+Also install (not through conda):
+
+- ```ncbi-blast+``` version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+- ```SAMtools``` . To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
+
+
+### Installation and Complete pipeline:
+
+1) Install annotate_my_genomes:
+```
+git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
+cd annotate_my_genomes                                         # enter repository
+bash makefile.sh                                               # make & install
+sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts (requires sudo privileges)
+```
+
+2) Enter into nextflow_scripts subdirectory and run the full pipeline using --flags parameters as follows:
+```
+cd nextflow_scripts/
+```
+2.1) genome-download (i.e : output galGal6 genome in working directory)
+```
+nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
+```
+2.1) annotate-my-genomes
+```
+nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+```
+2.2) add-ncbi-annotation
+```
+nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+```
+2.3) isoform-identification (i.e.: outputting in current directory)
+```
+nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap --NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
+```
+
+#### Notes: 
+
+- Users must provide full paths to files when running nextflow scripts.
+
+- Inside the repository, there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus for blast processing:
+```
+NCPUS=10
+```
+To a value according to the computational capacity of your machine. 
+
+
+### Option 2: Installing dependences via anaconda
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
@@ -107,10 +164,6 @@ conda remove --name annotate_my_genomes --all
 NCPUS=10
 ```
 To a value according to the computational capacity of your machine. 
-
-### Option 2: Using Nextflow (also recommended): 
-
-- https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#ix-nextflow
 
 ### Option 3: Without using conda, program by program:
 
@@ -230,52 +283,6 @@ grep "StringTie" tsebra_fixed.gtf > tsebra_stringtie.gtf                        
 mkdir tsebra_annotated
 add-ncbi-annotation -a tsebra_stringtie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 30 -o tsebra_annotated/
 ```
-
-## IX) Nextflow
-
-- Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
-
-### Requirements: 
-
-- Nextflow can be installed as depicted here (https://www.nextflow.io/) or via anaconda:
-
-```
-conda install -c bioconda nextflow
-```
-- ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
-
-### Installation and Complete pipeline:
-
-1) Install annotate_my_genomes (skipping conda install):
-```
-git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
-cd annotate_my_genomes                                         # enter repository
-bash makefile.sh                                               # make & install
-sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts (requires sudo privileges)
-```
-
-2) Enter into nextflow_scripts subdirectory and run the pipeline using --flags parameters as follows:
-```
-cd nextflow_scripts/
-```
-2.1) genome-download (i.e : galGal6 genome, ouputting in current directory)
-```
-nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
-```
-2.1) annotate-my-genomes
-```
-nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
-```
-2.2) add-ncbi-annotation
-```
-nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa --config /path/to/annotate_my_genomes/gawn_config.sh --threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
-```
-2.3) isoform-identification (i.e.: outputting in current directory)
-```
-nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap --NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
-```
-Users must provide full paths to files when running these nextflow scripts
-
 ### More Scenarios?
 
 - For downstream analysis and examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
