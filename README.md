@@ -38,17 +38,47 @@ The latter will output inside output1 folder:
 
 ## II) Installation:  
 
+## Installation:  
+
 ### Option 1: Installing dependences via anaconda (recommended)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
-bash makefile.sh                                               # make & install
-sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts (requires sudo privileges)
-conda env update --file environment.yml                        # install required programs
+conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
+conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
+conda create --name annotate_my_genomes python=3.6.13          # create environment
+conda activate annotate_my_genomes                             # load environment
+
+# Install packages
+conda install -c conda-forge -y parallel 
+conda install -c bioconda -y cufflinks
+conda install -c bioconda -y stringtie
+conda install -c bioconda -y gffcompare
+conda install -c bioconda -y gffread
+conda install -c bioconda -y gmap
+conda install -c bioconda -y bedtools
+conda install -c bioconda -y emboss
+conda install -c bioconda -y clustalo
+conda install -c bioconda -y minimap2
+conda install -c bioconda -y transdecoder
+conda install -c bioconda -y seqkit
+conda install -c conda-forge -y coreutils
+conda install -c anaconda -y gawk
+conda install -c conda-forge -y sed
+conda install -c bioconda/label/cf201901 -y feelnc
+conda install -c bioconda -y perl-local-lib
+conda install -c anaconda -y pandas
+
+bash makefile.sh                                               # make  & install
+```
+- Optionally (requires sudo privileges)
+```
+sudo cp ./bin/* /usr/local/bin/
 ```
 
-Also install these two programs (not through conda):
+Also install (not through conda):
+
 - ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
 - SAMtools . To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
 
