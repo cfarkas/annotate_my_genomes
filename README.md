@@ -66,13 +66,14 @@ conda install -c bioconda -y seqkit
 conda install -c conda-forge -y coreutils
 conda install -c anaconda -y gawk
 conda install -c conda-forge -y sed
-conda install -c bioconda/label/cf201901 -y feelnc
+conda install -c bioconda/label/cf201901 -y feelnc             # might take a while
 conda install -c bioconda -y perl-local-lib
 conda install -c anaconda -y pandas
 
 bash makefile.sh                                               # make  & install
 ```
-- Optionally (requires sudo privileges)
+Copy binaries to /usr/local/bin/ (requires sudo privileges)
+
 ```
 sudo cp ./bin/* /usr/local/bin/
 ```
