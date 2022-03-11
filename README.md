@@ -127,29 +127,8 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda create --name annotate_my_genomes python=3.6.13          # create environment
-conda activate annotate_my_genomes                             # load environment
-
-# Install packages
-conda install -c conda-forge -y parallel 
-conda install -c bioconda -y cufflinks
-conda install -c bioconda -y stringtie
-conda install -c bioconda -y gffcompare
-conda install -c bioconda -y gffread
-conda install -c bioconda -y gmap
-conda install -c bioconda -y bedtools
-conda install -c bioconda -y emboss
-conda install -c bioconda -y clustalo
-conda install -c bioconda -y minimap2
-conda install -c bioconda -y transdecoder
-conda install -c bioconda -y seqkit
-conda install -c conda-forge -y coreutils
-conda install -c anaconda -y gawk
-conda install -c conda-forge -y sed
-conda install -c bioconda/label/cf201901 -y feelnc             # might take a while
-conda install -c bioconda -y perl-local-lib
-conda install -c anaconda -y pandas
-
+conda env update --file environment.yml                        # install required programs
+conda activate annotate_my_genomes                             # load environment         
 bash makefile.sh                                               # make  & install
 ```
 Copy binaries to ```/usr/local/bin/``` (requires sudo privileges)
