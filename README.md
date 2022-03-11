@@ -43,40 +43,14 @@ The latter will output inside output1 folder:
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
-conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
-conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda create --name annotate_my_genomes python=3.6.13          # create environment
-conda activate annotate_my_genomes                             # load environment
+bash makefile.sh                                               # make & install
+sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts (requires sudo privileges)
+conda env update --file environment.yml                        # install required programs
+```
 
-# Install packages
-conda install -c conda-forge -y parallel 
-conda install -c bioconda -y cufflinks
-conda install -c bioconda -y stringtie
-conda install -c bioconda -y gffcompare
-conda install -c bioconda -y gffread
-conda install -c bioconda -y gmap
-conda install -c bioconda -y bedtools
-conda install -c bioconda -y emboss
-conda install -c bioconda -y clustalo
-conda install -c bioconda -y samtools
-conda install -c bioconda -y minimap2
-conda install -c bioconda -y transdecoder
-conda install -c bioconda -y seqkit
-conda install -c conda-forge -y coreutils
-conda install -c anaconda -y gawk
-conda install -c conda-forge -y sed
-conda install -c bioconda/label/cf201901 -y feelnc
-conda install -c bioconda -y perl-local-lib
-conda install -c anaconda -y pandas
-
-bash makefile.sh                                               # make  & install
-```
-- Optionally (requires sudo privileges)
-```
-sudo cp ./bin/* /usr/local/bin/
-```
 - Also install (not through conda):
-ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+1) ncbi-blast+ version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+2) SAMtools . See here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
 
 After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
 ```
@@ -88,19 +62,22 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 #
 #     $ conda deactivate
 ```
+
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
+
 - Uninstall as follows: 
 ```
 conda remove --name annotate_my_genomes --all
 ```
+
 - Inside the repository, there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus for blast processing:
 ```
 NCPUS=10
 ```
 To a value according to the computational capacity of your machine. 
 
-### Option 2: Using Nextflow: 
+### Option 2: Using Nextflow (also recommended): 
 
 - https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#ix-nextflow
 
