@@ -71,7 +71,9 @@ cd nextflow_scripts/
 ```
 2.1) genome-download (i.e : output galGal6 genome in working directory)
 ```
-nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
+nextflow run genome-download.nf --genome galGal6 
+--conda /path/to/annotate_my_genomes/environment.yml 
+--outdir ./
 ```
 2.1) annotate-my-genomes
 ```
@@ -150,6 +152,8 @@ After these steps, a conda enviroment called annotate_my_genomes can be managed 
 #
 #     $ conda deactivate
 ```
+
+#### Notes: 
 
 - By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
 - To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
