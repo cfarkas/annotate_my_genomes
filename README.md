@@ -125,7 +125,6 @@ conda install -c bioconda -y gmap
 conda install -c bioconda -y bedtools
 conda install -c bioconda -y emboss
 conda install -c bioconda -y clustalo
-conda install -c bioconda -y samtools
 conda install -c bioconda -y minimap2
 conda install -c bioconda -y transdecoder
 conda install -c bioconda -y seqkit
