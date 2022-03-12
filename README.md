@@ -105,7 +105,7 @@ NCPUS=10
 To a value according to the computational capacity of your machine. 
 
 
-### Option 2: Installing dependences via anaconda
+### Option 2: Installing dependences via anaconda (tested in Ubuntu 16.05, 18.04 and 20.04 LTS)
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
