@@ -112,7 +112,7 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda create --name annotate_my_genomes python=3.6.13          # create environment
+conda create --name annotate_my_genomes feelnc=0.2             # create environment
 conda activate annotate_my_genomes                             # load environment
 
 # Install packages
@@ -131,7 +131,6 @@ conda install -c bioconda -y seqkit
 conda install -c conda-forge -y coreutils
 conda install -c anaconda -y gawk
 conda install -c conda-forge -y sed
-conda install -c bioconda/label/cf201901 -y feelnc
 conda install -c bioconda -y perl-local-lib
 conda install -c anaconda -y pandas
 
