@@ -89,9 +89,9 @@ nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_an
 ```
 2.3) isoform-identification (i.e.: outputting in current directory)
 ```
-nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap --NCBI_transcripts /path/to/NCBI_transcripts.fa \
---genome_name galGal6 --conda /path/to/annotate_my_genomes/environment.yml \
---outdir ./
+nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap 
+--NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 \
+--conda /path/to/annotate_my_genomes/environment.yml --outdir ./
 ```
 
 #### Notes: 
