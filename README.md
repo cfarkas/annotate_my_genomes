@@ -71,41 +71,26 @@ cd nextflow_scripts/
 ```
 2.1) genome-download (i.e : output galGal6 genome in working directory)
 ```
-nextflow run genome-download.nf 
---genome galGal6 
---conda /path/to/annotate_my_genomes/environment.yml 
+nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_genomes/environment.yml \
 --outdir ./
 ```
 2.1) annotate-my-genomes
 ```
-nextflow run annotate-my-genomes.nf 
---stringtie /path/to/stringtie.gtf 
---ref_annotation /path/to/galGal6.gtf 
---genome /path/to/galGal6.fa 
---config /path/to/annotate_my_genomes/gawn_config.sh 
---threads 50 
---conda /path/to/annotate_my_genomes/environment.yml 
---outdir /path/to/output_folder/
+nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf \ 
+--genome /path/to/galGal6.fa  --config /path/to/annotate_my_genomes/gawn_config.sh \
+--threads 50 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
 ```
 2.2) add-ncbi-annotation
 ```
-nextflow run add-ncbi-annotation.nf 
---stringtie /path/to/stringtie.gtf 
---NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf 
---ref_annotation /path/to/galGal6.gtf 
---genome /path/to/galGal6.fa 
---config /path/to/annotate_my_genomes/gawn_config.sh 
---threads 50 
---conda /path/to/annotate_my_genomes/environment.yml 
---outdir /path/to/output_folder/
+nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf \
+--ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa \
+--config /path/to/annotate_my_genomes/gawn_config.sh --threads 50  \
+--conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
 ```
 2.3) isoform-identification (i.e.: outputting in current directory)
 ```
-nextflow run isoform-identification.nf 
---NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap 
---NCBI_transcripts /path/to/NCBI_transcripts.fa 
---genome_name galGal6 
---conda /path/to/annotate_my_genomes/environment.yml 
+nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap --NCBI_transcripts /path/to/NCBI_transcripts.fa \
+--genome_name galGal6 --conda /path/to/annotate_my_genomes/environment.yml \
 --outdir ./
 ```
 
@@ -127,12 +112,33 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda env update --file environment.yml                        # install required programs
-conda activate annotate_my_genomes                             # load environment         
+conda create --name annotate_my_genomes python=3.6.13          # create environment
+conda activate annotate_my_genomes                             # load environment
+
+# Install packages
+conda install -c conda-forge -y parallel 
+conda install -c bioconda -y cufflinks
+conda install -c bioconda -y stringtie
+conda install -c bioconda -y gffcompare
+conda install -c bioconda -y gffread
+conda install -c bioconda -y gmap
+conda install -c bioconda -y bedtools
+conda install -c bioconda -y emboss
+conda install -c bioconda -y clustalo
+conda install -c bioconda -y samtools
+conda install -c bioconda -y minimap2
+conda install -c bioconda -y transdecoder
+conda install -c bioconda -y seqkit
+conda install -c conda-forge -y coreutils
+conda install -c anaconda -y gawk
+conda install -c conda-forge -y sed
+conda install -c bioconda/label/cf201901 -y feelnc
+conda install -c bioconda -y perl-local-lib
+conda install -c anaconda -y pandas
+
 bash makefile.sh                                               # make  & install
 ```
-Copy binaries to ```/usr/local/bin/``` (requires sudo privileges)
-
+- Copy binaries to ```/usr/local/bin```
 ```
 sudo cp ./bin/* /usr/local/bin/
 ```
