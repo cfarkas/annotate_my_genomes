@@ -154,10 +154,15 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-sec=$(date "+%Y%m%d_%H%M%S")
-mkdir annotate_my_genomes_$sec
-cp ${a_DIR}/${stringtie_input} ./annotate_my_genomes_$sec
-cd annotate_my_genomes_$sec
+
+# sec=$(date "+%Y%m%d_%H%M%S")
+# mkdir annotate_my_genomes_$sec
+
+cd ${o_DIR}/${output_folder}
+cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
+
+# cd annotate_my_genomes_$sec
+
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 printf "${YELLOW}::: Done :::\n"
@@ -469,8 +474,10 @@ mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv UCSC_compare.annotated.gtf ./gffcompare_outputs_UCSC
 cp ${dir1}/gffcompare_outputs_UCSC/UCSC_compare.${stringtie_input}.tmap ./output_files/
-cd ${dir0}
-mv annotate_my_genomes_$sec ${o_DIR}/${output_folder}
+
+# cd ${dir0}
+# mv annotate_my_genomes_$sec ${o_DIR}/${output_folder}
+
 echo "Done"
 echo ""
 printf "${YELLOW}::: Done:::\n"
