@@ -155,7 +155,7 @@ echo ""
 
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
-# sec=$(date "+%Y%m%d_%H%M%S")
+seconds=$(date "+%Y%m%d_%H%M%S")
 # mkdir annotate_my_genomes_$sec
 
 cd ${o_DIR}/${output_folder}
@@ -478,6 +478,8 @@ cp ${dir1}/gffcompare_outputs_UCSC/UCSC_compare.${stringtie_input}.tmap ./output
 # cd ${dir0}
 # mv annotate_my_genomes_$sec ${o_DIR}/${output_folder}
 
+cd ${dir0}
+
 echo "Done"
 echo ""
 printf "${YELLOW}::: Done:::\n"
@@ -486,7 +488,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "The following files are available in ${o}/annotate_my_genomes_$sec/output_files : "
+echo "The following files are available in ${o_DIR}/${output_folder}/output_files : "
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file. GAWN protein annotation is named transcriptome.hits"
 echo ""
@@ -509,5 +511,5 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
-} | tee logfile_annotate_my_genomes
+} | tee logfile_annotate_my_genomes_$seconds
 #
