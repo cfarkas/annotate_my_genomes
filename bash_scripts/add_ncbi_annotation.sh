@@ -167,10 +167,15 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-sec=$(date "+%Y%m%d_%H%M%S")
-mkdir add_ncbi_annotation_$sec
-cp $a_DIR/${stringtie_input} ./add_ncbi_annotation_$sec
-cd add_ncbi_annotation_$sec
+
+seconds=$(date "+%Y%m%d_%H%M%S")
+# mkdir add_ncbi_annotation_$sec
+
+cd ${o_DIR}/${output_folder}
+cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
+
+# cd add_ncbi_annotation_$sec
+
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo "Done"
 printf "${YELLOW}::: Done :::\n"
@@ -483,8 +488,12 @@ mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv NCBI_compare.annotated.gtf ./gffcompare_outputs_NCBI
 cp ${dir1}/gffcompare_outputs_NCBI/NCBI_compare.${stringtie_input}.tmap ./output_files/
+
+# cd ${dir0}
+# mv add_ncbi_annotation_$sec ${o_DIR}/${output_folder}
+
 cd ${dir0}
-mv add_ncbi_annotation_$sec ${o_DIR}/${output_folder}
+
 echo "Done"
 echo ""
 printf "${YELLOW}::: Done:::\n"
@@ -493,7 +502,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "The following files are available in ${o}/add_ncbi_annotation_$sec/output_files : "
+echo "The following files are available in ${o}/output_files : "
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file. GAWN protein annotation is called transcriptome.hits"
 echo ""
@@ -516,5 +525,5 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
-} | tee logfile_add_ncbi_annotation
+} | tee logfile_add_ncbi_annotation_$seconds
 #
