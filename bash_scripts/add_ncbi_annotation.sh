@@ -180,6 +180,7 @@ else
    echo ""
    echo "Output folder is not empty. Creating temporary folder:"
    sec=$(date "+%Y%m%d_%H%M%S")
+   cd ${o_DIR}/${output_folder}
    mkdir add_ncbi_annotation_$sec && cd add_ncbi_annotation_$sec
 fi
 
