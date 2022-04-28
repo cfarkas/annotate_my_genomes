@@ -168,10 +168,20 @@ echo ""
 
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
-seconds=$(date "+%Y%m%d_%H%M%S")
+sec=$(date "+%Y%m%d_%H%M%S")
 # mkdir add_ncbi_annotation_$sec
 
-cd ${o_DIR}/${output_folder}
+if [ -z "$(ls -A ${o_DIR}/${output_folder})" ]; then
+   echo "Output folder is empty. We will work inside the provided output folder"
+   cd ${o_DIR}/${output_folder}
+else
+   echo "Output folder is not empty. Creating temporary folder"
+   sec=$(date "+%Y%m%d_%H%M%S")
+   mkdir add_ncbi_annotation_$sec
+   cd add_ncbi_annotation_$sec
+fi
+
+# cd ${o_DIR}/${output_folder}
 
 if [ -f $stringtie_input ]; then
     echo "$stringtie_input file found in output directory. Continue."
@@ -187,7 +197,7 @@ fi
 # cd add_ncbi_annotation_$sec
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-echo "Done"
+echo ""
 printf "${YELLOW}::: Done :::\n"
 echo ""
 
