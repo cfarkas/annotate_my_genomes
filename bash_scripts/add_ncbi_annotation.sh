@@ -498,6 +498,7 @@ rm -r -f output_files
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files
 rm -r -f *feelncfilter.log genes.gtf pipeliner* NM_coding.gtf candidate_lncRNA.gtf* coding-transcripts.fa.transdecoder_dir.__* NCBI_transcripts.fa.fai
+rm -r -f transdecoder
 mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv NCBI_compare.annotated.gtf ./gffcompare_outputs_NCBI
