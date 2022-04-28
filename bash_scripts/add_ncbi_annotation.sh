@@ -37,23 +37,9 @@ if [ ! "$a" ] || [ ! "$n" ] || [ ! "$r" ] || [ ! "$g" ] || [ ! "$c" ] || [ ! "$t
   echo "$usage" >&2; exit 1
 fi
 
-if [ ! -d "$o" ]; then
-  echo "Output directory: $o not found. Please create the output directory first, before running the pipeline."
-  exit 9999 # die with error code 9999
-fi
-
-if [ "$o" = ./ ]; then
-  echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
-  exit 9999 # die with error code 9999
-fi
 # Conditions : output folder
 if [ ! -d "$o" ]; then
   echo "Output directory: $o not found. Please create the output directory first, before running the pipeline."
-  exit 9999 # die with error code 9999
-fi
-
-if [ "$o" = ./ ]; then
-  echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
   exit 9999 # die with error code 9999
 fi
 
