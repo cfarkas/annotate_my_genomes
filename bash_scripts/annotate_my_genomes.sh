@@ -172,7 +172,7 @@ else
     ###
 fi
 
-#cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
+# cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
 # cd annotate_my_genomes_$sec
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
