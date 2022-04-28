@@ -148,9 +148,9 @@ output_folder="$(basename -- $FILE6)"
 echo "The output folder is the following: $output_folder"
 echo ""
 
-printf "${YELLOW}:::::::::::::::::::::::::::::::\n"
-printf "${YELLOW}::: 0. Defining directories :::\n"
-printf "${YELLOW}:::::::::::::::::::::::::::::::${CYAN}\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
+printf "${YELLOW}::: 0. Defining directories and StringTie input data :::\n"
+printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
 
 dir0=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
@@ -159,8 +159,20 @@ seconds=$(date "+%Y%m%d_%H%M%S")
 # mkdir annotate_my_genomes_$sec
 
 cd ${o_DIR}/${output_folder}
-cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
 
+
+if [ -f ${o_DIR}/${output_folder}/$stringtie_input]; then
+    echo "$stringtie_input file found in output directory. Continue."
+    echo ""
+    : 
+else
+    echo "copying $stringtie_input file into the output directory:"
+    cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
+    done
+    ###
+fi
+
+#cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
 # cd annotate_my_genomes_$sec
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
