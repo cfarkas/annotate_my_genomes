@@ -159,24 +159,29 @@ sec=$(date "+%Y%m%d_%H%M%S")
 # mkdir annotate_my_genomes_$sec
 
 if [ -z "$(ls -A ${o_DIR}/${output_folder})" ]; then
-   echo "Output folder is empty. We will work inside the provided output folder"
+   echo ""
+   echo "Output folder is empty. We will work inside the provided output folder:"
+   echo ""
    cd ${o_DIR}/${output_folder}
 else
-   echo "Output folder is not empty. Creating temporary folder"
+   echo ""
+   echo "Output folder is not empty. Creating temporary folder:"
+   echo ""
    sec=$(date "+%Y%m%d_%H%M%S")
-   mkdir annotate_my_genomes_$sec
-   cd annotate_my_genomes_$sec
+   mkdir annotate_my_genomes_$sec && cd annotate_my_genomes_$sec
 fi
 
 # cd ${o_DIR}/${output_folder}
 
 if [ -f $stringtie_input ]; then
+    echo ""
     echo "$stringtie_input file found in output directory. Continue."
     echo ""
     : 
 else
-    echo "copying $stringtie_input file into the output directory:"
-    cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
+    echo ""
+    echo "Copying $stringtie_input file into the output directory:"
+    cp ${a_DIR}/${stringtie_input} ./
     echo ""
 fi
 
