@@ -45,13 +45,6 @@ if [ ! -d "$o" ]; then
   exit 9999 # die with error code 9999
 fi
 
-if [ "$o" = ./ ]; then
-  echo ""
-  echo "Error. Please create a folder in the current directory to output (i.e. mkdir my_output)"
-  echo ""
-  exit 9999 # die with error code 9999
-fi
-
 # Conditions : Input existance
 
 if [ ! -e "$a" ]; then
@@ -523,7 +516,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 echo ""
-echo "The following files are available in ${o_DIR}/${output_folder}/output_files : "
+echo "The following files are available in ${dir1}/output_files : "
 echo ""
 echo "Transcript discoveries are summarized in Stats.txt file. GAWN protein annotation is named transcriptome.hits"
 echo ""
@@ -546,5 +539,5 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
-} | tee logfile_annotate_my_genomes_$sec
+} | tee logfile_annotate_my_genomes_${sec}
 #
