@@ -256,6 +256,7 @@ sed -i -e 's/$/%/' sed.script
 cat ${a_DIR}/${stringtie_input} | parallel --pipe -j ${t} sed -f sed.script > final_annotated.gtf
 rm -f fileA fileB *tmap.1 *tmap.2
 # sorting GTF file
+rm -r -f gff3sort
 git clone https://github.com/cfarkas/gff3sort.git
 perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
 rm final_annotated.gtf
@@ -264,6 +265,7 @@ printf "${PURPLE}::: Done. Gene_id field was replaced in the StringTie.gtf file 
 echo ""
 printf "${PURPLE}::: Moving gffcompare results to gffcompare_outputs folder ...\n"
 echo ""
+rm -r -f gffcompare_outputs_NCBI
 mkdir gffcompare_outputs_NCBI
 mv *.loci *.stats *.refmap *.tmap *.tracking ./gffcompare_outputs_NCBI
 echo ""
@@ -291,6 +293,7 @@ printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::${C
 echo ""
 printf "${PURPLE}::: Downloading GAWN annotation folder. See https://github.com/enormandeau/gawn.git${CYAN}\n"
 echo ""
+rm -r -f gawn
 git clone https://github.com/cfarkas/gawn.git
 cd gawn/02_infos/
 dir2=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
@@ -491,6 +494,7 @@ printf "${YELLOW}:::::::::::::::::::::::::::::::::::::::::::::::::::::${CYAN}\n"
 
 echo ""
 printf "${PURPLE}::: Moving results to the specified directory :::${CYAN}\n"
+rm -r -f output_files
 mkdir output_files
 mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files
 rm -r -f *feelncfilter.log genes.gtf pipeliner* NM_coding.gtf candidate_lncRNA.gtf* coding-transcripts.fa.transdecoder_dir.__* NCBI_transcripts.fa.fai
