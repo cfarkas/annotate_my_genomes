@@ -168,8 +168,7 @@ if [ -f ${o_DIR}/${output_folder}/$stringtie_input]; then
 else
     echo "copying $stringtie_input file into the output directory:"
     cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
-    done
-    ###
+    echo ""
 fi
 
 # cp ${a_DIR}/${stringtie_input} ${o_DIR}/${output_folder}
