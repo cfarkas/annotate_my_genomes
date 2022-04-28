@@ -536,5 +536,5 @@ end=`date +%s`
 elapsed=`expr $end - $begin`
 echo Time taken: $elapsed
 #
-} | tee logfile_annotate_my_genomes_$seconds
+} | tee logfile_annotate_my_genomes_$sec
 #
