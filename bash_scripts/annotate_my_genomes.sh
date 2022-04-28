@@ -159,7 +159,7 @@ sec=$(date "+%Y%m%d_%H%M%S")
 # mkdir annotate_my_genomes_$sec
 
 if [ -z "$(ls -A ${o_DIR}/${output_folder})" ]; then
-   echo "Output folder is empty. We will work inside output folder"
+   echo "Output folder is empty. We will work inside the provided output folder"
    cd ${o_DIR}/${output_folder}
 else
    echo "Output folder is not empty. Creating temporary folder"
