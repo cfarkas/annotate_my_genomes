@@ -168,6 +168,7 @@ else
    echo "Output folder is not empty. Creating temporary folder:"
    echo ""
    sec=$(date "+%Y%m%d_%H%M%S")
+   cd ${o_DIR}/${output_folder}
    mkdir annotate_my_genomes_$sec && cd annotate_my_genomes_$sec
 fi
 
