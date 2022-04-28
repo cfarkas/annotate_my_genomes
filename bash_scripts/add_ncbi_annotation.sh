@@ -173,7 +173,7 @@ seconds=$(date "+%Y%m%d_%H%M%S")
 
 cd ${o_DIR}/${output_folder}
 
-if [ -f ${o_DIR}/${output_folder}/$stringtie_input]; then
+if [ -f $stringtie_input ]; then
     echo "$stringtie_input file found in output directory. Continue."
     echo ""
     : 
