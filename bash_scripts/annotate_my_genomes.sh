@@ -191,6 +191,8 @@ fi
 
 dir1=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 echo ""
+echo "Current Working Directory:"
+echo ""
 echo $dir1
 echo ""
 printf "${YELLOW}::: Done :::\n"
