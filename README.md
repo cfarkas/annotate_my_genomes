@@ -117,7 +117,6 @@ conda activate annotate_my_genomes                             # load environmen
 
 # Install packages
 conda install -c conda-forge -y parallel 
-conda install -c bioconda -y cufflinks
 conda install -c bioconda -y stringtie
 conda install -c bioconda -y gffcompare
 conda install -c bioconda -y gffread
