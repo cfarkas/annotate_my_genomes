@@ -501,7 +501,9 @@ rm -r -f transdecoder
 mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv UCSC_compare.annotated.gtf ./gffcompare_outputs_UCSC
-cp ${dir1}/gffcompare_outputs_UCSC/UCSC_compare.${stringtie_input}.tmap ./output_files/
+cp ${dir1}/gffcompare_outputs_UCSC/UCSC_compare.${stringtie_input}.tmap ./
+mv UCSC_compare.${stringtie_input}.tmap gffcompare.tmap
+mv gffcompare.tmap ./output_files/
 
 # cd ${dir0}
 # mv annotate_my_genomes_$sec ${o_DIR}/${output_folder}
