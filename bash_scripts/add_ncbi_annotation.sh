@@ -507,7 +507,9 @@ rm -r -f transdecoder
 mkdir transdecoder
 mv coding-transcripts.fa.transdecoder.* ./transdecoder
 mv NCBI_compare.annotated.gtf ./gffcompare_outputs_NCBI
-cp ${dir1}/gffcompare_outputs_NCBI/NCBI_compare.${stringtie_input}.tmap ./output_files/
+cp ${dir1}/gffcompare_outputs_NCBI/NCBI_compare.${stringtie_input}.tmap  ./
+mv NCBI_compare.${stringtie_input}.tmap gffcompare.tmap
+mv gffcompare.tmap ./output_files/
 
 # cd ${dir0}
 # mv add_ncbi_annotation_$sec ${o_DIR}/${output_folder}
