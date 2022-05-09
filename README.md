@@ -51,6 +51,7 @@ conda install -c bioconda nextflow
 ```
 Also install (not through conda):
 
+- ```sed``` editor. Comes by default with Linux/Ubuntu distros
 - ```ncbi-blast+``` version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
 - ```SAMtools``` . To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
 
