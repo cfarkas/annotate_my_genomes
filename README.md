@@ -228,16 +228,16 @@ mkdir output3
 
 If ```stringtie.gtf``` (as an example of input GTF) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
 
-- tmap output (inside ```output_files``` subdirectory)
+- gffcompare.tmap (inside ```output_files``` subdirectory)
 - NCBI_transcripts.fa (inside ```gffcompare_outputs_NCBI``` subdirectory)
 
 By using isoform-identification pipeline, as follows: 
 
 ```
-isoform-identification -m /path/to/NCBI_compare.stringtie_chr33.gtf.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
+isoform-identification -m /path/to/gffcompare.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
 ```
 In this example:
-- ```NCBI_compare.stringtie.gtf.tmap``` correspond to the transcript map output (tmap) 
+- ```gffcompare.tmap``` correspond to the transcript map output from gffcompare
 - ```NCBI_transcripts.fa``` correspond to the transcripts sequences from ```stringtie.gtf```, in fasta format 
 - ```galGal6``` correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
 
