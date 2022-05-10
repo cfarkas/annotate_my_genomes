@@ -8,7 +8,7 @@ usage="$(basename "$0") [-h] [-m <gffcompare tmap file>] [-t <transcripts.fa fil
 This script will produce an annotated csv table of transcripts, by using the tmap output file from add-ncbi-annotation pipeline.
 Arguments:
     -h  show this help text
-    -m  NCBI gffcompare tmap output file. As example: NCBI_compare.stringtie.gtf.tmap
+    -m  NCBI gffcompare tmap output file. As example: gffcompare.tmap
     -t  transcripts file, output of add-ncbi-annotation program. As example: NCBI_transcripts.fa
     -g  UCSC genome name. In example: mm10, galGal6, hg38, rn6."
 options=':hm:t:g:'
