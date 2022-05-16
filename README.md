@@ -38,7 +38,7 @@ The latter will output inside output1 folder:
 
 ## II) Installation:  
 
-### Option 1: Running the pipeline via Nextflow (recommended)
+### Option 1: Via Nextflow (recommended)
 
 - Nextflow (https://www.nextflow.io/) is a great workflow framework and a programming DSL that eases the writing of data-intensive computational pipelines. We encourage and support the usage of this framework across different platforms for reproducibility. 
 
@@ -56,17 +56,98 @@ Also install (not through conda):
 - ```SAMtools``` . To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
 
 
-### Installation and Complete pipeline:
+### Installation:
 
-1) Install annotate_my_genomes:
+In a given directory:
+```
+git clone https://github.com/cfarkas/annotate_my_genomes.git                      # clone repository
+cd annotate_my_genomes                                                            # enter repository
+current_dir=$(pwd)                                                                # set working directory
+echo $current_dir                                                                 # check working directory
+nextflow run makefile.nf --workdir $current_dir --conda ./environment.yml         # make & install
+sudo cp ./bin/* /usr/local/bin/                                                   # optional, requires sudo privileges. 
+```
+
+### Option 2: Installing dependences via anaconda (tested in Ubuntu 16.05, 18.04 and 20.04 LTS)
+
+### Requirements: 
+- requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
+
+Also install (not through conda):
+
+- ```sed``` editor. Comes by default with Linux/Ubuntu distros
+- ```ncbi-blast+``` version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
+- ```SAMtools``` . To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
+
+### Installation:
+
+In a given directory:
 ```
 git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
 cd annotate_my_genomes                                         # enter repository
-bash makefile.sh                                               # make & install
-sudo cp ./bin/* /usr/local/bin/                                # required to run nextflow scripts (requires sudo privileges)
+conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
+conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
+conda create --name annotate_my_genomes feelnc=0.2             # create environment
+conda activate annotate_my_genomes                             # load environment
+
+# Install packages
+conda install -c conda-forge -y parallel 
+conda install -c bioconda -y stringtie
+conda install -c bioconda -y gffcompare
+conda install -c bioconda -y gffread
+conda install -c bioconda -y gmap
+conda install -c bioconda -y bedtools
+conda install -c bioconda -y emboss
+conda install -c bioconda -y clustalo
+conda install -c bioconda -y minimap2
+conda install -c bioconda -y transdecoder
+conda install -c bioconda -y seqkit
+conda install -c conda-forge -y coreutils
+conda install -c anaconda -y gawk
+conda install -c bioconda -y perl-local-lib
+conda install -c anaconda -y pandas
+
+bash makefile.sh                                               # make  & install
+```
+- Copy binaries to ```/usr/local/bin```
+```
+sudo cp ./bin/* /usr/local/bin/
 ```
 
-2) Enter into nextflow_scripts subdirectory and run the full pipeline using --flags parameters as follows:
+After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
+```
+# To activate this environment, use
+#
+#     $ conda activate annotate_my_genomes
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+```
+
+#### Notes: 
+
+- By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
+- To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
+
+- Uninstall environment as follows: 
+```
+conda remove --name annotate_my_genomes --all
+```
+
+- Inside the repository, there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus for blast processing:
+```
+NCPUS=10
+```
+To a value according to the computational capacity of your machine. 
+
+### Option 3: Without using conda, program by program:
+
+- see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
+
+## III) Running the whole pipeline via nextflow (recommended)
+
+2) Inside annotate_my_genomes folder, enter into nextflow_scripts subdirectory and run the full pipeline using --flags parameters as follows:
 ```
 cd nextflow_scripts/
 ```
@@ -105,78 +186,9 @@ NCPUS=10
 ```
 To a value according to the computational capacity of your machine. 
 
+## IV) Running the whole pipeline via anaconda + binaries: 
 
-### Option 2: Installing dependences via anaconda (tested in Ubuntu 16.05, 18.04 and 20.04 LTS)
-- requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
-```
-git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repository
-cd annotate_my_genomes                                         # enter repository
-conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
-conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda create --name annotate_my_genomes feelnc=0.2             # create environment
-conda activate annotate_my_genomes                             # load environment
-
-# Install packages
-conda install -c conda-forge -y parallel 
-conda install -c bioconda -y stringtie
-conda install -c bioconda -y gffcompare
-conda install -c bioconda -y gffread
-conda install -c bioconda -y gmap
-conda install -c bioconda -y bedtools
-conda install -c bioconda -y emboss
-conda install -c bioconda -y clustalo
-conda install -c bioconda -y minimap2
-conda install -c bioconda -y transdecoder
-conda install -c bioconda -y seqkit
-conda install -c conda-forge -y coreutils
-conda install -c anaconda -y gawk
-conda install -c bioconda -y perl-local-lib
-conda install -c anaconda -y pandas
-
-bash makefile.sh                                               # make  & install
-```
-- Copy binaries to ```/usr/local/bin```
-```
-sudo cp ./bin/* /usr/local/bin/
-```
-
-Also install (not through conda):
-- ```sed``` editor. Comes by default with Linux/Ubuntu distros
-- ```ncbi-blast+``` version equal or higher than v2.7.1. To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#5-installing-up-to-date-ncbi-blast-version-v271
-- ```SAMtools``` . To install it, see here: https://github.com/cfarkas/annotate_my_genomes/wiki#9-obtaining-and-installing-up-to-date-samtools-with-htslib-version--19
-
-After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
-```
-# To activate this environment, use
-#
-#     $ conda activate annotate_my_genomes
-#
-# To deactivate an active environment, use
-#
-#     $ conda deactivate
-```
-
-#### Notes: 
-
-- By activating annotate_my_genomes enviroment, all binaries in the annotate_my_genomes repository can be executed.
-- To install optional programs for downstream analysis, please see here: https://github.com/cfarkas/annotate_my_genomes/wiki#optional-dependences-to-run-all-the-downstream-analysis
-
-- Uninstall environment as follows: 
-```
-conda remove --name annotate_my_genomes --all
-```
-
-- Inside the repository, there is a file called gawn_config.sh. Optionally, edit and increase/decrease the number of cpus for blast processing:
-```
-NCPUS=10
-```
-To a value according to the computational capacity of your machine. 
-
-### Option 3: Without using conda, program by program:
-
-- see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
-
-## III) Quickstart (Running the test)
+### 1) Quickstart (Running the test)
 
 - Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. 
 - Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file), gawn_config.sh file (check NCPUS for blast, default = 10), number of threads for text processing (20 for this example) and the output folder. 
@@ -196,7 +208,7 @@ mkdir output2
 ./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output2
 ```
 
-## IV) Simplest usage
+## 2) Simplest usage
 (Optional) Edit NCPUS value in ```gawn_config.sh``` file inside the repository. Default is 10
 - As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
 
@@ -208,7 +220,7 @@ mkdir output1
 - ```final_annotated.gtf``` (located in output1/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 - To produce ```target.gtf``` assembly, check stringtie parameters here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
-## V) Adding NCBI annotations to increase annotation of transcripts
+## 3) Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
@@ -224,7 +236,7 @@ mkdir output3
 ./genome-download mm10            
 ./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
 ```
-## VI) Post processing add-ncbi-annotation outputs
+## 4) Post processing add-ncbi-annotation outputs
 
 If ```stringtie.gtf``` (as an example of input GTF) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
 
@@ -250,11 +262,11 @@ LOC100857209	XM_015272533.2	x	STRG.16904	STRG.16904.1	3	0.099526	0.386921	Model	
 LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	LOC112530844	olfactory receptor 14A16-like	XP_025001148.1			aaatcagcgggagacaagtctcatgctttcatgatcaacaagtctcagctttattgAAGCACACGCAGGCATTTATACGATAGTTAATGAGCTACTACATATGCCAAATTGGGTTCTCTTATTGGTTAGTTCTTTACGTGAGAAAGTAACCTTCAACGCTAGATACCGTGACAGTCCCGTGATGAATGCCCGATTGTTTACCGCATACCACTCAATTTTCTTAACTGCAGCATGTTcttatcacttccttgctcctgagtGAGGGCAGCACGACCTTGCCTGGTTTAATGAGCAGGGCCCTATctccttaccagctgcatcccatCATGGCCCCTCTCCCGGAGCCAGTGCTCCGGGTCCCAAAAGCTCTCCACACTTCCCCCGTTTTCTTTTGGTACGAGCCAGGTTGTATGAATCGCATCTTGAACCACCTTTTGCTAGCATTACAGTAAACAAAGCATGATTATCAGCATACCAATCACTATCTATAAGAATACACTAGATTTATgttacacacttctacaaagcattccttgtcagtaaactaacagtaaagactacacagcacaccagtattaactacagtttcaatatcccgatgaataaaataccacagtccCCACTCTGGATCAACCACTGTACCTGACCCCCACAATTAGTGCGCTTCTGAGTCTCATAACCGccaattgctcctggcagttcccagtgtCCAAGAGACCTTtctgatgagatgttttctgcaatCTGCTAAGGGAATACCAGTCGCAGCTCAGGAGTCACGGCACTGTATATGATGTCTTGCACACCATGCGGCTATCGCTCGCCGGAGTCGCCGTTGTTGTCATCGGGTTGAGATGGGTTGTTGATGTTCGGGGCTGGCTTAgtccatttactgggaacccataatgggccagatcctgtggAAACACAGCTCTCTCCTGGaagcctcccatgatgtttacaaaattccTATTGATTCCTAATTCactcaaagtttccacaaacccTTAACACCGTACagtgatattgttcagttataaacacttgggaacagatctcacagaagcttgTCCATGTTCCCTTACACGCTTCCATgcaatcagaacacagtactagATAAACAGGTtgacactcattccctgaaaggaacacatctcactcacaccacactcactctgacatttagaacaaaaaacatAGTTTATACATAACccacaatgctgacgacgtcttttAGCTTGTATCTTAATAACACTAGTGCATTAGTCAATTAGTTGCAATtcctaccccagccggcaatctaacctgtgagctcacgtatctcggggggggggggggaagcaggcacgctccttcataccctgcgtaggacgtctcctcacgccttacgggcacccccttttctatacacatacctgaTACACcaatggatggtccttgtctgtccctgcagtgatcgggtgaggaagggagaccttccaagaaatcttggggcgcgccaaaggtgtcccctctctcaatCGATCCCGCAGCCGAACAGAGCGGATCTATTCTCGTTGCAAAATTGAGTTGtagaaatcagaccctatatccggtaaggatatagagcaggcatgcGTCTATTGATGTCTATTGAtagtgcaagggggatcactccacctaacttgcacaccgtcaggagaaattgtactatagatataggtcaaactaatacataaccaatagttgacaggaattcagatacattttcattacgtccctgaaagacacattttcatgcagtataatgagacagaagaacagagggtAGTGCTGGCGCAGTTCTCATaatttgcagttgcttgcagcttgactcacagcacctggcacagcggtctctatcacagctctgcattcctttcgcctactcccatcattgttctgtgtgagacagtgatccatagcagctgttttacttgcactgacccagggggagaaaaacatgacctcgCTGGGTCAGCCGTCCATCCACAATTTCCCTGTTCTACTATTGCCTGGCCTGTGGGTGAGTTTGGGATACCCGTACTGTGTTTTACTCCCCATGTTTGCAGAAACTCCCCAAGCCTACGACTAGTGTAGGCTGGGccattgtctgtttttattcGTAGTGATATACCCATAACTGCAAAGCAACAACTGAGATGCTTTTCTACATACAtagccttttctccaggttgagcGGTGGCCCACATAAGATGACTATATGTATCTATAGACACGTGTACATATTTCAGCTGCCCGAACTCACCCACATGCATCACATCCATCTGCCTATTTTCGTTAGCTCTAAGTCCCCTGGGGTTAACTCCTAGCCCGAGACCCATACTGCCATTATGGTGGCTGCACACTGGGCACGATCTAACAATTACCTTAGCATCCTCATATGTTATCTGATATTCCCTTCTTAGCCCCTTGGCATTCTGGTGAAACATAGAGTACGCCTCTCGGGCCAGGACATGCCGGGAGACTAAAGGTCTCTGCGCCAGTGACACCAAGCGATCAGCTCTCGCATTTCCCTCTCCCAAGTCTATCTCCCATTTATGACCTCGAACATGTATTACTGCATATGAGTGCTCCCTAATtctgattgctctctgcaactgcacgAACAGCTTGTACAGCCGCcgattctgcacttcctttatgTAGGCTTCCTCTATTTGGTGGCATACTCCAGCTACATAAAGGGAGTCGGTGACCACATTAAGGGGGCCGATTAAGTTCATCATGGCCCATACAACGGCCACCAGCTCCAATGTTTGCAATAAGTCCTTATCATCGTCTGCAATGAGGTGATGTCTCCAGGAGCCgccctgctgccaggtcactgctgctgttctagacTTCTGTCCCGCATCCGTGTAAGCCGTGATTGTGTTCTGCAAGGGCGTCTCATGCTGCTTTGGTATCCGGAGCCAACTCCATTGACCAATCCAATGTAGCGGCACGTTCGGAATCTTTTCCACTGAAACCGTACTTCCAGCTCCTAAGAGAGCATCCTGTAACTCTGGACTATGCTGCACATACCATGTCAGAGTGTCCTTCTGCATTGGCAGCTGTACACACACAGGCTCCATACCTATGATCTGCAGGGTACGTTCTCGCCCTTTcttaatcacttctgccaggagttcagttttttgaagaagtgtttttgattgctgcagtgagggacagATCCACTCTAGTACCCATACctcccccgttttctttttagattgtgCCAACGCTCCTAAAAGGTACTTTGGTCCATACCATACCATAACCTGTATGGGGAGGTCAGGGTCACGTCTCCGAACACTGCCGTGTATAATGCAGTCCATAATCTGTTGTAGTAGACGTTTGTGCTGCGTTGTCACCGTTACAGGCTGGGCCGGGTCAGTGCCCTGTAACAAAGGTCGCAACGACTCTAAGAGTTCGTTTGGGATGCCCACCACAGGGCTCAACCACTTTAAGTCCCCCAGTAACCTTTGGGCATCATGTAGAGTCTCTAGTTTAGTATCcagttgcagtttctgtggggTTACTATCGTGTTAGTCAGTGTCCATCCTAAGTACTTCCGGGGCGCGGAGAGTTGTACCTTTTCAGGGGCAAACATAAGTTCTTCCCTATTTAGGGTCTTTTCTATTTGCCaaatttgttcctgtgtgaaggcCTCTGGCTGGGCAAAAAGGATGTCCTCCATGTAATGATAAAtgaccatttgtttccattctcgCCGGAGTGGTTGTAGAGCATGATCGACATATAGTTGACATCGCGTGGGGCTATTTTTCATCCTTTGAGGTAATACTGTCCATTCAAAACGTTGATCAGGGTGTTCTCGATTCAATGCAGGCAATGTGAAGGCAAATCGTTTAGTGTCCTGAGGGTGCAGGGTAATAGTaaagaaacagtcctttaaGTCACTAATTAGTAATGGCCAATTGTAAGGTAGCATGGCAGGATTAGGCAGGGCGGGTTGAAGTGCCCCCAGTTGAGAGAGCACATTGTGGCCAATTAAGCATTGAACAGTGGGGGGTAGAGGTGCCACCGAGACAGAGGTATGGACTACTTGTTCATCAAGGTGGATTTGCAGGGGAGGTGACTTTTTCGCTAAGGATAGTCCACCTGTACCCGTCACTGTGGCTATGGCCGCTTGCAGTGGCCATTGAGGCGGCCAAATTTCTGGGCTCAATATGCTGTTGTCGGCCCCTGTATCTAATAGACCttgaagtttgatttcttcctctctgtgtttAAGTGTCACTGGTTTTTTAGGTCGATCATGCAAATTTAGTGATAGCAATGCTAAGTCCCCTGAGGAGCCAAACCCTTGCTCCCCTCGGGGAGACGATTGACACGGTGTTAAGGCTTTGGTCAATTGCTCTAGGGGTACTAACTGCGCTATCCGTTGccctttctcaatttttattggAGGAAACGGGGTGTATACCATAATCTGGATCTCACCCTGAAAGTCCGCATCTATTACCCCAGGGAGGACAAAAAGTCCGAGCATCGATGCTGAAGAACGCCCCAATAAAAGGGCCCCAACAGCGGTTCCATTTATCATTACTGGTCCCCTGATCCCTGTAGACACCCGCTCAGGTTTTGTGGTCATTAAGGTCGTGGTCACTGCGGCTGCCAAGTCCAAGCCGAGGCTTCCTGGTGTGGCTgattgcagggctgctgctggctggaaacGGCTACTTGTGTCTGTGCGTGGCCGTCGTTTCTTTCTCGCGCTGGGCTGGGGGTTTCCTGACCGGCGTCGACAGGCATTGGTATTGTGGTTGTCCATACGACATGTGTGACACCATGAACCGGTGGTTTGACACTGACGACGCATATGTCCCATGCCGCCACAGCGATAGCATTTGATGCGACCAGCAACAGGCGATCTCGGGCCTAAATTTGTTATCGCAGACGCTTGTAAGGATGCAAGAGCTGCTAGCACTTGATTGTGAGAGGCCTCAGCTTGCGCCTTTAAACTTGCCCCTAACTCCTTAATAGCCTCAATCAGAAATGCTTGGGGCCCGACTGGCACGCTTGATagcttttccagtgcctcttcAATAGTCCAATTACTCCTCAAAGTACTCAGAGTACTACGTGCTGTTGAATTACAATTTTGGAGCGCGCATTGTTTTAACATTACTCCTCTCATATACTCTGGCACCCCTGCTTTTTCAATAGCCCCGGCTACCTTATCTATGAATGCCCCAAAGTCCTCATCTCTACCTTGTCGGATCCCCATATAAAATGGCAATCCATCAGGCACCTTAATCTTGTCCATGGCCTGTCTAGCTAAATACATCGTTTCTCGACATTTATCTGGCCCTAATAATGCTTGGGCTTGTGTTCTGAAAAAAGGCCCTAGCCCTAAGAGTTCTTCGATAGTTACACCATGTAGTGGGTCTCCCGGCTGCCTAGCCTTTGAGACACTCTGATGGCACAGTTCTTGCCAATATGCattaaacaacagctgttgATGTTGTGAAGAGATCAATTTTGCTATTGCCCGACAATCGGATGGCAGCAATATCTGCGTACTCCAAATATAATCCAATATCTGCTTAGCTGGCTCGCTTTTTACCCCAAACTGACTAACTGTAGATCGTAGCTGCGATAATAATTTCCAATCTAAAGCTGTGATGGTGGCCTGCATCCCTCCCGCAGGATTAGAGGCATATATCACTGGAAACGCCATGTGCCGCACGGCCTCC
 ```
 
-## VII) Annotate and identify homologs in novel proteins from transcriptome
+## V) Annotate and identify homologs in novel proteins from transcriptome
 
 - See this example: https://github.com/cfarkas/annotate_my_genomes/wiki#5-annotate-and-identify-homologs-in-novel-proteins-from-transcriptome
 
-## VIII Annotation of BRAKER2 / TSEBRA gtf output
+## VI Annotation of BRAKER2 / TSEBRA gtf output
 
 - The output ```braker.gtf``` from BRAKER2 pipeline (https://github.com/Gaius-Augustus/BRAKER) or ```tsebra.gtf``` from TSEBRA pipeline (https://github.com/Gaius-Augustus/TSEBRA) can be annotated using a few tools before running the pipeline.
 
