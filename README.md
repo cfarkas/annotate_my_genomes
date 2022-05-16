@@ -145,7 +145,83 @@ To a value according to the computational capacity of your machine.
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
-## III) Running the whole pipeline via nextflow (recommended)
+## III) Running the whole pipeline via anaconda + binaries: 
+
+### A) Quickstart (Running the test)
+
+- Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. 
+- Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file), gawn_config.sh file (check NCPUS for blast, default = 10), number of threads for text processing (20 for this example) and the output folder. 
+
+Go to ```annotate_my_genomes/test``` directory and execute the following:
+
+```
+# Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
+./genome-download galGal6        
+
+# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads:
+mkdir output1
+./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output1
+
+# Include NCBI annptations on stringtie_chr33.gtf (provided file) with 20 threads:
+mkdir output2
+./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output2
+```
+
+## B) Simplest usage
+(Optional) Edit NCPUS value in ```gawn_config.sh``` file inside the repository. Default is 10
+- As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
+
+```
+mkdir output1
+./genome-download galGal6          
+./annotate-my-genomes -a /path/to/target.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
+```
+- ```final_annotated.gtf``` (located in output1/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
+- To produce ```target.gtf``` assembly, check stringtie parameters here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
+
+## C) Adding NCBI annotations to increase annotation of transcripts
+Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
+- Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
+```
+mkdir output2
+./genome-download galGal6         
+./add-ncbi-annotation -a /path/to/target.gtf -n /path/to/galGal6_ncbiRefSeq.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output2
+```
+- ```final_annotated.gtf``` (located in output2/) will contained the merged NCBI-updated annotation (in UCSC coordinates).
+
+As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
+```
+mkdir output3
+./genome-download mm10            
+./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
+```
+## D) Post processing add-ncbi-annotation outputs
+
+If ```stringtie.gtf``` (as an example of input GTF) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
+
+- gffcompare.tmap (inside ```output_files``` subdirectory)
+- NCBI_transcripts.fa (inside ```gffcompare_outputs_NCBI``` subdirectory)
+
+By using isoform-identification pipeline, as follows: 
+
+```
+isoform-identification -m /path/to/gffcompare.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
+```
+In this example:
+- ```gffcompare.tmap``` correspond to the transcript map output from gffcompare
+- ```NCBI_transcripts.fa``` correspond to the transcripts sequences from ```stringtie.gtf```, in fasta format 
+- ```galGal6``` correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
+
+The outputs ```Ref_Transcript_Annotation.csv``` and ```Novel_Transcript_Annotation.csv``` files will contain detailed annotation of transcripts. Ref_Transcript_Annotation.csv should look like this:
+
+```
+ref_gene_id	ref_id	class_code	qry_gene_id	qry_id	num_exons	FPKM	TPM	Annotation Status	NCBI RefSeq Gene ID	Transcript Description	NCBI RefSeq Protein ID	Alternative Gene Name	RefSeq Transcript Info	cds_seq
+OR14J1L40	XM_025145345.1	x	STRG.16902	STRG.16902.1	3	0.089321	0.347251	Model	OR14J1L40	olfactory receptor 14J1-like 40	XP_025001113.1			AATTTCATTGGAATTAAATTTATTATACGTATGACAAACTGatatgaagaagaaacagaaacaccacATAAAATCTATCAGGCTTTTCCTAAATTTTCTGTAGTCTTGAGAGCATGATGAACATCTTTCTGATAGTGAAACCGGGTATGTTGGAGTATCTTCCTGAGGGAacccttgagctcctggttcctcatgctgtagatgagggggttcaaAGCTGGAGGCACCACTGTGTATAGAAATGACACCACCAGGTCCagagatggggaggagatggagggaggcttcaggtaggcaaacatggcagtgctgacaaacagggagagcacagccaggtgagggaggcacgtggagaaggttttgtgctgtccctgctcagagggcatcctcagcacggccctgaagatctgcacataggagaagagaatgaaagcaaagcaccCAGATGCTAAAGAGGCACTGACAATAAGAAGCCAAATGTCTTTGAGATAGGAGTGTGAGCaagagagcttgaggatctgggggatttcacagaagaactgatccacagcattgccttggcacagaggcagggaaaatgtattggcagtgtgcagcagggaattaaggacccccgtgccccaggcagctgctgccatggtggcacacgctctgctgcccagcagggtccggtagtgcaggggcttgcagatggcaac
+LOC100857209	XM_015272533.2	x	STRG.16904	STRG.16904.1	3	0.099526	0.386921	Model	LOC100857209	olfactory receptor 14A16-like	XP_015128019.2			catctgcagttcctgggcatggagtcctgttcagacTGCAGGAGATAATGATGAGTCGATACCATTCTCAGAGACACTCCTCCTGCAcactttgaaaatgcatttaactCCATAGCAtgagtttattttcatgagcttcAGAATCATGTAAGAAGTAGAAACTTAAGGAGCATTTAGTTTCCTATCATTTCCTAATCATATCCCAGGCTCCTGGattttttcctcataggagCTGTTTCCACATCTCTTTTCTttacccctaaccctaacttcTATGTTCTTCAACTTCTGTTAGAGAAATCTGTTTGATTGGAGGCTAAGTACATTATTCATGACTGCAGAGAATGACAATAAtttcagctggtgctgtcctttgggggaggagaggctgaaagcacatgAGGAGATTGTTCATATAACAGCAGACTGAGAAAGGTACAATTCAGGGTACTCAGAGATGTGTTCATATTTTCTGGCTCCcttcagatttctgcctccaatccttttcccttctcttagggtataaaagaaaaatccctgccctgtctctcctcttgcaaagAGGAGCAAACACCTTTGGAAACACCCTATGGTGCAGCtgtagctgtgatACCCCTGGCTCAGGCAgaagctgtggcagcagaaggccccttCCCTGCCGGGGGGCttcttccccccacacgtctccctgcagcgccctgggcagctccccgggcaggctgagtgctgagcctggcaggcggcagagtccctgccccggcacacagcccctggggcacagcagggaccctgctctgcactacagccctgggcacccggctgcacccaaacagcacagcctgcagccgtcctgggacacgcagccctcagggctgtgctctgatgctgcagcacagaagcccTCATCTGGAACAGTAGTCTTTTTCCATAGCAAGGAAACATGAAGTACTTTCAGCCAGATCTGCTATGGGATATCCCTGATTCAGTGATCCCTCCTGGAAAAACAGCTTCATTGCCTACTGCAAGAGACTTACCCTGTCAAGCGCTGTGAGCAAtgctcctccagtgagctcacatCCTACTCACACTGTACACATCCTGtaatctctttctcttttctcttctatcTTCATGTCACCTGCAGATCATGTCTatagccctgctgtgctgtacagaagagctgctcctgtgcaCAGCTGTCTCTCCGCAGCGCTGCCTGCTTTTatgagctccctgtgtcccaggagcctggcccagctcagcagc
+LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	LOC112530844	olfactory receptor 14A16-like	XP_025001148.1			aaatcagcgggagacaagtctcatgctttcatgatcaacaagtctcagctttattgAAGCACACGCAGGCATTTATACGATAGTTAATGAGCTACTACATATGCCAAATTGGGTTCTCTTATTGGTTAGTTCTTTACGTGAGAAAGTAACCTTCAACGCTAGATACCGTGACAGTCCCGTGATGAATGCCCGATTGTTTACCGCATACCACTCAATTTTCTTAACTGCAGCATGTTcttatcacttccttgctcctgagtGAGGGCAGCACGACCTTGCCTGGTTTAATGAGCAGGGCCCTATctccttaccagctgcatcccatCATGGCCCCTCTCCCGGAGCCAGTGCTCCGGGTCCCAAAAGCTCTCCACACTTCCCCCGTTTTCTTTTGGTACGAGCCAGGTTGTATGAATCGCATCTTGAACCACCTTTTGCTAGCATTACAGTAAACAAAGCATGATTATCAGCATACCAATCACTATCTATAAGAATACACTAGATTTATgttacacacttctacaaagcattccttgtcagtaaactaacagtaaagactacacagcacaccagtattaactacagtttcaatatcccgatgaataaaataccacagtccCCACTCTGGATCAACCACTGTACCTGACCCCCACAATTAGTGCGCTTCTGAGTCTCATAACCGccaattgctcctggcagttcccagtgtCCAAGAGACCTTtctgatgagatgttttctgcaatCTGCTAAGGGAATACCAGTCGCAGCTCAGGAGTCACGGCACTGTATATGATGTCTTGCACACCATGCGGCTATCGCTCGCCGGAGTCGCCGTTGTTGTCATCGGGTTGAGATGGGTTGTTGATGTTCGGGGCTGGCTTAgtccatttactgggaacccataatgggccagatcctgtggAAACACAGCTCTCTCCTGGaagcctcccatgatgtttacaaaattccTATTGATTCCTAATTCactcaaagtttccacaaacccTTAACACCGTACagtgatattgttcagttataaacacttgggaacagatctcacagaagcttgTCCATGTTCCCTTACACGCTTCCATgcaatcagaacacagtactagATAAACAGGTtgacactcattccctgaaaggaacacatctcactcacaccacactcactctgacatttagaacaaaaaacatAGTTTATACATAACccacaatgctgacgacgtcttttAGCTTGTATCTTAATAACACTAGTGCATTAGTCAATTAGTTGCAATtcctaccccagccggcaatctaacctgtgagctcacgtatctcggggggggggggggaagcaggcacgctccttcataccctgcgtaggacgtctcctcacgccttacgggcacccccttttctatacacatacctgaTACACcaatggatggtccttgtctgtccctgcagtgatcgggtgaggaagggagaccttccaagaaatcttggggcgcgccaaaggtgtcccctctctcaatCGATCCCGCAGCCGAACAGAGCGGATCTATTCTCGTTGCAAAATTGAGTTGtagaaatcagaccctatatccggtaaggatatagagcaggcatgcGTCTATTGATGTCTATTGAtagtgcaagggggatcactccacctaacttgcacaccgtcaggagaaattgtactatagatataggtcaaactaatacataaccaatagttgacaggaattcagatacattttcattacgtccctgaaagacacattttcatgcagtataatgagacagaagaacagagggtAGTGCTGGCGCAGTTCTCATaatttgcagttgcttgcagcttgactcacagcacctggcacagcggtctctatcacagctctgcattcctttcgcctactcccatcattgttctgtgtgagacagtgatccatagcagctgttttacttgcactgacccagggggagaaaaacatgacctcgCTGGGTCAGCCGTCCATCCACAATTTCCCTGTTCTACTATTGCCTGGCCTGTGGGTGAGTTTGGGATACCCGTACTGTGTTTTACTCCCCATGTTTGCAGAAACTCCCCAAGCCTACGACTAGTGTAGGCTGGGccattgtctgtttttattcGTAGTGATATACCCATAACTGCAAAGCAACAACTGAGATGCTTTTCTACATACAtagccttttctccaggttgagcGGTGGCCCACATAAGATGACTATATGTATCTATAGACACGTGTACATATTTCAGCTGCCCGAACTCACCCACATGCATCACATCCATCTGCCTATTTTCGTTAGCTCTAAGTCCCCTGGGGTTAACTCCTAGCCCGAGACCCATACTGCCATTATGGTGGCTGCACACTGGGCACGATCTAACAATTACCTTAGCATCCTCATATGTTATCTGATATTCCCTTCTTAGCCCCTTGGCATTCTGGTGAAACATAGAGTACGCCTCTCGGGCCAGGACATGCCGGGAGACTAAAGGTCTCTGCGCCAGTGACACCAAGCGATCAGCTCTCGCATTTCCCTCTCCCAAGTCTATCTCCCATTTATGACCTCGAACATGTATTACTGCATATGAGTGCTCCCTAATtctgattgctctctgcaactgcacgAACAGCTTGTACAGCCGCcgattctgcacttcctttatgTAGGCTTCCTCTATTTGGTGGCATACTCCAGCTACATAAAGGGAGTCGGTGACCACATTAAGGGGGCCGATTAAGTTCATCATGGCCCATACAACGGCCACCAGCTCCAATGTTTGCAATAAGTCCTTATCATCGTCTGCAATGAGGTGATGTCTCCAGGAGCCgccctgctgccaggtcactgctgctgttctagacTTCTGTCCCGCATCCGTGTAAGCCGTGATTGTGTTCTGCAAGGGCGTCTCATGCTGCTTTGGTATCCGGAGCCAACTCCATTGACCAATCCAATGTAGCGGCACGTTCGGAATCTTTTCCACTGAAACCGTACTTCCAGCTCCTAAGAGAGCATCCTGTAACTCTGGACTATGCTGCACATACCATGTCAGAGTGTCCTTCTGCATTGGCAGCTGTACACACACAGGCTCCATACCTATGATCTGCAGGGTACGTTCTCGCCCTTTcttaatcacttctgccaggagttcagttttttgaagaagtgtttttgattgctgcagtgagggacagATCCACTCTAGTACCCATACctcccccgttttctttttagattgtgCCAACGCTCCTAAAAGGTACTTTGGTCCATACCATACCATAACCTGTATGGGGAGGTCAGGGTCACGTCTCCGAACACTGCCGTGTATAATGCAGTCCATAATCTGTTGTAGTAGACGTTTGTGCTGCGTTGTCACCGTTACAGGCTGGGCCGGGTCAGTGCCCTGTAACAAAGGTCGCAACGACTCTAAGAGTTCGTTTGGGATGCCCACCACAGGGCTCAACCACTTTAAGTCCCCCAGTAACCTTTGGGCATCATGTAGAGTCTCTAGTTTAGTATCcagttgcagtttctgtggggTTACTATCGTGTTAGTCAGTGTCCATCCTAAGTACTTCCGGGGCGCGGAGAGTTGTACCTTTTCAGGGGCAAACATAAGTTCTTCCCTATTTAGGGTCTTTTCTATTTGCCaaatttgttcctgtgtgaaggcCTCTGGCTGGGCAAAAAGGATGTCCTCCATGTAATGATAAAtgaccatttgtttccattctcgCCGGAGTGGTTGTAGAGCATGATCGACATATAGTTGACATCGCGTGGGGCTATTTTTCATCCTTTGAGGTAATACTGTCCATTCAAAACGTTGATCAGGGTGTTCTCGATTCAATGCAGGCAATGTGAAGGCAAATCGTTTAGTGTCCTGAGGGTGCAGGGTAATAGTaaagaaacagtcctttaaGTCACTAATTAGTAATGGCCAATTGTAAGGTAGCATGGCAGGATTAGGCAGGGCGGGTTGAAGTGCCCCCAGTTGAGAGAGCACATTGTGGCCAATTAAGCATTGAACAGTGGGGGGTAGAGGTGCCACCGAGACAGAGGTATGGACTACTTGTTCATCAAGGTGGATTTGCAGGGGAGGTGACTTTTTCGCTAAGGATAGTCCACCTGTACCCGTCACTGTGGCTATGGCCGCTTGCAGTGGCCATTGAGGCGGCCAAATTTCTGGGCTCAATATGCTGTTGTCGGCCCCTGTATCTAATAGACCttgaagtttgatttcttcctctctgtgtttAAGTGTCACTGGTTTTTTAGGTCGATCATGCAAATTTAGTGATAGCAATGCTAAGTCCCCTGAGGAGCCAAACCCTTGCTCCCCTCGGGGAGACGATTGACACGGTGTTAAGGCTTTGGTCAATTGCTCTAGGGGTACTAACTGCGCTATCCGTTGccctttctcaatttttattggAGGAAACGGGGTGTATACCATAATCTGGATCTCACCCTGAAAGTCCGCATCTATTACCCCAGGGAGGACAAAAAGTCCGAGCATCGATGCTGAAGAACGCCCCAATAAAAGGGCCCCAACAGCGGTTCCATTTATCATTACTGGTCCCCTGATCCCTGTAGACACCCGCTCAGGTTTTGTGGTCATTAAGGTCGTGGTCACTGCGGCTGCCAAGTCCAAGCCGAGGCTTCCTGGTGTGGCTgattgcagggctgctgctggctggaaacGGCTACTTGTGTCTGTGCGTGGCCGTCGTTTCTTTCTCGCGCTGGGCTGGGGGTTTCCTGACCGGCGTCGACAGGCATTGGTATTGTGGTTGTCCATACGACATGTGTGACACCATGAACCGGTGGTTTGACACTGACGACGCATATGTCCCATGCCGCCACAGCGATAGCATTTGATGCGACCAGCAACAGGCGATCTCGGGCCTAAATTTGTTATCGCAGACGCTTGTAAGGATGCAAGAGCTGCTAGCACTTGATTGTGAGAGGCCTCAGCTTGCGCCTTTAAACTTGCCCCTAACTCCTTAATAGCCTCAATCAGAAATGCTTGGGGCCCGACTGGCACGCTTGATagcttttccagtgcctcttcAATAGTCCAATTACTCCTCAAAGTACTCAGAGTACTACGTGCTGTTGAATTACAATTTTGGAGCGCGCATTGTTTTAACATTACTCCTCTCATATACTCTGGCACCCCTGCTTTTTCAATAGCCCCGGCTACCTTATCTATGAATGCCCCAAAGTCCTCATCTCTACCTTGTCGGATCCCCATATAAAATGGCAATCCATCAGGCACCTTAATCTTGTCCATGGCCTGTCTAGCTAAATACATCGTTTCTCGACATTTATCTGGCCCTAATAATGCTTGGGCTTGTGTTCTGAAAAAAGGCCCTAGCCCTAAGAGTTCTTCGATAGTTACACCATGTAGTGGGTCTCCCGGCTGCCTAGCCTTTGAGACACTCTGATGGCACAGTTCTTGCCAATATGCattaaacaacagctgttgATGTTGTGAAGAGATCAATTTTGCTATTGCCCGACAATCGGATGGCAGCAATATCTGCGTACTCCAAATATAATCCAATATCTGCTTAGCTGGCTCGCTTTTTACCCCAAACTGACTAACTGTAGATCGTAGCTGCGATAATAATTTCCAATCTAAAGCTGTGATGGTGGCCTGCATCCCTCCCGCAGGATTAGAGGCATATATCACTGGAAACGCCATGTGCCGCACGGCCTCC
+```
+
+## IV) Running the whole pipeline via nextflow (recommended)
 
 2) Inside ```annotate_my_genomes``` folder, enter into ```nextflow_scripts``` subdirectory and run the full pipeline using --flags parameters as follows:
 ```
@@ -171,7 +247,7 @@ nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_an
 ```
 2.3) isoform-identification (i.e.: outputting in current directory)
 ```
-nextflow run isoform-identification.nf --NCBI_tmap /path/to/NCBI_compare.stringtie.gtf.tmap \
+nextflow run isoform-identification.nf --NCBI_tmap /path/to/gffcompare.tmap \
 --NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 \
 --conda /path/to/annotate_my_genomes/environment.yml --outdir ./
 ```
@@ -186,81 +262,6 @@ NCPUS=10
 ```
 To a value according to the computational capacity of your machine. 
 
-## IV) Running the whole pipeline via anaconda + binaries: 
-
-### 1) Quickstart (Running the test)
-
-- Inside test folder, run the pipeline with a provided set of transcripts from chromosome 33, Gallus gallus genome version "6", in GTF format. 
-- Users need to specify the stringtie output (GTF format), UCSC reference genome (GTF annotation and fasta file), gawn_config.sh file (check NCPUS for blast, default = 10), number of threads for text processing (20 for this example) and the output folder. 
-
-Go to ```annotate_my_genomes/test``` directory and execute the following:
-
-```
-# Download Gallus gallus v6 fasta assembly (non masked) with matched GTF files (UCSC/Ensembl)
-./genome-download galGal6        
-
-# Execute pipeline on stringtie_chr33.gtf (provided file) with 20 threads:
-mkdir output1
-./annotate-my-genomes -a stringtie_chr33.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output1
-
-# Include NCBI annptations on stringtie_chr33.gtf (provided file) with 20 threads:
-mkdir output2
-./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output2
-```
-
-## 2) Simplest usage
-(Optional) Edit NCPUS value in ```gawn_config.sh``` file inside the repository. Default is 10
-- As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
-
-```
-mkdir output1
-./genome-download galGal6          
-./annotate-my-genomes -a /path/to/target.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output1
-```
-- ```final_annotated.gtf``` (located in output1/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
-- To produce ```target.gtf``` assembly, check stringtie parameters here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
-
-## 3) Adding NCBI annotations to increase annotation of transcripts
-Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
-- Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
-```
-mkdir output2
-./genome-download galGal6         
-./add-ncbi-annotation -a /path/to/target.gtf -n /path/to/galGal6_ncbiRefSeq.gtf -r /path/to/galGal6.gtf -g /path/to/galGal6.fa -c /path/to/gawn_config.sh -t 20 -o /path/to/output2
-```
-- ```final_annotated.gtf``` (located in output2/) will contained the merged NCBI-updated annotation (in UCSC coordinates).
-
-As example for mouse genome, change galGal6 prefix to mm10. Using 30 threads for processing "mouse.gtf" assembly:
-```
-mkdir output3
-./genome-download mm10            
-./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
-```
-## 4) Post processing add-ncbi-annotation outputs
-
-If ```stringtie.gtf``` (as an example of input GTF) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
-
-- gffcompare.tmap (inside ```output_files``` subdirectory)
-- NCBI_transcripts.fa (inside ```gffcompare_outputs_NCBI``` subdirectory)
-
-By using isoform-identification pipeline, as follows: 
-
-```
-isoform-identification -m /path/to/gffcompare.tmap -t /path/to/NCBI_transcripts.fa -g galGal6
-```
-In this example:
-- ```gffcompare.tmap``` correspond to the transcript map output from gffcompare
-- ```NCBI_transcripts.fa``` correspond to the transcripts sequences from ```stringtie.gtf```, in fasta format 
-- ```galGal6``` correspond to the NCBI genome name (in this example, Gallus gallus 6 genome, galGal6). 
-
-The outputs ```Ref_Transcript_Annotation.csv``` and ```Novel_Transcript_Annotation.csv``` files will contain detailed annotation of transcripts. Ref_Transcript_Annotation.csv should look like this:
-
-```
-ref_gene_id	ref_id	class_code	qry_gene_id	qry_id	num_exons	FPKM	TPM	Annotation Status	NCBI RefSeq Gene ID	Transcript Description	NCBI RefSeq Protein ID	Alternative Gene Name	RefSeq Transcript Info	cds_seq
-OR14J1L40	XM_025145345.1	x	STRG.16902	STRG.16902.1	3	0.089321	0.347251	Model	OR14J1L40	olfactory receptor 14J1-like 40	XP_025001113.1			AATTTCATTGGAATTAAATTTATTATACGTATGACAAACTGatatgaagaagaaacagaaacaccacATAAAATCTATCAGGCTTTTCCTAAATTTTCTGTAGTCTTGAGAGCATGATGAACATCTTTCTGATAGTGAAACCGGGTATGTTGGAGTATCTTCCTGAGGGAacccttgagctcctggttcctcatgctgtagatgagggggttcaaAGCTGGAGGCACCACTGTGTATAGAAATGACACCACCAGGTCCagagatggggaggagatggagggaggcttcaggtaggcaaacatggcagtgctgacaaacagggagagcacagccaggtgagggaggcacgtggagaaggttttgtgctgtccctgctcagagggcatcctcagcacggccctgaagatctgcacataggagaagagaatgaaagcaaagcaccCAGATGCTAAAGAGGCACTGACAATAAGAAGCCAAATGTCTTTGAGATAGGAGTGTGAGCaagagagcttgaggatctgggggatttcacagaagaactgatccacagcattgccttggcacagaggcagggaaaatgtattggcagtgtgcagcagggaattaaggacccccgtgccccaggcagctgctgccatggtggcacacgctctgctgcccagcagggtccggtagtgcaggggcttgcagatggcaac
-LOC100857209	XM_015272533.2	x	STRG.16904	STRG.16904.1	3	0.099526	0.386921	Model	LOC100857209	olfactory receptor 14A16-like	XP_015128019.2			catctgcagttcctgggcatggagtcctgttcagacTGCAGGAGATAATGATGAGTCGATACCATTCTCAGAGACACTCCTCCTGCAcactttgaaaatgcatttaactCCATAGCAtgagtttattttcatgagcttcAGAATCATGTAAGAAGTAGAAACTTAAGGAGCATTTAGTTTCCTATCATTTCCTAATCATATCCCAGGCTCCTGGattttttcctcataggagCTGTTTCCACATCTCTTTTCTttacccctaaccctaacttcTATGTTCTTCAACTTCTGTTAGAGAAATCTGTTTGATTGGAGGCTAAGTACATTATTCATGACTGCAGAGAATGACAATAAtttcagctggtgctgtcctttgggggaggagaggctgaaagcacatgAGGAGATTGTTCATATAACAGCAGACTGAGAAAGGTACAATTCAGGGTACTCAGAGATGTGTTCATATTTTCTGGCTCCcttcagatttctgcctccaatccttttcccttctcttagggtataaaagaaaaatccctgccctgtctctcctcttgcaaagAGGAGCAAACACCTTTGGAAACACCCTATGGTGCAGCtgtagctgtgatACCCCTGGCTCAGGCAgaagctgtggcagcagaaggccccttCCCTGCCGGGGGGCttcttccccccacacgtctccctgcagcgccctgggcagctccccgggcaggctgagtgctgagcctggcaggcggcagagtccctgccccggcacacagcccctggggcacagcagggaccctgctctgcactacagccctgggcacccggctgcacccaaacagcacagcctgcagccgtcctgggacacgcagccctcagggctgtgctctgatgctgcagcacagaagcccTCATCTGGAACAGTAGTCTTTTTCCATAGCAAGGAAACATGAAGTACTTTCAGCCAGATCTGCTATGGGATATCCCTGATTCAGTGATCCCTCCTGGAAAAACAGCTTCATTGCCTACTGCAAGAGACTTACCCTGTCAAGCGCTGTGAGCAAtgctcctccagtgagctcacatCCTACTCACACTGTACACATCCTGtaatctctttctcttttctcttctatcTTCATGTCACCTGCAGATCATGTCTatagccctgctgtgctgtacagaagagctgctcctgtgcaCAGCTGTCTCTCCGCAGCGCTGCCTGCTTTTatgagctccctgtgtcccaggagcctggcccagctcagcagc
-LOC112530844	XM_025145380.1	p	STRG.16906	STRG.16906.1	1	0.192245	0.747381	Model	LOC112530844	olfactory receptor 14A16-like	XP_025001148.1			aaatcagcgggagacaagtctcatgctttcatgatcaacaagtctcagctttattgAAGCACACGCAGGCATTTATACGATAGTTAATGAGCTACTACATATGCCAAATTGGGTTCTCTTATTGGTTAGTTCTTTACGTGAGAAAGTAACCTTCAACGCTAGATACCGTGACAGTCCCGTGATGAATGCCCGATTGTTTACCGCATACCACTCAATTTTCTTAACTGCAGCATGTTcttatcacttccttgctcctgagtGAGGGCAGCACGACCTTGCCTGGTTTAATGAGCAGGGCCCTATctccttaccagctgcatcccatCATGGCCCCTCTCCCGGAGCCAGTGCTCCGGGTCCCAAAAGCTCTCCACACTTCCCCCGTTTTCTTTTGGTACGAGCCAGGTTGTATGAATCGCATCTTGAACCACCTTTTGCTAGCATTACAGTAAACAAAGCATGATTATCAGCATACCAATCACTATCTATAAGAATACACTAGATTTATgttacacacttctacaaagcattccttgtcagtaaactaacagtaaagactacacagcacaccagtattaactacagtttcaatatcccgatgaataaaataccacagtccCCACTCTGGATCAACCACTGTACCTGACCCCCACAATTAGTGCGCTTCTGAGTCTCATAACCGccaattgctcctggcagttcccagtgtCCAAGAGACCTTtctgatgagatgttttctgcaatCTGCTAAGGGAATACCAGTCGCAGCTCAGGAGTCACGGCACTGTATATGATGTCTTGCACACCATGCGGCTATCGCTCGCCGGAGTCGCCGTTGTTGTCATCGGGTTGAGATGGGTTGTTGATGTTCGGGGCTGGCTTAgtccatttactgggaacccataatgggccagatcctgtggAAACACAGCTCTCTCCTGGaagcctcccatgatgtttacaaaattccTATTGATTCCTAATTCactcaaagtttccacaaacccTTAACACCGTACagtgatattgttcagttataaacacttgggaacagatctcacagaagcttgTCCATGTTCCCTTACACGCTTCCATgcaatcagaacacagtactagATAAACAGGTtgacactcattccctgaaaggaacacatctcactcacaccacactcactctgacatttagaacaaaaaacatAGTTTATACATAACccacaatgctgacgacgtcttttAGCTTGTATCTTAATAACACTAGTGCATTAGTCAATTAGTTGCAATtcctaccccagccggcaatctaacctgtgagctcacgtatctcggggggggggggggaagcaggcacgctccttcataccctgcgtaggacgtctcctcacgccttacgggcacccccttttctatacacatacctgaTACACcaatggatggtccttgtctgtccctgcagtgatcgggtgaggaagggagaccttccaagaaatcttggggcgcgccaaaggtgtcccctctctcaatCGATCCCGCAGCCGAACAGAGCGGATCTATTCTCGTTGCAAAATTGAGTTGtagaaatcagaccctatatccggtaaggatatagagcaggcatgcGTCTATTGATGTCTATTGAtagtgcaagggggatcactccacctaacttgcacaccgtcaggagaaattgtactatagatataggtcaaactaatacataaccaatagttgacaggaattcagatacattttcattacgtccctgaaagacacattttcatgcagtataatgagacagaagaacagagggtAGTGCTGGCGCAGTTCTCATaatttgcagttgcttgcagcttgactcacagcacctggcacagcggtctctatcacagctctgcattcctttcgcctactcccatcattgttctgtgtgagacagtgatccatagcagctgttttacttgcactgacccagggggagaaaaacatgacctcgCTGGGTCAGCCGTCCATCCACAATTTCCCTGTTCTACTATTGCCTGGCCTGTGGGTGAGTTTGGGATACCCGTACTGTGTTTTACTCCCCATGTTTGCAGAAACTCCCCAAGCCTACGACTAGTGTAGGCTGGGccattgtctgtttttattcGTAGTGATATACCCATAACTGCAAAGCAACAACTGAGATGCTTTTCTACATACAtagccttttctccaggttgagcGGTGGCCCACATAAGATGACTATATGTATCTATAGACACGTGTACATATTTCAGCTGCCCGAACTCACCCACATGCATCACATCCATCTGCCTATTTTCGTTAGCTCTAAGTCCCCTGGGGTTAACTCCTAGCCCGAGACCCATACTGCCATTATGGTGGCTGCACACTGGGCACGATCTAACAATTACCTTAGCATCCTCATATGTTATCTGATATTCCCTTCTTAGCCCCTTGGCATTCTGGTGAAACATAGAGTACGCCTCTCGGGCCAGGACATGCCGGGAGACTAAAGGTCTCTGCGCCAGTGACACCAAGCGATCAGCTCTCGCATTTCCCTCTCCCAAGTCTATCTCCCATTTATGACCTCGAACATGTATTACTGCATATGAGTGCTCCCTAATtctgattgctctctgcaactgcacgAACAGCTTGTACAGCCGCcgattctgcacttcctttatgTAGGCTTCCTCTATTTGGTGGCATACTCCAGCTACATAAAGGGAGTCGGTGACCACATTAAGGGGGCCGATTAAGTTCATCATGGCCCATACAACGGCCACCAGCTCCAATGTTTGCAATAAGTCCTTATCATCGTCTGCAATGAGGTGATGTCTCCAGGAGCCgccctgctgccaggtcactgctgctgttctagacTTCTGTCCCGCATCCGTGTAAGCCGTGATTGTGTTCTGCAAGGGCGTCTCATGCTGCTTTGGTATCCGGAGCCAACTCCATTGACCAATCCAATGTAGCGGCACGTTCGGAATCTTTTCCACTGAAACCGTACTTCCAGCTCCTAAGAGAGCATCCTGTAACTCTGGACTATGCTGCACATACCATGTCAGAGTGTCCTTCTGCATTGGCAGCTGTACACACACAGGCTCCATACCTATGATCTGCAGGGTACGTTCTCGCCCTTTcttaatcacttctgccaggagttcagttttttgaagaagtgtttttgattgctgcagtgagggacagATCCACTCTAGTACCCATACctcccccgttttctttttagattgtgCCAACGCTCCTAAAAGGTACTTTGGTCCATACCATACCATAACCTGTATGGGGAGGTCAGGGTCACGTCTCCGAACACTGCCGTGTATAATGCAGTCCATAATCTGTTGTAGTAGACGTTTGTGCTGCGTTGTCACCGTTACAGGCTGGGCCGGGTCAGTGCCCTGTAACAAAGGTCGCAACGACTCTAAGAGTTCGTTTGGGATGCCCACCACAGGGCTCAACCACTTTAAGTCCCCCAGTAACCTTTGGGCATCATGTAGAGTCTCTAGTTTAGTATCcagttgcagtttctgtggggTTACTATCGTGTTAGTCAGTGTCCATCCTAAGTACTTCCGGGGCGCGGAGAGTTGTACCTTTTCAGGGGCAAACATAAGTTCTTCCCTATTTAGGGTCTTTTCTATTTGCCaaatttgttcctgtgtgaaggcCTCTGGCTGGGCAAAAAGGATGTCCTCCATGTAATGATAAAtgaccatttgtttccattctcgCCGGAGTGGTTGTAGAGCATGATCGACATATAGTTGACATCGCGTGGGGCTATTTTTCATCCTTTGAGGTAATACTGTCCATTCAAAACGTTGATCAGGGTGTTCTCGATTCAATGCAGGCAATGTGAAGGCAAATCGTTTAGTGTCCTGAGGGTGCAGGGTAATAGTaaagaaacagtcctttaaGTCACTAATTAGTAATGGCCAATTGTAAGGTAGCATGGCAGGATTAGGCAGGGCGGGTTGAAGTGCCCCCAGTTGAGAGAGCACATTGTGGCCAATTAAGCATTGAACAGTGGGGGGTAGAGGTGCCACCGAGACAGAGGTATGGACTACTTGTTCATCAAGGTGGATTTGCAGGGGAGGTGACTTTTTCGCTAAGGATAGTCCACCTGTACCCGTCACTGTGGCTATGGCCGCTTGCAGTGGCCATTGAGGCGGCCAAATTTCTGGGCTCAATATGCTGTTGTCGGCCCCTGTATCTAATAGACCttgaagtttgatttcttcctctctgtgtttAAGTGTCACTGGTTTTTTAGGTCGATCATGCAAATTTAGTGATAGCAATGCTAAGTCCCCTGAGGAGCCAAACCCTTGCTCCCCTCGGGGAGACGATTGACACGGTGTTAAGGCTTTGGTCAATTGCTCTAGGGGTACTAACTGCGCTATCCGTTGccctttctcaatttttattggAGGAAACGGGGTGTATACCATAATCTGGATCTCACCCTGAAAGTCCGCATCTATTACCCCAGGGAGGACAAAAAGTCCGAGCATCGATGCTGAAGAACGCCCCAATAAAAGGGCCCCAACAGCGGTTCCATTTATCATTACTGGTCCCCTGATCCCTGTAGACACCCGCTCAGGTTTTGTGGTCATTAAGGTCGTGGTCACTGCGGCTGCCAAGTCCAAGCCGAGGCTTCCTGGTGTGGCTgattgcagggctgctgctggctggaaacGGCTACTTGTGTCTGTGCGTGGCCGTCGTTTCTTTCTCGCGCTGGGCTGGGGGTTTCCTGACCGGCGTCGACAGGCATTGGTATTGTGGTTGTCCATACGACATGTGTGACACCATGAACCGGTGGTTTGACACTGACGACGCATATGTCCCATGCCGCCACAGCGATAGCATTTGATGCGACCAGCAACAGGCGATCTCGGGCCTAAATTTGTTATCGCAGACGCTTGTAAGGATGCAAGAGCTGCTAGCACTTGATTGTGAGAGGCCTCAGCTTGCGCCTTTAAACTTGCCCCTAACTCCTTAATAGCCTCAATCAGAAATGCTTGGGGCCCGACTGGCACGCTTGATagcttttccagtgcctcttcAATAGTCCAATTACTCCTCAAAGTACTCAGAGTACTACGTGCTGTTGAATTACAATTTTGGAGCGCGCATTGTTTTAACATTACTCCTCTCATATACTCTGGCACCCCTGCTTTTTCAATAGCCCCGGCTACCTTATCTATGAATGCCCCAAAGTCCTCATCTCTACCTTGTCGGATCCCCATATAAAATGGCAATCCATCAGGCACCTTAATCTTGTCCATGGCCTGTCTAGCTAAATACATCGTTTCTCGACATTTATCTGGCCCTAATAATGCTTGGGCTTGTGTTCTGAAAAAAGGCCCTAGCCCTAAGAGTTCTTCGATAGTTACACCATGTAGTGGGTCTCCCGGCTGCCTAGCCTTTGAGACACTCTGATGGCACAGTTCTTGCCAATATGCattaaacaacagctgttgATGTTGTGAAGAGATCAATTTTGCTATTGCCCGACAATCGGATGGCAGCAATATCTGCGTACTCCAAATATAATCCAATATCTGCTTAGCTGGCTCGCTTTTTACCCCAAACTGACTAACTGTAGATCGTAGCTGCGATAATAATTTCCAATCTAAAGCTGTGATGGTGGCCTGCATCCCTCCCGCAGGATTAGAGGCATATATCACTGGAAACGCCATGTGCCGCACGGCCTCC
-```
 
 ## V) Annotate and identify homologs in novel proteins from transcriptome
 
