@@ -259,8 +259,8 @@ process output_pipeline {
   '''
   echo ""
   printf "::: Moving results to the output directory :::\n"
-  cp Ref_Transcript_Annotation.csv "!{params.outdir}"
-  cp Novel_Transcript_Annotation.csv "!{params.outdir}"
+  mv Ref_Transcript_Annotation.csv "!{params.outdir}"
+  mv Novel_Transcript_Annotation.csv "!{params.outdir}"
   echo ""
   echo "------------------------------------------------------------"
   echo "------------------------------------------------------------"
