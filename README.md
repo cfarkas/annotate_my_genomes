@@ -151,10 +151,10 @@ To a value according to the computational capacity of your machine.
 ```
 cd nextflow_scripts/
 ```
-2.1) Run ```genome-download.nf``` (i.e : output galGal6 genome in working directory)
+2.1) Run ```genome-download.nf``` (i.e : output galGal6 genome)
 ```
 nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_genomes/environment.yml \
---outdir ./
+--outdir /path/to/output_folder/
 ```
 2.1) Run ```annotate-my-genomes.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#b-simplest-usage
 ```
