@@ -148,7 +148,7 @@ To a value according to the computational capacity of your machine.
 ## III) Running the whole pipeline via nextflow (recommended)
 
 - Inside ```annotate_my_genomes``` folder, enter into ```nextflow_scripts``` subdirectory and run the full pipeline using ```--flags``` parameters. 
-- NOTE: Users **must provide full paths to inputs in the command line**.  We recommed to split flags with "\" and run the pipeline as follows: 
+- NOTE: Users **must provide full paths to inputs in the command line**.  We recommed to split the flags with backslashes and run the pipeline as follows: 
 ```
 cd nextflow_scripts/
 ```
