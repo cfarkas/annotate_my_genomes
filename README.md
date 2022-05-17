@@ -147,33 +147,32 @@ To a value according to the computational capacity of your machine.
 
 ## III) Running the whole pipeline via nextflow (recommended)
 
-2) Inside ```annotate_my_genomes``` folder, enter into ```nextflow_scripts``` subdirectory and run the full pipeline using --flags parameters as follows:
+2) Inside ```annotate_my_genomes``` folder, enter into ```nextflow_scripts``` subdirectory and run the full pipeline using ```--flags``` parameters. NOTE: Users <h6>must</h6> provide full paths to inputs in the command line. 
 ```
 cd nextflow_scripts/
 ```
 2.1) Run ```genome-download.nf``` (i.e : output galGal6 genome)
 ```
-nextflow run genome-download.nf --genome galGal6 --conda /path/to/annotate_my_genomes/environment.yml \
---outdir /path/to/output_folder/
+nextflow run genome-download.nf --genome galGal6 --conda ./environment.yml --outdir /path/to/output_folder/
 ```
 2.2) Run ```annotate-my-genomes.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#b-simplest-usage
 ```
 nextflow run annotate-my-genomes.nf --stringtie /path/to/stringtie.gtf --ref_annotation /path/to/galGal6.gtf \ 
 --genome /path/to/galGal6.fa  --config /path/to/annotate_my_genomes/gawn_config.sh \
---threads 20 --conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+--threads 20 --conda ./environment.yml --outdir /path/to/output_folder/
 ```
 2.3) Run ```add-ncbi-annotation.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#c-adding-ncbi-annotations-to-increase-annotation-of-transcripts
 ```
 nextflow run add-ncbi-annotation.nf --stringtie /path/to/stringtie.gtf --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf \
 --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa \
 --config /path/to/annotate_my_genomes/gawn_config.sh --threads 20  \
---conda /path/to/annotate_my_genomes/environment.yml --outdir /path/to/output_folder/
+--conda ./environment.yml --outdir /path/to/output_folder/
 ```
 2.4) Run ```isoform-identification.nf``` (i.e.: outputting in current directory) . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#d-post-processing-add-ncbi-annotation-outputs
 ```
 nextflow run isoform-identification.nf --NCBI_tmap /path/to/gffcompare.tmap \
 --NCBI_transcripts /path/to/NCBI_transcripts.fa --genome_name galGal6 \
---conda /path/to/annotate_my_genomes/environment.yml --outdir ./
+--conda ./environment.yml --outdir ./
 ```
 
 ## IV) Running the whole pipeline via anaconda + binaries: 
