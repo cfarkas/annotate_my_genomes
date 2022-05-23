@@ -148,7 +148,7 @@ To a value according to the computational capacity of your machine.
 ## III) Running the whole pipeline via nextflow (recommended)
 
 - Inside ```annotate_my_genomes``` folder, enter into ```nextflow_scripts``` subdirectory and run the full pipeline using ```--flags``` parameters. 
-- NOTE: Users **must provide full paths to inputs in the command line**.  We recommed to split the flags with backslashes and run the pipeline as follows: 
+- NOTE: Users **must provide full paths to inputs in the command line**.  We recommed to split the flags with backslashes and run the pipeline exactly as follows: 
 ```
 cd nextflow_scripts/
 ```
@@ -156,7 +156,7 @@ cd nextflow_scripts/
 ```
 nextflow run genome-download.nf \
 --genome galGal6 \
---conda ./environment.yml --outdir /path/to/output_folder/
+--conda /path/to/environment.yml --outdir /path/to/output_folder/
 ```
 2.2) Run ```annotate-my-genomes.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#b-simplest-usage
 ```
@@ -166,7 +166,7 @@ nextflow run annotate-my-genomes.nf \
 --genome /path/to/galGal6.fa \
 --config /path/to/annotate_my_genomes/gawn_config.sh \
 --threads 20 \
---conda ./environment.yml --outdir /path/to/output_folder/
+--conda /path/to/environment.yml --outdir /path/to/output_folder/
 ```
 2.3) Run ```add-ncbi-annotation.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#c-adding-ncbi-annotations-to-increase-annotation-of-transcripts
 ```
@@ -176,7 +176,7 @@ nextflow run add-ncbi-annotation.nf \
 --ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa \
 --config /path/to/annotate_my_genomes/gawn_config.sh \
 --threads 20  \
---conda ./environment.yml --outdir /path/to/output_folder/
+--conda /path/to/environment.yml --outdir /path/to/output_folder/
 ```
 2.4) Run ```isoform-identification.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#d-post-processing-add-ncbi-annotation-outputs
 ```
@@ -184,7 +184,7 @@ nextflow run isoform-identification.nf \
 --NCBI_tmap /path/to/gffcompare.tmap \
 --NCBI_transcripts /path/to/NCBI_transcripts.fa \
 --genome_name galGal6 \
---conda ./environment.yml --outdir /path/to/output_folder/
+--conda /path/to/environment.yml --outdir /path/to/output_folder/
 ```
 
 ## IV) Running the whole pipeline via anaconda + binaries: 
