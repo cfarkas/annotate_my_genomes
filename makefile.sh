@@ -1,6 +1,7 @@
 #!/bin/bash
 
 dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+rm -r -f swissprot
 mkdir swissprot
 cd swissprot
 wget ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
