@@ -25,9 +25,10 @@ process make_and_install {
   '''
   cd "!{params.workdir}"
   dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+  rm -r -f swissprot
   mkdir swissprot
   cd swissprot
-  wget --ignore-length --compression=none ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
+  wget --ignore-length ftp://ftp.ncbi.nlm.nih.gov/blast/db/swissprot.tar.gz
   gunzip swissprot.tar.gz
   tar -xvf swissprot.tar
   SWISSPROT_PATH=$PWD
