@@ -89,26 +89,7 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda create --name annotate_my_genomes feelnc=0.2             # create environment
-conda activate annotate_my_genomes                             # load environment
-
-# Install packages
-conda install -c conda-forge -y parallel 
-conda install -c bioconda -y stringtie
-conda install -c bioconda -y gffcompare
-conda install -c bioconda -y gffread
-conda install -c bioconda -y gmap
-conda install -c bioconda -y bedtools
-conda install -c bioconda -y emboss
-conda install -c bioconda -y clustalo
-conda install -c bioconda -y minimap2
-conda install -c bioconda -y transdecoder
-conda install -c bioconda -y seqkit
-conda install -c conda-forge -y coreutils
-conda install -c anaconda -y gawk
-conda install -c bioconda -y perl-local-lib
-conda install -c anaconda -y pandas
-
+conda env create -f environment.yml                            # create and install environment
 bash makefile.sh                                               # make  & install
 ```
 - Copy binaries to ```/usr/local/bin```
@@ -116,7 +97,7 @@ bash makefile.sh                                               # make  & install
 sudo cp ./bin/* /usr/local/bin/
 ```
 
-After these steps, a conda enviroment called annotate_my_genomes can be managed as follows:
+After these steps, a conda enviroment called ```annotate_my_genomes``` can be managed as follows:
 ```
 # To activate this environment, use
 #
