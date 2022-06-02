@@ -156,7 +156,8 @@ nextflow run annotate-my-genomes.nf \
 nextflow run add-ncbi-annotation.nf \
 --stringtie /path/to/stringtie.gtf \
 --NCBI_annotation /path/to/galGal6_ncbiRefSeq.gtf \
---ref_annotation /path/to/galGal6.gtf --genome /path/to/galGal6.fa \
+--ref_annotation /path/to/galGal6.gtf \
+--genome /path/to/galGal6.fa \
 --config /path/to/annotate_my_genomes/gawn_config.sh \
 --threads 20  \
 --conda /path/to/environment.yml --outdir /path/to/output_folder/
