@@ -125,11 +125,11 @@ NCPUS=10
 To a value according to the computational capacity of your machine.
 
 ### Option 3: Run thorugh docker:
-See here: ```https://hub.docker.com/repository/docker/carlosfarkas/annotate_my_genomes_v3```
+- See here: https://hub.docker.com/repository/docker/carlosfarkas/annotate_my_genomes_v3
 
 ### Option 4: Without using conda, program by program:
 
-- see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
+- See detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
 ## III) Running the whole pipeline via nextflow (recommended)
 
