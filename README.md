@@ -5,7 +5,7 @@ Transcriptome annotation pipeline using short and long sequencing reads from non
 ![image](https://user-images.githubusercontent.com/7016350/108611599-a6319f00-73a5-11eb-89b7-3cfd44b00cc5.png)
 
 ## I) Pipeline Outline
-  annotate_my_genomes is a pipeline that aims to annotate genome-guided transcriptome assemblies from StringTie, coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from RefSeq/NCBI, without loosing isoform and exon information. Also, known/novel coding sequences in nucleotides and correspondent proteins will be resolved.  
+  ```annotate_my_genomes``` is a pipeline that aims to annotate genome-guided transcriptome assemblies from StringTie, coming from long read RNA-Seq alignments in vertebrate genomes (i.e. PacBio technology). Transcripts are classified by its coding potential, probable gene function and identified as novel or reconciliated with the current reference annotation from RefSeq/NCBI, without loosing isoform and exon information. Also, known/novel coding sequences in nucleotides and correspondent proteins will be resolved.  
 
 This pipeline requieres to run:
 
@@ -125,7 +125,7 @@ NCPUS=10
 To a value according to the computational capacity of your machine.
 
 ### Option 3: Run thorugh docker:
-- See here: https://hub.docker.com/repository/docker/carlosfarkas/annotate_my_genomes_v3
+- See here: https://hub.docker.com/r/carlosfarkas/annotate_my_genomes_v3
 
 ### Option 4: Without using conda, program by program:
 
