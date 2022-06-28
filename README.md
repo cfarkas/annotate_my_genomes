@@ -1,6 +1,6 @@
 # annotate_my_genomes
 
-Transcriptome annotation pipeline using long sequencing reads from non-model (and model) animal organisms.
+Transcriptome annotation pipeline using short and long sequencing reads from non-model (and model) animal organisms.
 
 ![image](https://user-images.githubusercontent.com/7016350/108611599-a6319f00-73a5-11eb-89b7-3cfd44b00cc5.png)
 
@@ -122,9 +122,12 @@ conda remove --name annotate_my_genomes --all
 ```
 NCPUS=10
 ```
-To a value according to the computational capacity of your machine. 
+To a value according to the computational capacity of your machine.
 
-### Option 3: Without using conda, program by program:
+### Option 3: Run thorugh docker:
+See here: ```https://hub.docker.com/repository/docker/carlosfarkas/annotate_my_genomes_v3```
+
+### Option 4: Without using conda, program by program:
 
 - see detailed installation steps in our wiki here: https://github.com/cfarkas/annotate_my_genomes/wiki
 
