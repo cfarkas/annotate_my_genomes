@@ -125,7 +125,7 @@ NCPUS=10
 To a value according to the computational capacity of your machine.
 
 ### Option 3: Run through docker:
-- See here: https://hub.docker.com/r/carlosfarkas/annotate_my_genomes_v3
+- See here: https://hub.docker.com/repository/docker/carlosfarkas/annotate_my_genomes
 
 ### Option 4: Without using conda, program by program:
 
