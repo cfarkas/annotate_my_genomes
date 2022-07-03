@@ -196,7 +196,7 @@ mkdir output2
 ./add-ncbi-annotation -a stringtie_chr33.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6.gtf -g galGal6.fa -c gawn_config.sh -t 20 -o output2
 ```
 
-## B) Simplest usage
+### B) Simplest usage
 (Optional) Edit NCPUS value in ```gawn_config.sh``` file inside the repository. Default is 10
 - As example, to annotate a chicken GTF file (i.e: "target.gtf") using 20 threads for cpu processing:
 
@@ -208,7 +208,7 @@ mkdir output1
 - ```final_annotated.gtf``` (located in output1/) will contained the merged NCBI-updated annotation (in UCSC coordinates)
 - To produce ```target.gtf``` assembly, check stringtie parameters here: https://github.com/cfarkas/annotate_my_genomes/wiki#ii-obtaining-stringtie-gtf-file-for-annotation
 
-## C) Adding NCBI annotations to increase annotation of transcripts
+### C) Adding NCBI annotations to increase annotation of transcripts
 Users can add annotations from NCBI by using the three outputs from ./genome-download program as inputs into ./add-ncbi-annotation. 
 - Resuming the previous example, using add-ncbi-annotation instead of annotate-my-genomes:
 ```
@@ -224,7 +224,7 @@ mkdir output3
 ./genome-download mm10            
 ./add-ncbi-annotation -a /path/to/mouse.gtf -n /path/to/mm10_ncbiRefSeq.gtf -r /path/to/mm10.gtf -g /path/to/mm10.fa -c /path/to/gawn_config.sh -t 30 -o /path/to/output3
 ```
-## D) Post processing add-ncbi-annotation outputs
+### D) Post processing add-ncbi-annotation outputs
 
 If ```stringtie.gtf``` (as an example of input GTF) was annotated with ```add-ncbi-annotation```, users can produce transcripts annotation tables (csv format) using two outputs from add-ncbi-annotation pipeline as follows:
 
