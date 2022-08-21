@@ -136,7 +136,9 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git && cd annotate_my_g
 # make & install using workdir
 chmod 755 makefile.sh
 docker run --volume $HOME:$HOME --workdir $(pwd) carlosfarkas/annotate_my_genomes ./makefile.sh         # make & install
-
+                    
+                    OR
+                    
 # make & install using -it (interactively)
 docker run -v $(pwd):/annotate_my_genomes -it carlosfarkas/annotate_my_genomes:latest
 cd annotate_my_genomes/
