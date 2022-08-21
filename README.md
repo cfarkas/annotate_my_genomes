@@ -125,7 +125,7 @@ NCPUS=10
 To a value according to the computational capacity of your machine.
 
 ### Option 3: Run through docker:
-- See here: [https://hub.docker.com/repository/docker/carlosfarkas/annotate_my_genomes](https://hub.docker.com/r/carlosfarkas/annotate_my_genomes)
+- See here: https://hub.docker.com/r/carlosfarkas/annotate_my_genomes
 ```
 # Downloading the docker image
 docker pull carlosfarkas/annotate_my_genomes:latest
