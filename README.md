@@ -90,6 +90,7 @@ cd annotate_my_genomes                                         # enter repositor
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
 conda env create -f environment.yml                            # create and install environment
+conda activate annotate_my_genomes                             # activate environment
 bash makefile.sh                                               # make  & install
 ```
 - Copy binaries to ```/usr/local/bin```
