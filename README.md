@@ -324,7 +324,7 @@ add-ncbi-annotation -a tsebra_stringtie.gtf -n galGal6_ncbiRefSeq.gtf -r galGal6
 ```
 ### More Scenarios?
 
-- For downstream analysis and examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes.wiki.git
+- For downstream analysis and examples, please visit our wiki page : https://github.com/cfarkas/annotate_my_genomes/wiki
 
 ### Notes
 Compiling automatically uses Shell script compiler shc to make binaries, please check: https://github.com/neurobin/shc.
