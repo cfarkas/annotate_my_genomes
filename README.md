@@ -126,7 +126,7 @@ NCPUS=10
 To a value according to the computational capacity of your machine.
 
 ### Option 3: Run through docker:
-- See here: https://hub.docker.com/r/carlosfarkas/annotate_my_genomes
+- See installation and pipeline run here: https://hub.docker.com/r/carlosfarkas/annotate_my_genomes
 ```
 # Run docker without sudo privileges as follows:
 sudo chmod 666 /var/run/docker.sock
