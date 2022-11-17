@@ -61,12 +61,12 @@ Also install (not through conda):
 
 In a given directory:
 ```
-git clone https://github.com/cfarkas/annotate_my_genomes.git                      # clone repository
-cd annotate_my_genomes                                                            # enter repository
-current_dir=$(pwd)                                                                # set working directory
-echo $current_dir                                                                 # check working directory
-nextflow run makefile.nf --workdir $current_dir --conda ./environment.yml         # make & install
-sudo cp ./bin/* /usr/local/bin/                                                   # optional, requires sudo privileges. 
+git clone https://github.com/cfarkas/annotate_my_genomes.git                        # clone repository
+cd annotate_my_genomes                                                              # enter repository
+current_dir=$(pwd)                                                                  # set working directory
+echo $current_dir                                                                   # check working directory
+nextflow run makefile.nf --workdir $current_dir --conda ./22.04_environment.yml     # make & install; use environment.yml for Ubuntu < 22.04
+sudo cp ./bin/* /usr/local/bin/                                                     # optional, requires sudo privileges. 
 ```
 
 ### Option 2: Installing dependences via anaconda (tested in Ubuntu 16.05, 18.04 and 20.04 LTS)
@@ -89,7 +89,7 @@ git clone https://github.com/cfarkas/annotate_my_genomes.git   # clone repositor
 cd annotate_my_genomes                                         # enter repository
 conda config --add channels bioconda                           # add bioconda channel (if you haven't already done so)
 conda config --add channels conda-forge                        # add conda-forge channel (if you haven't already done so)
-conda env create -f environment.yml                            # create and install environment
+conda env create -f 22.04_environment.yml                      # create and install environment; use environment.yml for Ubuntu < 22.04
 conda activate annotate_my_genomes                             # activate environment
 bash makefile.sh                                               # make  & install
 ```
@@ -155,7 +155,8 @@ cd annotate_my_genomes/
 ## III) Running the whole pipeline via nextflow (recommended)
 
 - Inside ```annotate_my_genomes``` folder, enter into ```nextflow_scripts``` subdirectory and run the full pipeline using ```--flags``` parameters. 
-- NOTE: Users **must provide full paths to inputs in the command line**.  We recommed to split the flags with backslashes and run the pipeline exactly as follows: 
+- NOTE 1: Users **must provide full paths to inputs in the command line**.  We recommed to split the flags with backslashes and run the pipeline exactly as follows: 
+- NOTE 2: Use environment.yml for Ubuntu < 22.04
 ```
 cd nextflow_scripts/
 ```
@@ -163,7 +164,7 @@ cd nextflow_scripts/
 ```
 nextflow run genome-download.nf \
 --genome galGal6 \
---conda /path/to/environment.yml --outdir /path/to/output_folder/
+--conda /path/to/22.04_environment.yml --outdir /path/to/output_folder/
 ```
 2.2) Run ```annotate-my-genomes.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#b-simplest-usage
 ```
@@ -173,7 +174,7 @@ nextflow run annotate-my-genomes.nf \
 --genome /path/to/galGal6.fa \
 --config /path/to/annotate_my_genomes/gawn_config.sh \
 --threads 20 \
---conda /path/to/environment.yml --outdir /path/to/output_folder/
+--conda /path/to/22.04_environment.yml --outdir /path/to/output_folder/
 ```
 2.3) Run ```add-ncbi-annotation.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#c-adding-ncbi-annotations-to-increase-annotation-of-transcripts
 ```
@@ -184,7 +185,7 @@ nextflow run add-ncbi-annotation.nf \
 --genome /path/to/galGal6.fa \
 --config /path/to/annotate_my_genomes/gawn_config.sh \
 --threads 20  \
---conda /path/to/environment.yml --outdir /path/to/output_folder/
+--conda /path/to/22.04_environment.yml --outdir /path/to/output_folder/
 ```
 2.4) Run ```isoform-identification.nf``` . Details here: https://github.com/cfarkas/annotate_my_genomes/blob/master/README.md#d-post-processing-add-ncbi-annotation-outputs
 ```
@@ -192,7 +193,7 @@ nextflow run isoform-identification.nf \
 --NCBI_tmap /path/to/gffcompare.tmap \
 --NCBI_transcripts /path/to/NCBI_transcripts.fa \
 --genome_name galGal6 \
---conda /path/to/environment.yml --outdir /path/to/output_folder/
+--conda /path/to/22.04_environment.yml --outdir /path/to/output_folder/
 ```
 
 ## IV) Running the whole pipeline via anaconda + binaries: 
