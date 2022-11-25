@@ -69,7 +69,7 @@ nextflow run makefile.nf --workdir $current_dir --conda ./22.04_environment.yml 
 sudo cp ./bin/* /usr/local/bin/                                                     # optional, requires sudo privileges. 
 ```
 
-### Option 2: Installing dependences via anaconda (tested in Ubuntu 16.05, 18.04 and 20.04 LTS)
+### Option 2: Installing dependences via anaconda (tested in Ubuntu 16.05, 18.04, 20.04 and 22.04 LTS)
 
 ### Requirements: 
 - requires miniconda, python2.7 and/or python>=3. To install miniconda, see: https://docs.conda.io/en/latest/miniconda.html
