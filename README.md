@@ -148,7 +148,7 @@ docker run --volume $HOME:$HOME --workdir $(pwd) carlosfarkas/annotate_my_genome
 # make & install using -it (interactively)
 docker run -v $(pwd):/annotate_my_genomes -it carlosfarkas/annotate_my_genomes:latest
 cd annotate_my_genomes/
-./makefile.sh     
+bash makefile.sh     
 ```
 ### Option 4: Without using conda, program by program:
 
