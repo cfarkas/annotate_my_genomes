@@ -453,26 +453,41 @@ perl ./gff3sort/gff3sort.pl final_annotated.gtf > final_annotated.sorted.gtf
 echo "done"
 rm final_annotated.gtf
 mv final_annotated.sorted.gtf final_annotated.gtf
-rm coding-genes.gtf lncRNAs.gtf other-genes.gtf sed.script transcriptome.hits
+rm coding-genes.gtf lncRNAs.gtf other-genes.gtf transcriptome.hits
 ### Novel coding genes and correspondent proteins
 echo ""
 echo "::: Obtaining novel coding transcripts (cds) and correspondent proteins"
 echo ""
-perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' coding_transcripts.gtf > final_annotated.tab
-sed -i 's/transcript_id //g' final_annotated.tab
-sed -i 's/;/\t/g' final_annotated.tab
-sed -i 's/gene_id//g' final_annotated.tab
-sed -i 's/"//g' final_annotated.tab
-awk '!a[$0]++' final_annotated.tab > transcripts_and_genes.tab && rm final_annotated.tab
-awk '{print $2"\t"$1}' transcripts_and_genes.tab > coding-genes-and-transcripts.tab && rm transcripts_and_genes.tab
-awk '$1 ~ /STRG./' coding-genes-and-transcripts.tab > novel-coding-genes.matches
-awk '{print $2}' novel-coding-genes.matches > novel-coding-transcripts.matches
+#
+wget https://raw.githubusercontent.com/cfarkas/annotate_my_genomes/master/additional_scripts/transcriptome_metrics.sh
+bash transcriptome_metrics.sh -f final_annotated.gtf -g /home/carlos/annotate_my_genomes/test/galGal6.fa
+#
+## products
+# known-genes-coding.gtf
+# novel-genes-coding.gtf
+# known-genes-lncRNA.gtf
+# novel-genes-lncRNA.gtf
+#
+cp ./transcriptome_metrics/known-genes-coding.gtf ./
+cp ./transcriptome_metrics/novel-genes-coding.gtf ./
+cp ./transcriptome_metrics/novel-transcripts-lncRNA.fa ./
+cp ./transcriptome_metrics/known-transcripts-lncRNA.fa ./
+#
+perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' novel-genes-coding.gtf > novel_annotated.tab
+sed -i 's/transcript_id //g' novel_annotated.tab
+sed -i 's/;/\t/g' novel_annotated.tab
+sed -i 's/gene_id//g' novel_annotated.tab
+sed -i 's/"//g' novel_annotated.tab
+awk '!a[$0]++' novel_annotated.tab > novel-transcripts_and_genes.tab && rm novel_annotated.tab
+awk '{print $2"\t"$1}' novel-transcripts_and_genes.tab > novel-coding-genes-and-transcripts.tab && rm novel-transcripts_and_genes.tab
+awk '{print $1}' novel-coding-genes-and-transcripts.tab > novel-coding-transcripts.matches
+rm novel-coding-genes-and-transcripts.tab
 seqkit fx2tab cds.fa > cds.tab
 seqkit fx2tab prot.fa > prot.tab
 grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
 grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
 seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
-rm novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
+rm -r -f novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches cds.tab prot.tab
 # obtaining final gff file
 echo ""
 echo "::: Obtaining final gff file"
@@ -481,7 +496,7 @@ gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
 rm -r -f gff3sort
 echo "done"
 echo ""
-rm merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
+rm -r -f merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
 
 ###############################
 # Configuring Summary Results #
@@ -495,7 +510,7 @@ echo ""
 printf "${PURPLE}::: Moving results to the specified directory :::${CYAN}\n"
 rm -r -f output_files
 mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa sed.script novel-transcripts-lncRNA.fa known-transcripts-lncRNA.fa ./output_files
 rm -r -f *feelncfilter.log genes.gtf pipeliner* NM_coding.gtf candidate_lncRNA.gtf* coding-transcripts.fa.transdecoder_dir.__* transcripts.fa.fai
 rm -r -f transdecoder
 mkdir transdecoder
