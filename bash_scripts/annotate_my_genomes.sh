@@ -411,19 +411,13 @@ sed -i 's/Parent=GENE[.]/Parent=/'g coding-transcripts.fa.test.gff3
 sed -i 's/~~/;protein_id=/'g coding-transcripts.fa.test.gff3
 gffread coding-transcripts.fa.test.gff3 -T -P -g transcripts.fa -o coding_transcripts.gtf
 rm coding-transcripts.fa.test.gff3
-# removing transcript id by expansion
-sed -i 's/[.][0-9]"/"/'g coding_transcripts.gtf
-sed -i 's/[.][0-9][0-9]"/"/'g coding_transcripts.gtf
-sed -i 's/[.][0-9][0-9][0-9]"/"/'g coding_transcripts.gtf
 # removing protein id by expansion
 sed -i 's/[.]p[0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
 sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
-cat coding_transcripts.gtf | parallel --pipe -j ${t} sed -f sed.script > coding_transcripts.fixed.gtf
-rm coding_transcripts.gtf
-mv coding_transcripts.fixed.gtf coding_transcripts.gtf
+#
 # obtaining cds.fa and prot.fa from coding_transcripts.gtf
 echo ""
 echo "::: Obtaining cds.fa and prot.fa from coding_transcripts.gtf"
@@ -460,14 +454,7 @@ echo "::: Obtaining novel coding transcripts (cds) and correspondent proteins"
 echo ""
 #
 wget https://raw.githubusercontent.com/cfarkas/annotate_my_genomes/master/additional_scripts/transcriptome_metrics.sh
-bash transcriptome_metrics.sh -f final_annotated.gtf -g /home/carlos/annotate_my_genomes/test/galGal6.fa
-#
-## products
-# known-genes-coding.gtf
-# novel-genes-coding.gtf
-# known-genes-lncRNA.gtf
-# novel-genes-lncRNA.gtf
-#
+bash transcriptome_metrics.sh -f final_annotated.gtf -g ${g_DIR}/${reference_genome}
 cp ./transcriptome_metrics/known-genes-coding.gtf ./
 cp ./transcriptome_metrics/novel-genes-coding.gtf ./
 cp ./transcriptome_metrics/novel-transcripts-lncRNA.fa ./
@@ -550,6 +537,8 @@ echo ""
 echo "Predicted coding sequences and correspondent protein sequences were named cds.fa and prot.fa, respectively"
 echo ""
 echo "Novel predicted coding sequences and correspondent protein sequences were named novel-cds.fa and novel-prot.fa, respectively"
+echo ""
+echo "Novel and Known predicted lncRNAs were named novel-transcripts-lncRNA.fa and known-transcripts-lncRNA.fa, respectively"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
