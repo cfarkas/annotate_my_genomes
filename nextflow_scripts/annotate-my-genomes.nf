@@ -566,14 +566,11 @@ process novel_hits {
 
   shell:
   '''
-  sed -i 's/transcript_id //g' novel_annotated.tab
-  sed -i 's/;/\t/g' novel_annotated.tab
-  sed -i 's/gene_id//g' novel_annotated.tab
-  sed -i 's/"//g' novel_annotated.tab
-  awk '!a[$0]++' novel_annotated.tab > novel-transcripts_and_genes.tab && rm novel_annotated.tab
-  awk '{print $2"\t"$1}' novel-transcripts_and_genes.tab > novel-coding-genes-and-transcripts.tab && rm novel-transcripts_and_genes.tab
-  awk '{print $1}' novel-coding-genes-and-transcripts.tab > novel-coding-transcripts.matches
-  rm novel-coding-genes-and-transcripts.tab
+  awk '{print $(NF)}' novel_annotated.tab > novel-coding-transcripts.matches
+  sed -i 's/;//g' novel-coding-transcripts.matches
+  sed -i 's/"//g' novel-coding-transcripts.matches
+  awk '!a[$0]++' novel-coding-transcripts.matches > novel-coding-transcripts.tab && rm novel-coding-transcripts.matches
+  mv novel-coding-transcripts.tab novel-coding-transcripts.matches
   seqkit fx2tab cds.fa > cds.tab
   seqkit fx2tab prot.fa > prot.tab
   grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
