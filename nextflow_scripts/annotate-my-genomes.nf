@@ -459,19 +459,12 @@ process format_sequences_and_proteins {
   sed -i 's/~~/;protein_id=/'g coding-transcripts.fa.test.gff3
   gffread coding-transcripts.fa.test.gff3 -T -P -g transcripts.fa -o coding_transcripts.gtf
   rm coding-transcripts.fa.test.gff3
-  # removing transcript id by expansion
-  sed -i 's/[.][0-9]"/"/'g coding_transcripts.gtf
-  sed -i 's/[.][0-9][0-9]"/"/'g coding_transcripts.gtf
-  sed -i 's/[.][0-9][0-9][0-9]"/"/'g coding_transcripts.gtf
   # removing protein id by expansion
   sed -i 's/[.]p[0-9]//'g coding_transcripts.gtf
   sed -i 's/[.]p[0-9][0-9]//'g coding_transcripts.gtf
   sed -i 's/[.]p[0-9][0-9][0-9]//'g coding_transcripts.gtf
   sed -i 's/[.]p[0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
   sed -i 's/[.]p[0-9][0-9][0-9][0-9][0-9]//'g coding_transcripts.gtf
-  cat coding_transcripts.gtf | parallel --pipe -j "!{params.threads}" sed -f sed.script > coding_transcripts.fixed.gtf
-  rm coding_transcripts.gtf
-  mv coding_transcripts.fixed.gtf coding_transcripts.gtf
   # obtaining cds.fa and prot.fa from coding_transcripts.gtf
   echo ""
   echo "::: INFO: Obtaining cds.fa and prot.fa from coding_transcripts.gtf"
@@ -511,31 +504,12 @@ process format_sequences_and_proteins {
 }
 
 
-process awk_extracted_hits {
-  echo true
-  stageInMode 'copy'
-  conda "${params.conda}"
-
-  input:
-  file 'coding_transcripts.gtf' from records10
-
-  output:
-  file 'final_annotated.tab' into records16
-
-  shell:
-  '''
-  awk '{print $9"\t"$10"\t"$11"\t"$12}' coding_transcripts.gtf > final_annotated.tab
-  '''
-}
-
-
 process novel_hits {
   echo true
   stageInMode 'copy'
   conda "${params.conda}"
 
   input:
-  file 'final_annotated.tab' from records16
   file 'cds.fa' from records11
   file 'prot.fa' from records12
   file 'final_annotated.gtf' from records13
@@ -544,32 +518,44 @@ process novel_hits {
   file 'novel-cds.fa' into records17
   file 'novel-prot.fa' into records18
   file 'final_annotated.gff' into records19
+  file 'known-genes-coding.gtf' into records20
+  file 'novel-genes-coding.gtf' into records21
+  file 'novel-transcripts-lncRNA.fa' into records22
+  file 'known-transcripts-lncRNA.fa' into records23
 
   shell:
   '''
-  sed -i 's/transcript_id\t//g' final_annotated.tab
-  sed -i 's/;/\t/g' final_annotated.tab
-  sed -i 's/gene_id\t//g' final_annotated.tab
-  sed -i 's/"//g' final_annotated.tab
-  awk '!a[$0]++' final_annotated.tab > transcripts_and_genes.tab && rm final_annotated.tab
-  awk '{print $2"\t"$1}' transcripts_and_genes.tab > coding-genes-and-transcripts.tab && rm transcripts_and_genes.tab
-  awk '$1 ~ /STRG./' coding-genes-and-transcripts.tab > novel-coding-genes.matches
-  awk '{print $2}' novel-coding-genes.matches > novel-coding-transcripts.matches
+  wget https://raw.githubusercontent.com/cfarkas/annotate_my_genomes/master/additional_scripts/transcriptome_metrics.sh
+  bash transcriptome_metrics.sh -f final_annotated.gtf -g "!{params.genome}"
+  cp ./transcriptome_metrics/known-genes-coding.gtf ./
+  cp ./transcriptome_metrics/novel-genes-coding.gtf ./
+  cp ./transcriptome_metrics/novel-transcripts-lncRNA.fa ./
+  cp ./transcriptome_metrics/known-transcripts-lncRNA.fa ./
+  #
+  perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' novel-genes-coding.gtf > novel_annotated.tab
+  sed -i 's/transcript_id //g' novel_annotated.tab
+  sed -i 's/;/\t/g' novel_annotated.tab
+  sed -i 's/gene_id//g' novel_annotated.tab
+  sed -i 's/"//g' novel_annotated.tab
+  awk '!a[$0]++' novel_annotated.tab > novel-transcripts_and_genes.tab && rm novel_annotated.tab
+  awk '{print $2"\t"$1}' novel-transcripts_and_genes.tab > novel-coding-genes-and-transcripts.tab && rm novel-transcripts_and_genes.tab
+  awk '{print $1}' novel-coding-genes-and-transcripts.tab > novel-coding-transcripts.matches
+  rm novel-coding-genes-and-transcripts.tab
   seqkit fx2tab cds.fa > cds.tab
   seqkit fx2tab prot.fa > prot.tab
   grep -w -F -f novel-coding-transcripts.matches cds.tab > novel-coding-cds.tab
   grep -w -F -f novel-coding-transcripts.matches prot.tab > novel-coding-prot.tab
   seqkit tab2fx novel-coding-cds.tab > novel-cds.fa && seqkit tab2fx novel-coding-prot.tab > novel-prot.fa
-  rm -rf novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches novel-coding-genes.matches coding-genes-and-transcripts.tab cds.tab prot.tab
+  rm -r -f novel-coding-cds.tab novel-coding-prot.tab novel-coding-transcripts.matches cds.tab prot.tab
   # obtaining final gff file
   echo ""
-  echo "::: INFO: Obtaining final gff file"
+  echo "::: Obtaining final gff file"
   echo ""
   gffread -E -F --merge final_annotated.gtf -o final_annotated.gff
   rm -r -f gff3sort
-  echo "::: INFO: format_sequences_and_proteins process done"
+  echo "done"
   echo ""
-  rm -rf merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
+  rm -r -f merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
   echo "------------------------------------------------------"
   echo "::: INFO: annotate_my_genomes pipeline ended correctly"
   echo "------------------------------------------------------"
@@ -597,6 +583,10 @@ process output_pipeline {
   file 'novel-cds.fa' from records17
   file 'novel-prot.fa' from records18
   file 'final_annotated.gff' from records19
+  file 'known-genes-coding.gtf' from records20
+  file 'novel-genes-coding.gtf' from records21
+  file 'novel-transcripts-lncRNA.fa' from records22
+  file 'known-transcripts-lncRNA.fa' from records23
   file 'gffcompare_outputs_UCSC' from gffcompare_outputs_UCSC_dir
   file 'gawn' from gawn_dir
   file 'feelnc_codpot_out' from feelnc_codpot_out_dir
@@ -610,7 +600,7 @@ process output_pipeline {
   rm -r -f output_files
   mkdir output_files
   mv UCSC_compare.stringtie_input_file.gtf.tmap gffcompare.tmap
-  mv gffcompare.tmap candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa ./output_files
+  mv gffcompare.tmap candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff transcripts.fa cds.fa prot.fa coding_transcripts.gtf Stats.txt transcriptome.swissprot novel-cds.fa novel-prot.fa sed.script novel-transcripts-lncRNA.fa known-transcripts-lncRNA.fa known-genes-coding.gtf novel-genes-coding.gtf ./output_files
 
   if [ -z "$(ls -A "!{params.outdir}")" ]; then
      echo ""
@@ -658,6 +648,10 @@ process output_pipeline {
   echo "Predicted coding sequences and correspondent protein sequences were named cds.fa and prot.fa, respectively"
   echo ""
   echo "Novel predicted coding sequences and correspondent protein sequences were named novel-cds.fa and novel-prot.fa, respectively"
+  echo ""
+  echo "Novel and Known predicted lncRNAs were named novel-transcripts-lncRNA.fa and known-transcripts-lncRNA.fa, respectively"
+  echo ""
+  echo "Novel and Known coding genes were named novel-genes-coding.gtf and known-genes-coding.gtf, respectively"
   echo ""
   echo "------------------------------------------------------------"
   echo "------------------------------------------------------------"
