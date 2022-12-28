@@ -503,7 +503,7 @@ echo ""
 printf "${PURPLE}::: Moving results to the specified directory :::${CYAN}\n"
 rm -r -f output_files
 mkdir output_files
-mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf transcriptome.swissprot novel-cds.fa novel-prot.fa sed.script novel-transcripts-lncRNA.fa known-transcripts-lncRNA.fa ./output_files
+mv candidate_lncRNA_classes.txt final_annotated.gtf final_annotated.gff NCBI_transcripts.fa cds.fa prot.fa Stats.txt coding_transcripts.gtf transcriptome.swissprot novel-cds.fa novel-prot.fa sed.script novel-transcripts-lncRNA.fa known-transcripts-lncRNA.fa known-genes-coding.gtf novel-genes-coding.gtf ./output_files
 rm -r -f *feelncfilter.log genes.gtf pipeliner* NM_coding.gtf candidate_lncRNA.gtf* coding-transcripts.fa.transdecoder_dir.__* NCBI_transcripts.fa.fai
 rm -r -f transdecoder
 mkdir transdecoder
@@ -545,6 +545,8 @@ echo ""
 echo "Novel predicted coding sequences and correspondent protein sequences were named novel-cds.fa and novel-prot.fa, respectively"
 echo ""
 echo "Novel and Known predicted lncRNAs were named novel-transcripts-lncRNA.fa and known-transcripts-lncRNA.fa, respectively"
+echo ""
+echo "Novel and Known coding genes were named novel-genes-coding.gtf and known-genes-coding.gtf, respectively"
 echo ""
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
 printf "${YELLOW}::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n"
