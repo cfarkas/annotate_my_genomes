@@ -524,6 +524,51 @@ process format_sequences_and_proteins {
 }
 
 
+process transcriptome_metrics {
+  echo true
+  stageInMode 'copy'
+  conda "${params.conda}"
+
+  input:
+  file 'final_annotated.gtf' from records13
+  
+  output:
+  file 'known-genes-coding.gtf' into records16
+  file 'novel-genes-coding.gtf' into records17
+  file 'novel-transcripts-lncRNA.fa' into records18
+  file 'known-transcripts-lncRNA.fa' into records19
+  file ''
+  
+  shell:
+  '''
+  wget https://raw.githubusercontent.com/cfarkas/annotate_my_genomes/master/additional_scripts/transcriptome_metrics.sh
+  bash transcriptome_metrics.sh -f final_annotated.gtf -g "!{params.genome}"
+  cp ./transcriptome_metrics/known-genes-coding.gtf ./
+  cp ./transcriptome_metrics/novel-genes-coding.gtf ./
+  cp ./transcriptome_metrics/novel-transcripts-lncRNA.fa ./
+  cp ./transcriptome_metrics/known-transcripts-lncRNA.fa ./
+  '''
+}
+
+
+process awk_extracted_hits {
+  echo true
+  stageInMode 'copy'
+  conda "${params.conda}"
+
+  input:
+  file 'novel-genes-coding.gtf' from records17
+
+  output:
+  file 'novel_annotated.tab' into records20
+
+  shell:
+  '''
+  awk '{print $9"\t"$10"\t"$11"\t"$12}' novel-genes-coding.gtf > novel_annotated.tab
+  '''
+}
+
+
 process novel_hits {
   echo true
   stageInMode 'copy'
@@ -535,24 +580,12 @@ process novel_hits {
   file 'final_annotated.gtf' from records13
 
   output:
-  file 'novel-cds.fa' into records17
-  file 'novel-prot.fa' into records18
-  file 'final_annotated.gff' into records19
-  file 'known-genes-coding.gtf' into records20
-  file 'novel-genes-coding.gtf' into records21
-  file 'novel-transcripts-lncRNA.fa' into records22
-  file 'known-transcripts-lncRNA.fa' into records23
+  file 'novel-cds.fa' into records21
+  file 'novel-prot.fa' into records22
+  file 'final_annotated.gff' into records23
 
   shell:
   '''
-  wget https://raw.githubusercontent.com/cfarkas/annotate_my_genomes/master/additional_scripts/transcriptome_metrics.sh
-  bash transcriptome_metrics.sh -f final_annotated.gtf -g "!{params.genome}"
-  cp ./transcriptome_metrics/known-genes-coding.gtf ./
-  cp ./transcriptome_metrics/novel-genes-coding.gtf ./
-  cp ./transcriptome_metrics/novel-transcripts-lncRNA.fa ./
-  cp ./transcriptome_metrics/known-transcripts-lncRNA.fa ./
-  #
-  perl -lne 'print "@m" if @m=(/((?:transcript_id|gene_id)\s+\S+)/g);' novel-genes-coding.gtf > novel_annotated.tab
   sed -i 's/transcript_id //g' novel_annotated.tab
   sed -i 's/;/\t/g' novel_annotated.tab
   sed -i 's/gene_id//g' novel_annotated.tab
@@ -577,7 +610,7 @@ process novel_hits {
   echo ""
   rm -r -f merged.fixed.coding.gtf namelist namelist_unique_sorted coding.hits
   echo "------------------------------------------------------"
-  echo "::: INFO: add_ncbi_annotation pipeline ended correctly"
+  echo "::: INFO: annotate_my_genomes pipeline ended correctly"
   echo "------------------------------------------------------"
   echo ""
   '''
@@ -600,13 +633,13 @@ process output_pipeline {
   file 'final_annotated.gtf' from records13
   file 'sed.script' from records14
   file 'transcriptome.swissprot' from records15
-  file 'novel-cds.fa' from records17
-  file 'novel-prot.fa' from records18
-  file 'final_annotated.gff' from records19
-  file 'known-genes-coding.gtf' from records20
-  file 'novel-genes-coding.gtf' from records21
-  file 'novel-transcripts-lncRNA.fa' from records22
-  file 'known-transcripts-lncRNA.fa' from records23
+  file 'novel-cds.fa' from records21
+  file 'novel-prot.fa' from records22
+  file 'final_annotated.gff' from records23
+  file 'known-genes-coding.gtf' from records16
+  file 'novel-genes-coding.gtf' from records17
+  file 'novel-transcripts-lncRNA.fa' from records18
+  file 'known-transcripts-lncRNA.fa' from records19
   file 'gffcompare_outputs_NCBI' from gffcompare_outputs_NCBI_dir
   file 'gawn' from gawn_dir
   file 'feelnc_codpot_out' from feelnc_codpot_out_dir
