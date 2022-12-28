@@ -620,7 +620,7 @@ process output_pipeline {
   file 'known-genes-coding.gtf' from records16
   file 'novel-genes-coding.gtf' from records17
   file 'novel-transcripts-lncRNA.fa' from records18
-  file 'known-transcripts-lncRNA.fa' from records18
+  file 'known-transcripts-lncRNA.fa' from records19
   file 'gffcompare_outputs_UCSC' from gffcompare_outputs_UCSC_dir
   file 'gawn' from gawn_dir
   file 'feelnc_codpot_out' from feelnc_codpot_out_dir
