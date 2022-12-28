@@ -578,6 +578,7 @@ process novel_hits {
   file 'cds.fa' from records11
   file 'prot.fa' from records12
   file 'final_annotated.gtf' from records13
+  file 'novel_annotated.tab' from records20
 
   output:
   file 'novel-cds.fa' into records21
