@@ -15,7 +15,7 @@ def append_annotations_to_gtf(gtf_line, blastx_info, gawn_names):
         if transcript_id in blastx_info:
             annotations.append(f'blastx "{blastx_info[transcript_id]}"')
         if transcript_id in gawn_names:
-            annotations.append(f'gawn_name "{gawn_names[transcript_id]}"')
+            annotations.append(f'gawn_annotation "{gawn_names[transcript_id]}"')
         if annotations:
             gtf_line += ' ' + ' '.join(annotations) + ';'
     return gtf_line
