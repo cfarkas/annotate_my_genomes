@@ -13,11 +13,11 @@ def append_annotations_to_gtf(gtf_line, blastx_info, gawn_names):
         transcript_id = gtf_line.split('transcript_id "')[1].split('"')[0]
         annotations = []
         if transcript_id in blastx_info:
-            annotations.append(f'blastx "{blastx_info[transcript_id]}"')
+            annotations.append(f'blastx "{blastx_info[transcript_id]}";')  # Added semicolon here
         if transcript_id in gawn_names:
-            annotations.append(f'gawn_annotation "{gawn_names[transcript_id]}"')
+            annotations.append(f'gawn_annotation "{gawn_names[transcript_id]}";')  # Added semicolon here
         if annotations:
-            gtf_line += ' ' + ' '.join(annotations) + ';'
+            gtf_line += ' ' + ' '.join(annotations)
     return gtf_line
 
 # Read the hits file and store the blastx info in a dictionary
