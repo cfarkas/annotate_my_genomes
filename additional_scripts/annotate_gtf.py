@@ -9,16 +9,20 @@ output_file = sys.argv[4]  # Output GTF file with annotations
 
 # Function to append blastx information and gawn_name to GTF entries
 def append_annotations_to_gtf(gtf_line, blastx_info, gawn_names):
-    if 'transcript' in gtf_line:
-        transcript_id = gtf_line.split('transcript_id "')[1].split('"')[0]
-        annotations = []
-        if transcript_id in blastx_info:
-            annotations.append(f'blastx "{blastx_info[transcript_id]}"')
-        if transcript_id in gawn_names:
-            annotations.append(f'gawn_name "{gawn_names[transcript_id]}"')
-        if annotations:
-            gtf_line += ' ' + ' '.join(annotations) + ';'
-    return gtf_line
+    try:
+        if 'transcript' in gtf_line:
+            transcript_id = gtf_line.split('transcript_id "')[1].split('"')[0]
+            annotations = []
+            if transcript_id in blastx_info:
+                annotations.append(f'blastx "{blastx_info[transcript_id]}";')
+            if transcript_id in gawn_names:
+                annotations.append(f'gawn_name "{gawn_names[transcript_id]}";')
+            if annotations:
+                gtf_line += ' ' + ' '.join(annotations)
+        return gtf_line
+    except IndexError as e:
+        print(f"Warning: Malformed line skipped: {gtf_line}")
+        return None
 
 # Read the hits file and store the blastx info in a dictionary
 blastx_info = {}
@@ -41,6 +45,7 @@ with open(annotation_table_file, 'r') as table:
 with open(gtf_file, 'r') as gtf, open(output_file, 'w') as out_gtf:
     for line in tqdm(gtf, desc="Annotating GTF"):
         modified_line = append_annotations_to_gtf(line.strip(), blastx_info, gawn_names)
-        out_gtf.write(modified_line + '\n')
+        if modified_line:
+            out_gtf.write(modified_line + '\n')
 
 print("Annotation completed. Output is in", output_file)
