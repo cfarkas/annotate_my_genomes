@@ -11,6 +11,10 @@ output_file = sys.argv[4]  # Output GTF file with annotations
 def append_annotations_to_gtf(gtf_line, blastx_info, gawn_names):
     try:
         if 'transcript' in gtf_line:
+            # Ensure there's a semicolon at the end of the original GTF line
+            if not gtf_line.endswith(';'):
+                gtf_line += ';'
+                
             transcript_id = gtf_line.split('transcript_id "')[1].split('"')[0]
             annotations = []
             if transcript_id in blastx_info:
